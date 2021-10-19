@@ -2,7 +2,7 @@ module.exports = {
    purge: {
       enabled: true,
       content: ["./src/**/*.elm"],
-     defaultExtractor: (content) => { mmatchado = content.match(/class\s+".+"/g) || [];
+     defaultExtractor: (content) => { mmatchado = content.match(/class\s+"(.+)"/).groups || [];
                                       return mmatchado
                                     }
    },

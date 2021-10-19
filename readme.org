@@ -1,0 +1,18 @@
+* <2021-10-19 Tue>
+Instalé ~elm-tooling/elm-json~
+Actualicé paquetes elm
+Actualicé paquetes pnpm
+Instalé tailwindcss y sus plugins
+Cree tailwind.config.js
+   - para integrar sus plugins
+   - Definir como extraer las clases de los elm-files con regex
+Instalé paquete para ejecutar en paralelo ~concurrently~ con pnpm.
+Configure package.json scripts nuevos:
+  - ~run dev~ para compliar tailwindcss JIT a ~public/tailwind.css~ que luego es importado por ~public/styles.css~
+  - ~run tail~ solo para generar  ~public/tailwind.css~
+  - ~run build~ para generar el tailwindcss minificado conto con el entregable de elm-pages
+Cree el git y primer commit.
+
+Notas:
+En un futuro el formato de puge en tailwind.config.js va a cambiar
+No pude comprobar en log las clases seleccionadas
