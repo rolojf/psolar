@@ -1,0 +1,24 @@
+{
+  "name": "elm-pages-app",
+  "scripts": {
+    "postinstall": "elm-tooling install",
+    "start": "elm-pages dev",
+    "build": "tailwindcss -o public/tailwind.css --jit --minify && elm-pages build",
+    "tail": "tailwindcss -o public/tailwind.css --jit",
+    "dev": "concurrently \"elm-pages dev\" \"tailwindcss -o public/tailwind.css --watch --jit\""
+  },
+  "devDependencies": {
+    "concurrently": "^6.3.0",
+    "elm-optimize-level-2": "0.2.3",
+    "elm-pages": "^2.1.9",
+    "elm-review": "2.6.1",
+    "elm-tooling": "1.6.0",
+    "tailwindcss": "^2.2.17"
+  },
+  "dependencies": {
+    "@tailwindcss/aspect-ratio": "^0.3.0",
+    "@tailwindcss/forms": "^0.3.4",
+    "@tailwindcss/line-clamp": "^0.2.2",
+    "@tailwindcss/typography": "^0.4.1"
+  }
+}
