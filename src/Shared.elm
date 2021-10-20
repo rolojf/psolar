@@ -4,11 +4,8 @@ import Browser.Navigation
 import Css
 import Css.Global
 import DataSource
-import Html as HTML
-import Html.Styled as Html exposing (div, text)
-import Html.Styled.Attributes as Attr exposing (css)
-import Html.Styled.Attributes.Aria as Aria
-import Html.Styled.Events as Events
+import Html exposing (Html, div, text)
+import Html.Attributes as Attr exposing (class)
 import Pages.Flags
 import Pages.PageUrl exposing (PageUrl)
 import Path exposing (Path)
@@ -103,17 +100,11 @@ view :
     -> Model
     -> (Msg -> msg)
     -> View msg
-    -> { body : HTML.Html msg, title : String }
+    -> { body : Html msg, title : String }
 view sharedData page model toMsg pageView =
     { body =
-          Html.div
-              []
-              [ Css.Global.global Tw.globalStyles
-              , Html.main_
-                  []
-                  pageView.body
-                  ]
-                 |> Html.toUnstyled
-
+        Html.div
+            []
+            pageView.body
     , title = pageView.title
     }
