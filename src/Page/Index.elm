@@ -29,6 +29,7 @@ type alias RouteParams =
     {}
 
 
+
 page : Page RouteParams Data
 page =
     Page.single
@@ -310,7 +311,7 @@ viewHero =
             [ class "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
             [ Html.img
                 [ class "h-56 w-full object-cover object-top sm:h-72 md:h-96 lg:w-full lg:h-full lg:object-right"
-                , Attr.src ( Cloudinary.url "f_auto,q_auto:best" "dreamstime_s_30697263_clymr0.jpg")
+                , Attr.src (Cloudinary.url "f_auto,q_auto:best" "dreamstime_s_30697263_clymr0.jpg")
                 , Attr.alt ""
                 ]
                 []
