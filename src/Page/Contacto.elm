@@ -12,7 +12,6 @@ import Html.Styled as Htmls exposing (div)
 import Html.Styled.Attributes as Attr exposing (class)
 import Html.Styled.Attributes.Aria as Aria
 import Html.Styled.Events as Events
-import Json.Decode as Decode
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
@@ -23,7 +22,6 @@ import Shared
 import Tailwind.Breakpoints as TwBp
 import Tailwind.Utilities as Tw
 import Task
-import Tuple
 import View exposing (View)
 
 
@@ -56,7 +54,6 @@ type Msg
     | Telefono String
     | Comentario String
     | Enviado
-    | RespondioBien Bool
     | ReMsg Reto.Msg
 
 
@@ -129,31 +126,27 @@ update _ _ _ _ msg model =
             , Nothing
             )
 
-        RespondioBien siOno ->
-            ( { model
-                | usuarioStatus =
-                    if siOno then
-                        Conocido
-
-                    else
-                        Desconocido
-              }
-            , Cmd.none
-            , Nothing
-            )
-
         ReMsg reMsg ->
+            let
+                modeloResultante =
+                    Reto.update reMsg model.reModel
+            in
             ( { model
-                | reModel = Reto.update reMsg model.reModel
+                | reModel = modeloResultante
                 , usuarioStatus =
-                    if model.reModel.respondioBien then
+                    if modeloResultante.intento == Reto.YaOk then
                         Conocido
+
+                    else if modeloResultante.intento == Reto.EstaFrito then
+                        Rechazado
 
                     else
                         Desconocido
               }
-            , if model.reModel.vaDeNuez then
-                Task.perform (\_ -> ReMsg Reto.IntentaDeNuez) <| Process.sleep 500
+            , if modeloResultante.vaDeNuez then
+                Task.perform
+                    (\_ -> ReMsg Reto.IntentaDeNuez)
+                    (Process.sleep 500)
 
               else
                 Cmd.none
@@ -228,7 +221,7 @@ view :
 view maybeUrl sharedModel model static =
     { title = "Formulario de Contacto"
     , body =
-        [ div
+        [ {- div
             [ Attr.css
                 [ Tw.max_w_7xl
                 , Tw.mx_auto
@@ -236,33 +229,35 @@ view maybeUrl sharedModel model static =
                 , TwBp.lg [ Tw.px_8 ]
                 ]
             ]
-            [ div
+            [-} div
                 [ Attr.css [ Tw.relative, Tw.bg_white ] ]
                 [ viewLayout
-                , if not model.listo then
-                    viewFormulario model
-
-                  else
+                , viewFormulario model
+                , if model.listo then
                     div
                         [ Attr.css [ TwBp.lg [ Tw.h_72 ] ] ]
-                        [ Htmls.text <|
-                            case model.usuarioStatus of
-                                Desconocido ->
-                                    "Vamos a confirmar pues!"
+                        [ case model.usuarioStatus of
+                            Desconocido ->
+                                Reto.view model.reModel |> Htmls.map ReMsg
 
-                                Conocido ->
-                                    "HEY! Sos Familia!!"
+                            Conocido ->
+                                Htmls.h4 []
+                                    [ Htmls.text "HEY! Sos Familia!!" ]
 
-                                Rechazado ->
-                                    "Pareces un Bot, intenta de nuevo"
+                            Rechazado ->
+                                Htmls.h4 []
+                                    [ Htmls.text "Pareces un Bot, intenta de nuevo" ]
 
-                                _ ->
-                                    "¿Cómo chingados llegué a este estado?"
-                        , Reto.view model.reModel |> Htmls.map ReMsg
+                            _ ->
+                                Htmls.h4 []
+                                    [ Htmls.text "¿Cómo chingados llegué a este estado?" ]
                         ]
+
+                  else
+                    div [] []
                 ]
             ]
-        ]
+        -- ]
             |> List.map Htmls.toUnstyled
     }
 
@@ -278,7 +273,7 @@ viewLayout =
                     [ Tw.h_56
                     , Tw.w_full
                     , Tw.object_cover
-                    , TwBp.lg [ Tw.absolute, Tw.h_full ]
+                    , TwBp.lg [ Tw.absolute, Tw.h_screen ]
                     ]
                 , Attr.src "https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-1.2.1&ixqx=g09zpRVLoT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80"
                 , Attr.alt ""
@@ -556,16 +551,16 @@ viewFormulario model =
     div
         [ Attr.css
             [ Tw.relative
-            , Tw.pt_12
-            , Tw.pb_16
+            , Tw.py_8
             , Tw.px_4
-            , TwBp.sm [ Tw.pt_16, Tw.px_6 ]
+            , TwBp.sm [ Tw.px_6 ]
             , TwBp.lg
                 [ Tw.px_8
                 , Tw.max_w_7xl
                 , Tw.mx_auto
                 , Tw.grid
                 , Tw.grid_cols_2
+                , Tw.py_2
                 ]
             ]
         ]

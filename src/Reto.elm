@@ -1,19 +1,15 @@
 module Reto exposing (..)
 
-import Html exposing (Html)
 import Html.Styled as Htmls exposing (div)
 import Html.Styled.Attributes as Attr exposing (class)
 import Html.Styled.Events as Events
-import Process
 import Tailwind.Breakpoints as TwBp
 import Tailwind.Utilities as Tw
-import Task
 
 
 type alias Model =
     { intentos : Int
     , listo : Bool
-    , respondioBien : Bool
     , intento : Intentos
     , queRespondio : String
     , vaDeNuez : Bool
@@ -24,15 +20,14 @@ type Intentos
     = VaPues
     | YaRespondio
     | VaDeNuevo
-    | YaOk
     | EstaFrito
+    | YaOk
 
 
 newModel : Model
 newModel =
     { intentos = 0
     , listo = False
-    , respondioBien = False
     , intento = VaPues
     , queRespondio = ""
     , vaDeNuez = False
@@ -57,64 +52,31 @@ update msg model =
                         False
             in
             { model
-                | respondioBien = seLaSupo
+                | queRespondio = conQue
                 , intento =
                     if seLaSupo then
                         YaOk
 
                     else
                         YaRespondio
-                , queRespondio = conQue
-                , vaDeNuez =
-                    if seLaSupo then
-                        False
-
-                    else
-                        True
+                , vaDeNuez = not seLaSupo
             }
 
         IntentaDeNuez ->
-            let
-                yaValio =
-                    model.intentos >= 3
+                { model
+                    | queRespondio = ""
+                    , intento = if model.intentos >= 3 then EstaFrito else VaDeNuevo
+                    , vaDeNuez = False
+                    , intentos = model.intentos + 1
+                }
 
-                nuevoModelo =
-                    { model
-                        | intentos = model.intentos + 1
-                        , queRespondio = ""
-                    }
-            in
-            case yaValio of
-                False ->
-                    { nuevoModelo | intento = VaDeNuevo }
-
-                True ->
-                    { nuevoModelo
-                        | intento = EstaFrito
-                        , respondioBien = False
-                    }
 
 
 view : Model -> Htmls.Html Msg
 view model =
     div
         []
-        [ case model.intento of
-            VaPues ->
-                viewChallenge model
-
-            YaRespondio ->
-                viewChallenge model
-
-            VaDeNuevo ->
-                viewChallenge model
-
-            EstaFrito ->
-                Htmls.text "Shame on you!"
-
-            YaOk ->
-                Htmls.text "Wellcome!"
-        ]
+        [ viewChallenge model ]
 
 
 viewChallenge : Model -> Htmls.Html Msg
