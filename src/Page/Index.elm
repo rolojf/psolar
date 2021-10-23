@@ -14,6 +14,9 @@ import Pages.Url
 import Path
 import Route
 import Shared
+import Simple.Animation as Animation exposing (Animation)
+import Simple.Animation.Animated as Animated
+import Simple.Animation.Property as P
 import Svg exposing (path, svg)
 import Svg.Attributes as SvgAttr
 import View exposing (View)
@@ -33,7 +36,9 @@ init :
     -> StaticPayload templateData routeParams
     -> ( Model, Cmd Msg )
 init _ _ _ =
-    ( { menuOpen = False }, Cmd.none )
+    ( { menuOpen = False }
+    , Cmd.none
+    )
 
 
 page : Page.PageWithState RouteParams Data Model Msg
@@ -140,10 +145,8 @@ viewHero menuOpen =
             , { texto = "Háblanos"
               , dir = Pages.Url.fromPath (Route.toPath Route.Contacto)
               }
-            , direccionEspecial
             ]
 
-        -- text-indigo-600 hover:text-indigo-500" el sign-in para resaltar
         clasesComunItems =
             "font-medium hover:text-gray-900"
 
@@ -162,6 +165,76 @@ viewHero menuOpen =
                 , class <| clasesMenuItems cualMenu
                 ]
                 [ text direccion.texto ]
+
+        menuAppear : Bool -> Animation
+        menuAppear show =
+            if show then
+                Animation.fromTo
+                    { duration = 180
+                    , options = [ Animation.easeOut ]
+                    }
+                    [ P.opacity 0, P.scale 0.92 ]
+                    [ P.opacity 1, P.scale 1 ]
+
+            else
+                Animation.fromTo
+                    { duration = 125
+                    , options = [ Animation.easeIn ]
+                    }
+                    [ P.opacity 1, P.scale 1 ]
+                    [ P.opacity 0, P.scale 0.92 ]
+
+        movilMenu =
+            div
+                [ class "rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden" ]
+                [ div
+                    [ class "px-5 pt-4 flex items-center justify-between" ]
+                    [ div []
+                        [ Html.img
+                            [ class "h-8 w-auto"
+                            , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
+                            , Attr.alt ""
+                            ]
+                            []
+                        ]
+                    , div
+                        [ class "-mr-2" ]
+                        [ Html.button
+                            [ Attr.type_ "button"
+                            , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                            , Html.Events.onClick ToggleMenu
+                            ]
+                            [ Html.span
+                                [ class "sr-only" ]
+                                [ text "Close main menu" ]
+                            , {- Heroicon name: outline/x -}
+                              svg
+                                [ SvgAttr.class "h-6 w-6"
+                                , SvgAttr.fill "none"
+                                , SvgAttr.viewBox "0 0 24 24"
+                                , SvgAttr.stroke "currentColor"
+                                , Attr.attribute "aria-hidden" "true"
+                                ]
+                                [ path
+                                    [ SvgAttr.strokeLinecap "round"
+                                    , SvgAttr.strokeLinejoin "round"
+                                    , SvgAttr.strokeWidth "2"
+                                    , SvgAttr.d "M6 18L18 6M6 6l12 12"
+                                    ]
+                                    []
+                                ]
+                            ]
+                        ]
+                    ]
+                , div
+                    [ class "px-2 pt-2 pb-3 space-y-1" ]
+                    (List.map (menuItems True) direcciones)
+                , Html.a
+                    [ Attr.href "#"
+                    , class "block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
+                    ]
+                    [ text direccionEspecial.texto                     ]
+                ]
     in
     div
         [ class "relative bg-white overflow-hidden" ]
@@ -235,83 +308,20 @@ viewHero menuOpen =
                                 ]
                             , div
                                 [ class "hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
-                                (List.map (menuItems False) direcciones)
+                                (List.map (menuItems False) direcciones
+                                    ++ [ Html.a
+                                            [ Attr.href "#"
+                                            , class "text-indigo-600 hover:text-indigo-500"
+                                            ]
+                                            [ text direccionEspecial.texto ]
+                                       ]
+                                )
                             ]
                         ]
-                    , {-
-                         Mobile menu, show/hide based on menu open state.
-
-                         Entering: "duration-150 ease-out"
-                           From: "opacity-0 scale-95"
-                           To: "opacity-100 scale-100"
-                         Leaving: "duration-100 ease-in"
-                           From: "opacity-100 scale-100"
-                           To: "opacity-0 scale-95"
-                      -}
-                      if not menuOpen then
-                        div [] []
-
-                      else
-                        div
-                            [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
-                            [ div
-                                [ class "rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden" ]
-                                [ div
-                                    [ class "px-5 pt-4 flex items-center justify-between" ]
-                                    [ div []
-                                        [ Html.img
-                                            [ class "h-8 w-auto"
-                                            , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
-                                            , Attr.alt ""
-                                            ]
-                                            []
-                                        ]
-                                    , div
-                                        [ class "-mr-2" ]
-                                        [ Html.button
-                                            [ Attr.type_ "button"
-                                            , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                                            , Html.Events.onClick ToggleMenu
-                                            ]
-                                            [ Html.span
-                                                [ class "sr-only" ]
-                                                [ text "Close main menu" ]
-                                            , {- Heroicon name: outline/x -}
-                                              svg
-                                                [ SvgAttr.class "h-6 w-6"
-                                                , SvgAttr.fill "none"
-                                                , SvgAttr.viewBox "0 0 24 24"
-                                                , SvgAttr.stroke "currentColor"
-                                                , Attr.attribute "aria-hidden" "true"
-                                                ]
-                                                [ path
-                                                    [ SvgAttr.strokeLinecap "round"
-                                                    , SvgAttr.strokeLinejoin "round"
-                                                    , SvgAttr.strokeWidth "2"
-                                                    , SvgAttr.d "M6 18L18 6M6 6l12 12"
-                                                    ]
-                                                    []
-                                                ]
-                                            ]
-                                        ]
-                                    ]
-                                , div
-                                    [ class "px-2 pt-2 pb-3 space-y-1" ]
-                                    (List.map (menuItems True)
-                                        (direcciones
-                                            |> List.reverse
-                                            |> List.drop 1
-                                            |> List.reverse
-                                        )
-                                    )
-                                , Html.a
-                                    [ Attr.href "#"
-                                    , class "block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
-                                    ]
-                                    [ text direccionEspecial.texto
-                                    ]
-                                ]
-                            ]
+                    , Animated.div
+                        (menuAppear menuOpen)
+                        [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
+                        [ movilMenu ]
                     ]
                 , Html.main_
                     [ class "mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28" ]
