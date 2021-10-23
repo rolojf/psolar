@@ -128,6 +128,11 @@ view maybeUrl sharedModel model static =
 
 viewHero menuOpen =
     let
+        direccionEspecial =
+            { texto = "Huevón"
+            , dir = Pages.Url.fromPath (Route.toPath Route.Contacto)
+            }
+
         direcciones : List { texto : String, dir : Pages.Url.Url }
         direcciones =
             [ { texto = "Contáctanos"
@@ -136,9 +141,7 @@ viewHero menuOpen =
             , { texto = "Háblanos"
               , dir = Pages.Url.fromPath (Route.toPath Route.Contacto)
               }
-            , { texto = "Huevón"
-              , dir = Pages.Url.fromPath (Route.toPath Route.Contacto)
-              }
+            , direccionEspecial
             ]
 
         -- text-indigo-600 hover:text-indigo-500" el sign-in para resaltar
@@ -289,32 +292,19 @@ viewHero menuOpen =
                                 ]
                             , div
                                 [ class "px-2 pt-2 pb-3 space-y-1" ]
-                                [ Html.a
-                                    [ Attr.href "#"
-                                    , class "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                                    ]
-                                    [ text "Product" ]
-                                , Html.a
-                                    [ Attr.href "#"
-                                    , class "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                                    ]
-                                    [ text "Features" ]
-                                , Html.a
-                                    [ Attr.href "#"
-                                    , class "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                                    ]
-                                    [ text "Marketplace" ]
-                                , Html.a
-                                    [ Attr.href "#"
-                                    , class "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                                    ]
-                                    [ text "Company" ]
-                                ]
+                                (List.map (menuItems True)
+                                    (direcciones
+                                        |> List.reverse
+                                        |> List.drop 1
+                                        |> List.reverse
+                                    )
+                                )
                             , Html.a
                                 [ Attr.href "#"
                                 , class "block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
                                 ]
-                                [ text "Log in" ]
+                                [ text direccionEspecial.texto
+                                ]
                             ]
                         ]
                     ]
