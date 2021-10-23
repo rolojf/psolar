@@ -7,8 +7,7 @@ import Head
 import Head.Seo as Seo
 import Html as Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (class)
-import Html.Styled as Htmls
-import Html.Styled.Attributes as AttrS
+import Html.Events
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
@@ -209,6 +208,7 @@ viewHero menuOpen =
                                             [ Attr.type_ "button"
                                             , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                                             , Attr.attribute "aria-expanded" "false"
+                                            , Html.Events.onClick ToggleMenu
                                             ]
                                             [ Html.span
                                                 [ class "sr-only" ]
@@ -248,65 +248,70 @@ viewHero menuOpen =
                            From: "opacity-100 scale-100"
                            To: "opacity-0 scale-95"
                       -}
-                      div
-                        [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
-                        [ div
-                            [ class "rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden" ]
+                      if not menuOpen then
+                        div [] []
+
+                      else
+                        div
+                            [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
                             [ div
-                                [ class "px-5 pt-4 flex items-center justify-between" ]
-                                [ div []
-                                    [ Html.img
-                                        [ class "h-8 w-auto"
-                                        , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
-                                        , Attr.alt ""
+                                [ class "rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden" ]
+                                [ div
+                                    [ class "px-5 pt-4 flex items-center justify-between" ]
+                                    [ div []
+                                        [ Html.img
+                                            [ class "h-8 w-auto"
+                                            , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
+                                            , Attr.alt ""
+                                            ]
+                                            []
                                         ]
-                                        []
+                                    , div
+                                        [ class "-mr-2" ]
+                                        [ Html.button
+                                            [ Attr.type_ "button"
+                                            , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                                            , Html.Events.onClick ToggleMenu
+                                            ]
+                                            [ Html.span
+                                                [ class "sr-only" ]
+                                                [ text "Close main menu" ]
+                                            , {- Heroicon name: outline/x -}
+                                              svg
+                                                [ SvgAttr.class "h-6 w-6"
+                                                , SvgAttr.fill "none"
+                                                , SvgAttr.viewBox "0 0 24 24"
+                                                , SvgAttr.stroke "currentColor"
+                                                , Attr.attribute "aria-hidden" "true"
+                                                ]
+                                                [ path
+                                                    [ SvgAttr.strokeLinecap "round"
+                                                    , SvgAttr.strokeLinejoin "round"
+                                                    , SvgAttr.strokeWidth "2"
+                                                    , SvgAttr.d "M6 18L18 6M6 6l12 12"
+                                                    ]
+                                                    []
+                                                ]
+                                            ]
+                                        ]
                                     ]
                                 , div
-                                    [ class "-mr-2" ]
-                                    [ Html.button
-                                        [ Attr.type_ "button"
-                                        , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                                        ]
-                                        [ Html.span
-                                            [ class "sr-only" ]
-                                            [ text "Close main menu" ]
-                                        , {- Heroicon name: outline/x -}
-                                          svg
-                                            [ SvgAttr.class "h-6 w-6"
-                                            , SvgAttr.fill "none"
-                                            , SvgAttr.viewBox "0 0 24 24"
-                                            , SvgAttr.stroke "currentColor"
-                                            , Attr.attribute "aria-hidden" "true"
-                                            ]
-                                            [ path
-                                                [ SvgAttr.strokeLinecap "round"
-                                                , SvgAttr.strokeLinejoin "round"
-                                                , SvgAttr.strokeWidth "2"
-                                                , SvgAttr.d "M6 18L18 6M6 6l12 12"
-                                                ]
-                                                []
-                                            ]
-                                        ]
+                                    [ class "px-2 pt-2 pb-3 space-y-1" ]
+                                    (List.map (menuItems True)
+                                        (direcciones
+                                            |> List.reverse
+                                            |> List.drop 1
+                                            |> List.reverse
+                                        )
+                                    )
+                                , Html.a
+                                    [ Attr.href "#"
+                                    , class "block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
+                                    ]
+                                    [ text direccionEspecial.texto
                                     ]
                                 ]
-                            , div
-                                [ class "px-2 pt-2 pb-3 space-y-1" ]
-                                (List.map (menuItems True)
-                                    (direcciones
-                                        |> List.reverse
-                                        |> List.drop 1
-                                        |> List.reverse
-                                    )
-                                )
-                            , Html.a
-                                [ Attr.href "#"
-                                , class "block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
-                                ]
-                                [ text direccionEspecial.texto
-                                ]
                             ]
-                        ]
                     ]
                 , Html.main_
                     [ class "mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28" ]
