@@ -1,5 +1,6 @@
 module Page.Index exposing (Data, Model, Msg, page)
 
+import Browser.Navigation
 import Cloudinary
 import DataSource exposing (DataSource)
 import Head
@@ -11,6 +12,8 @@ import Html.Styled.Attributes as AttrS
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
+import Path
+import Route
 import Shared
 import Svg exposing (path, svg)
 import Svg.Attributes as SvgAttr
@@ -18,25 +21,66 @@ import View exposing (View)
 
 
 type alias Model =
-    ()
-
-
-type alias Msg =
-    Never
+    { menuOpen : Bool }
 
 
 type alias RouteParams =
     {}
 
 
+init :
+    Maybe PageUrl
+    -> Shared.Model
+    -> StaticPayload templateData routeParams
+    -> ( Model, Cmd Msg )
+init _ _ _ =
+    ( { menuOpen = False }, Cmd.none )
 
-page : Page RouteParams Data
+
+page : Page.PageWithState RouteParams Data Model Msg
 page =
     Page.single
         { head = head
         , data = data
         }
-        |> Page.buildNoState { view = view }
+        |> Page.buildWithSharedState
+            { view = view
+            , init = init
+            , update = update
+            , subscriptions = subscriptions
+            }
+
+
+subscriptions :
+    Maybe PageUrl
+    -> routeParams
+    -> Path.Path
+    -> Model
+    -> Shared.Model
+    -> Sub Msg
+subscriptions _ _ _ _ _ =
+    Sub.none
+
+
+type Msg
+    = ToggleMenu
+
+
+update :
+    PageUrl
+    -> Maybe Browser.Navigation.Key
+    -> Shared.Model
+    -> StaticPayload templateData routeParams
+    -> Msg
+    -> Model
+    -> ( Model, Cmd Msg, Maybe Shared.Msg )
+update _ _ _ _ msg model =
+    case msg of
+        ToggleMenu ->
+            ( { model | menuOpen = not model.menuOpen }
+            , Cmd.none
+            , Nothing
+            )
 
 
 data : DataSource Data
@@ -50,7 +94,7 @@ head :
 head static =
     Seo.summary
         { canonicalUrlOverride = Nothing
-        , siteName = "elm-pages"
+        , siteName = "psolar"
         , image =
             { url = Pages.Url.external "TODO"
             , alt = "elm-pages logo"
@@ -71,17 +115,52 @@ type alias Data =
 view :
     Maybe PageUrl
     -> Shared.Model
+    -> Model
     -> StaticPayload Data RouteParams
     -> View Msg
-view maybeUrl sharedModel static =
+view maybeUrl sharedModel model static =
     { title = "Por ahora nada"
     , body =
-        [ viewHero
+        [ viewHero model.menuOpen
         ]
     }
 
 
-viewHero =
+viewHero menuOpen =
+    let
+        direcciones : List { texto : String, dir : Pages.Url.Url }
+        direcciones =
+            [ { texto = "Contáctanos"
+              , dir = Pages.Url.fromPath (Route.toPath Route.Contacto)
+              }
+            , { texto = "Háblanos"
+              , dir = Pages.Url.fromPath (Route.toPath Route.Contacto)
+              }
+            , { texto = "Huevón"
+              , dir = Pages.Url.fromPath (Route.toPath Route.Contacto)
+              }
+            ]
+
+        -- text-indigo-600 hover:text-indigo-500" el sign-in para resaltar
+        clasesComunItems =
+            "font-medium hover:text-gray-900"
+
+        clasesMenuItems : Bool -> String
+        clasesMenuItems esMovil =
+            if esMovil then
+                "block px-3 py-2 rounded-md text-base text-gray-700 hover:bg-gray-50 " ++ clasesComunItems
+
+            else
+                clasesComunItems ++ " text-gray-500"
+
+        menuItems : Bool -> { texto : String, dir : Pages.Url.Url } -> Html msg
+        menuItems cualMenu direccion =
+            Html.a
+                [ Attr.href <| Pages.Url.toString direccion.dir
+                , class <| clasesMenuItems cualMenu
+                ]
+                [ text direccion.texto ]
+    in
     div
         [ class "relative bg-white overflow-hidden" ]
         [ div
@@ -117,7 +196,7 @@ viewHero =
                                             [ text "Workflow" ]
                                         , Html.img
                                             [ class "h-8 w-auto sm:h-10"
-                                            , Attr.src "https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                                            , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
                                             ]
                                             []
                                         ]
@@ -153,32 +232,7 @@ viewHero =
                                 ]
                             , div
                                 [ class "hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
-                                [ Html.a
-                                    [ Attr.href "#"
-                                    , class "font-medium text-gray-500 hover:text-gray-900"
-                                    ]
-                                    [ text "Product" ]
-                                , Html.a
-                                    [ Attr.href "#"
-                                    , class "font-medium text-gray-500 hover:text-gray-900"
-                                    ]
-                                    [ text "Features" ]
-                                , Html.a
-                                    [ Attr.href "#"
-                                    , class "font-medium text-gray-500 hover:text-gray-900"
-                                    ]
-                                    [ text "Marketplace" ]
-                                , Html.a
-                                    [ Attr.href "#"
-                                    , class "font-medium text-gray-500 hover:text-gray-900"
-                                    ]
-                                    [ text "Company" ]
-                                , Html.a
-                                    [ Attr.href "#"
-                                    , class "font-medium text-indigo-600 hover:text-indigo-500"
-                                    ]
-                                    [ text "Log in" ]
-                                ]
+                                (List.map (menuItems False) direcciones)
                             ]
                         ]
                     , {-
@@ -200,7 +254,7 @@ viewHero =
                                 [ div []
                                     [ Html.img
                                         [ class "h-8 w-auto"
-                                        , Attr.src "https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+                                        , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
                                         , Attr.alt ""
                                         ]
                                         []

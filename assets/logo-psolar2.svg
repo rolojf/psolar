@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="193.76065mm"
+   height="36.150627mm"
+   viewBox="0 0 193.76065 36.150627"
+   version="1.1"
+   id="svg22987"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   sodipodi:docname="logo-psolar2.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview22989"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     showborder="false"
+     inkscape:zoom="1.1111933"
+     inkscape:cx="504.41269"
+     inkscape:cy="38.697137"
+     inkscape:window-width="1366"
+     inkscape:window-height="711"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1"
+     inkscape:snap-nodes="false" />
+  <defs
+     id="defs22984">
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter23361"
+       x="-0.066700783"
+       y="-0.11141027"
+       width="1.1334016"
+       height="1.2228205">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.6309218"
+         id="feGaussianBlur23363" />
+    </filter>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="mix-blend-mode:normal;fill:#808080;stroke:none;stroke-width:0.235741;filter:url(#filter23361)"
+       id="rect23204"
+       width="94.664742"
+       height="56.675316"
+       x="132.21017"
+       y="29.176653"
+       transform="matrix(1.2778656,-0.00737514,-0.52542572,0.46368657,-105.87706,-1.9206817)" />
+    <rect
+       style="fill:#1e3a8a;fill-opacity:1;stroke:#000000;stroke-width:0.239579"
+       id="rect19410"
+       width="127.6459"
+       height="43.410809"
+       x="36.634026"
+       y="0.11362744"
+       transform="matrix(1,0,-0.58745919,0.80925379,0,0)" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:32.9087px;line-height:1.25;font-family:Roboto;-inkscape-font-specification:'Roboto, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:1.97659px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.822715"
+       x="40.920311"
+       y="29.125877"
+       id="text19414"
+       transform="matrix(1.0978506,0,-0.67973333,0.91087076,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan32514"
+         x="40.920311"
+         y="29.125877"
+         style="stroke-width:0.822715">psolar</tspan></text>
+  </g>
+</svg>
