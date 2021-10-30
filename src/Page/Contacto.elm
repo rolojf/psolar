@@ -581,7 +581,7 @@ viewFormulario model =
                         , Tw.tracking_tight
                         , TwBp.sm [ Tw.text_4xl ]
                         ]
-                    ]
+                    , Attr.class "font-serif" ]
                     [ text "¿Cómo Podemos Ayudar?" ]
                 , Htmls.p
                     [ Attr.css

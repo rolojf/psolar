@@ -329,20 +329,20 @@ viewHero menuOpen =
                         [ class "sm:text-center lg:text-left"
                         ]
                         [ Html.h1
-                            [ class "text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl" ]
+                            [ class "text-4xl font-serif tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl" ]
                             [ Html.span
                                 [ class "block xl:inline" ]
-                                [ text "Cuidamos tu " ]
+                                [ text "Servicio a " ]
                             , Html.span
                                 [ class "block text-blue-900 xl:inline" ]
                                 [ text " Panel Solar " ]
                             , Html.span
                                 [ class "block xl:inline" ]
-                                [ text " para que ahorres más" ]
+                                [ text " para Ahorrar Más" ]
                             ]
                         , Html.p
                             [ class "mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" ]
-                            [ text "Con revisiones para ver que todo está bien, si no hay algo que afecte. Y mantenimiento para prevenir y corregir.  Alarga la vida y produce más." ]
+                            [ text "Revisiones para confirmar si todo está bien, o si no hay algo que afecte. Mantenimiento para prevenir y corregir.  Cuida tu inversión y produce más." ]
                         , div
                             [ class "mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start" ]
                             [ div
