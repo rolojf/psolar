@@ -1,8 +1,6 @@
 module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
 
 import Browser.Navigation
-import Css
-import Css.Global
 import DataSource
 import Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (class)

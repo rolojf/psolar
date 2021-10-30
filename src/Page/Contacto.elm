@@ -8,7 +8,7 @@ import DataSource exposing (DataSource)
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
-import Html.Styled as Htmls exposing (div)
+import Html.Styled as Htmls exposing (div, text)
 import Html.Styled.Attributes as Attr exposing (class)
 import Html.Styled.Attributes.Aria as Aria
 import Html.Styled.Events as Events
@@ -242,15 +242,15 @@ view maybeUrl sharedModel model static =
 
                             Conocido ->
                                 Htmls.h4 []
-                                    [ Htmls.text "HEY! Sos Familia!!" ]
+                                    [ text "HEY! Sos Familia!!" ]
 
                             Rechazado ->
                                 Htmls.h4 []
-                                    [ Htmls.text "Pareces un Bot, intenta de nuevo" ]
+                                    [ text "Pareces un Bot, intenta de nuevo" ]
 
                             _ ->
                                 Htmls.h4 []
-                                    [ Htmls.text "¿Cómo chingados llegué a este estado?" ]
+                                    [ text "¿Cómo chingados llegué a este estado?" ]
                         ]
 
                   else
@@ -298,7 +298,7 @@ viewFormulario model =
                         , Tw.text_gray_700
                         ]
                     ]
-                    [ Htmls.text "First name" ]
+                    [ text "Nombre" ]
                 , div
                     [ Attr.css [ Tw.mt_1 ] ]
                     [ Htmls.input
@@ -338,7 +338,7 @@ viewFormulario model =
                         , Tw.text_gray_700
                         ]
                     ]
-                    [ Htmls.text "Last name" ]
+                    [ text "Apellido" ]
                 , div
                     [ Attr.css [ Tw.mt_1 ] ]
                     [ Htmls.input
@@ -376,7 +376,7 @@ viewFormulario model =
                         , Tw.text_gray_700
                         ]
                     ]
-                    [ Htmls.text "Email" ]
+                    [ text "Correo Electrónico" ]
                 , div
                     [ Attr.css [ Tw.mt_1 ] ]
                     [ Htmls.input
@@ -420,7 +420,7 @@ viewFormulario model =
                             , Tw.text_gray_700
                             ]
                         ]
-                        [ Htmls.text "Phone" ]
+                        [ text "Teléfono" ]
                     , Htmls.span
                         [ Attr.id "phone_description"
                         , Attr.css
@@ -428,7 +428,7 @@ viewFormulario model =
                             , Tw.text_gray_500
                             ]
                         ]
-                        [ Htmls.text "Optional" ]
+                        [ text "Opcional" ]
                     ]
                 , div
                     [ Attr.css [ Tw.mt_1 ] ]
@@ -465,12 +465,12 @@ viewFormulario model =
                         [ Attr.for "how_can_we_help"
                         , Attr.css [ Tw.block, Tw.text_sm, Tw.font_medium, Tw.text_gray_700 ]
                         ]
-                        [ Htmls.text "How can we help you?" ]
+                        [ text "Comentario" ]
                     , Htmls.span
                         [ Attr.id "how_can_we_help_description"
                         , Attr.css [ Tw.text_sm, Tw.text_gray_500 ]
                         ]
-                        [ Htmls.text ">Max. 500 characters" ]
+                        [ text ">Max. 500 caracteres" ]
                     ]
                 , div
                     [ Attr.css [ Tw.mt_1 ] ]
@@ -501,7 +501,7 @@ viewFormulario model =
                     [ Attr.for "how_did_you_hear_about_us"
                     , Attr.css [ Tw.block, Tw.text_sm, Tw.font_medium, Tw.text_gray_700 ]
                     ]
-                    [ Htmls.text "How did you hear about us?" ]
+                    [ text "¿Cómo llegó con nosotros?" ]
                 , div
                     [ Attr.css [ Tw.mt_1 ] ]
                     [ Htmls.input
@@ -545,7 +545,7 @@ viewFormulario model =
                         , Css.focus [ Tw.outline_none, Tw.ring_2, Tw.ring_offset_2, Tw.ring_indigo_500 ]
                         ]
                     ]
-                    [ Htmls.text "Submit" ]
+                    [ text "Enviar" ]
                 ]
     in
     div
@@ -560,7 +560,7 @@ viewFormulario model =
                 , Tw.mx_auto
                 , Tw.grid
                 , Tw.grid_cols_2
-                , Tw.py_2
+                , Tw.py_8
                 ]
             ]
         ]
@@ -582,7 +582,7 @@ viewFormulario model =
                         , TwBp.sm [ Tw.text_4xl ]
                         ]
                     ]
-                    [ Htmls.text "Let's work together" ]
+                    [ text "¿Cómo Podemos Ayudar?" ]
                 , Htmls.p
                     [ Attr.css
                         [ Tw.mt_4
@@ -591,7 +591,7 @@ viewFormulario model =
                         , TwBp.sm [ Tw.mt_3 ]
                         ]
                     ]
-                    [ Htmls.text "We’d love to hear from you! Send us a message using the form opposite, or email us. We’d love to hear from you! Send us a message using the form opposite, or email us." ]
+                    [ text "Responderemos tan pronto sea posible con un correo electrónico o con un mensaje a su teléfono. Gracias." ]
                 , Htmls.form
                     [ Attr.action "#"
                     , Attr.method "POST"
