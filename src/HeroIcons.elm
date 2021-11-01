@@ -23,6 +23,42 @@ solidX =
         ]
 
 
+outlineMenu =
+    svg
+        [ SvgAttr.class "h-6 w-6"
+        , SvgAttr.fill "none"
+        , SvgAttr.viewBox "0 0 24 24"
+        , SvgAttr.stroke "currentColor"
+        , Attr.attribute "aria-hidden" "true"
+        ]
+        [ path
+            [ SvgAttr.strokeLinecap "round"
+            , SvgAttr.strokeLinejoin "round"
+            , SvgAttr.strokeWidth "2"
+            , SvgAttr.d "M4 6h16M4 12h16M4 18h16"
+            ]
+            []
+        ]
+
+
+outlineX =
+    svg
+        [ SvgAttr.class "h-6 w-6"
+        , SvgAttr.fill "none"
+        , SvgAttr.viewBox "0 0 24 24"
+        , SvgAttr.stroke "currentColor"
+        , Attr.attribute "aria-hidden" "true"
+        ]
+        [ path
+            [ SvgAttr.strokeLinecap "round"
+            , SvgAttr.strokeLinejoin "round"
+            , SvgAttr.strokeWidth "2"
+            , SvgAttr.d "M6 18L18 6M6 6l12 12"
+            ]
+            []
+        ]
+
+
 outlineCheckCircle =
     svg
         [ SvgAttr.class "h-6 w-6 text-green-400"

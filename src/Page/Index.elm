@@ -25,7 +25,9 @@ import View exposing (View)
 
 
 type alias Model =
-    { menuOpen : Bool }
+    { menuOpen : Bool
+    , verNotificaciones : Bool
+    }
 
 
 type alias RouteParams =
@@ -38,7 +40,9 @@ init :
     -> StaticPayload templateData routeParams
     -> ( Model, Cmd Msg )
 init _ _ _ =
-    ( { menuOpen = False }
+    ( { menuOpen = False
+      , verNotificaciones = True
+      }
     , Cmd.none
     )
 
@@ -70,6 +74,7 @@ subscriptions _ _ _ _ _ =
 
 type Msg
     = ToggleMenu
+    | CierraNoti
 
 
 update :
@@ -84,6 +89,12 @@ update _ _ _ _ msg model =
     case msg of
         ToggleMenu ->
             ( { model | menuOpen = not model.menuOpen }
+            , Cmd.none
+            , Nothing
+            )
+
+        CierraNoti ->
+            ( { model | verNotificaciones = False }
             , Cmd.none
             , Nothing
             )
@@ -132,6 +143,8 @@ view maybeUrl sharedModel model static =
             HeroIcons.outlineCheckCircle
             "Maravillos Vas Bien"
             "Solo no te desesperes por favor hay que echarle ganas"
+            model.verNotificaciones
+            |> Html.map (\_ -> CierraNoti)
         ]
     }
 
@@ -213,22 +226,7 @@ viewHero menuOpen =
                             [ Html.span
                                 [ class "sr-only" ]
                                 [ text "Close main menu" ]
-                            , {- Heroicon name: outline/x -}
-                              svg
-                                [ SvgAttr.class "h-6 w-6"
-                                , SvgAttr.fill "none"
-                                , SvgAttr.viewBox "0 0 24 24"
-                                , SvgAttr.stroke "currentColor"
-                                , Attr.attribute "aria-hidden" "true"
-                                ]
-                                [ path
-                                    [ SvgAttr.strokeLinecap "round"
-                                    , SvgAttr.strokeLinejoin "round"
-                                    , SvgAttr.strokeWidth "2"
-                                    , SvgAttr.d "M6 18L18 6M6 6l12 12"
-                                    ]
-                                    []
-                                ]
+                            , HeroIcons.outlineX
                             ]
                         ]
                     ]
@@ -239,7 +237,7 @@ viewHero menuOpen =
                     [ Attr.href "#"
                     , class "block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
                     ]
-                    [ text direccionEspecial.texto                     ]
+                    [ text direccionEspecial.texto ]
                 ]
     in
     div
@@ -292,22 +290,7 @@ viewHero menuOpen =
                                             [ Html.span
                                                 [ class "sr-only" ]
                                                 [ text "Open main menu" ]
-                                            , {- Heroicon name: outline/menu -}
-                                              svg
-                                                [ SvgAttr.class "h-6 w-6"
-                                                , SvgAttr.fill "none"
-                                                , SvgAttr.viewBox "0 0 24 24"
-                                                , SvgAttr.stroke "currentColor"
-                                                , Attr.attribute "aria-hidden" "true"
-                                                ]
-                                                [ path
-                                                    [ SvgAttr.strokeLinecap "round"
-                                                    , SvgAttr.strokeLinejoin "round"
-                                                    , SvgAttr.strokeWidth "2"
-                                                    , SvgAttr.d "M4 6h16M4 12h16M4 18h16"
-                                                    ]
-                                                    []
-                                                ]
+                                            , HeroIcons.outlineMenu
                                             ]
                                         ]
                                     ]
