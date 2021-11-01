@@ -11,7 +11,7 @@ import Head
 import Head.Seo as Seo
 import Html exposing (Html)
 import Html.Styled as Htmls exposing (div, text)
-import Html.Styled.Attributes as Attr exposing (class)
+import Html.Styled.Attributes as Attr exposing (class, css)
 import Html.Styled.Attributes.Aria as Aria
 import Html.Styled.Events as Events
 import Page exposing (Page, StaticPayload)
@@ -21,6 +21,8 @@ import Path
 import Process
 import Reto
 import Shared
+import Svg.Styled as Svg
+import Svg.Styled.Attributes as SvgAttr
 import Tailwind.Breakpoints as TwBp
 import Tailwind.Utilities as Tw
 import Task
@@ -240,7 +242,7 @@ view maybeUrl sharedModel model static =
     { title = "Formulario de Contacto"
     , body =
         [ {- div
-             [ Attr.css
+             [ css
                  [ Tw.max_w_7xl
                  , Tw.mx_auto
                  , TwBp.sm [ Tw.px_6 ]
@@ -250,12 +252,12 @@ view maybeUrl sharedModel model static =
              [
           -}
           div
-            [ Attr.css [ Tw.relative, Tw.bg_white ] ]
+            [ css [ Tw.relative, Tw.bg_white ] ]
             [ viewLayout
             , viewFormulario model
             , if model.listo then
                 div
-                    [ Attr.css [ TwBp.lg [ Tw.h_72 ] ] ]
+                    [ css [ TwBp.lg [ Tw.h_72 ] ] ]
                     [ case model.usuarioStatus of
                         Desconocido ->
                             Reto.view model.reModel |> Htmls.map ReMsg
@@ -285,11 +287,11 @@ view maybeUrl sharedModel model static =
 viewLayout : Htmls.Html Msg
 viewLayout =
     div
-        [ Attr.css [ TwBp.lg [ Tw.absolute, Tw.inset_0 ] ] ]
+        [ css [ TwBp.lg [ Tw.absolute, Tw.inset_0 ] ] ]
         [ div
-            [ Attr.css [ TwBp.lg [ Tw.absolute, Tw.inset_y_0, Tw.right_0, Tw.w_1over2 ] ] ]
+            [ css [ TwBp.lg [ Tw.absolute, Tw.inset_y_0, Tw.right_0, Tw.w_1over2 ] ] ]
             [ Htmls.img
-                [ Attr.css
+                [ css
                     [ Tw.h_56
                     , Tw.w_full
                     , Tw.object_cover
@@ -312,7 +314,7 @@ viewFormulario model =
                 []
                 [ Htmls.label
                     [ Attr.for "first_name"
-                    , Attr.css
+                    , css
                         [ Tw.block
                         , Tw.text_sm
                         , Tw.font_medium
@@ -321,7 +323,7 @@ viewFormulario model =
                     ]
                     [ text "Nombre" ]
                 , div
-                    [ Attr.css [ Tw.mt_1 ] ]
+                    [ css [ Tw.mt_1 ] ]
                     [ Htmls.input
                         [ Attr.type_ "text"
                         , Attr.name "first_name"
@@ -330,7 +332,7 @@ viewFormulario model =
                         , Attr.minlength 2
                         , Attr.maxlength 15
                         , Attr.autocomplete True -- "given-name"
-                        , Attr.css
+                        , css
                             [ Tw.block
                             , Tw.w_full
                             , Tw.shadow_sm
@@ -352,7 +354,7 @@ viewFormulario model =
             div []
                 [ Htmls.label
                     [ Attr.for "last_name"
-                    , Attr.css
+                    , css
                         [ Tw.block
                         , Tw.text_sm
                         , Tw.font_medium
@@ -361,13 +363,13 @@ viewFormulario model =
                     ]
                     [ text "Apellido" ]
                 , div
-                    [ Attr.css [ Tw.mt_1 ] ]
+                    [ css [ Tw.mt_1 ] ]
                     [ Htmls.input
                         [ Attr.type_ "text"
                         , Attr.name "last_name"
                         , Attr.id "last_name"
                         , Attr.autocomplete True -- "family-name"
-                        , Attr.css
+                        , css
                             [ Tw.block
                             , Tw.w_full
                             , Tw.shadow_sm
@@ -387,10 +389,10 @@ viewFormulario model =
 
         viewCampoCorreo =
             div
-                [ Attr.css [ TwBp.sm [ Tw.col_span_2 ] ] ]
+                [ css [ TwBp.sm [ Tw.col_span_2 ] ] ]
                 [ Htmls.label
                     [ Attr.for "email"
-                    , Attr.css
+                    , css
                         [ Tw.block
                         , Tw.text_sm
                         , Tw.font_medium
@@ -399,13 +401,13 @@ viewFormulario model =
                     ]
                     [ text "Correo Electrónico" ]
                 , div
-                    [ Attr.css [ Tw.mt_1 ] ]
+                    [ css [ Tw.mt_1 ] ]
                     [ Htmls.input
                         [ Attr.id "email"
                         , Attr.name "email"
                         , Attr.type_ "email"
                         , Attr.autocomplete True --"email"
-                        , Attr.css
+                        , css
                             [ Tw.block
                             , Tw.w_full
                             , Tw.shadow_sm
@@ -425,16 +427,16 @@ viewFormulario model =
 
         viewCampoTelefono =
             div
-                [ Attr.css [ TwBp.sm [ Tw.col_span_2 ] ] ]
+                [ css [ TwBp.sm [ Tw.col_span_2 ] ] ]
                 [ div
-                    [ Attr.css
+                    [ css
                         [ Tw.flex
                         , Tw.justify_between
                         ]
                     ]
                     [ Htmls.label
                         [ Attr.for "phone"
-                        , Attr.css
+                        , css
                             [ Tw.block
                             , Tw.text_sm
                             , Tw.font_medium
@@ -444,7 +446,7 @@ viewFormulario model =
                         [ text "Teléfono" ]
                     , Htmls.span
                         [ Attr.id "phone_description"
-                        , Attr.css
+                        , css
                             [ Tw.text_sm
                             , Tw.text_gray_500
                             ]
@@ -452,7 +454,7 @@ viewFormulario model =
                         [ text "Opcional" ]
                     ]
                 , div
-                    [ Attr.css [ Tw.mt_1 ] ]
+                    [ css [ Tw.mt_1 ] ]
                     [ Htmls.input
                         [ Attr.type_ "text"
                         , Attr.name "phone"
@@ -462,7 +464,7 @@ viewFormulario model =
                         , Attr.value model.telefono
                         , Attr.autocomplete True -- "tel"
                         , Aria.ariaDescribedby "phone_description"
-                        , Attr.css
+                        , css
                             [ Tw.block
                             , Tw.w_full
                             , Tw.shadow_sm
@@ -479,28 +481,28 @@ viewFormulario model =
 
         viewCampoComment =
             div
-                [ Attr.css [ TwBp.sm [ Tw.col_span_2 ] ] ]
+                [ css [ TwBp.sm [ Tw.col_span_2 ] ] ]
                 [ div
-                    [ Attr.css [ Tw.flex, Tw.justify_between ] ]
+                    [ css [ Tw.flex, Tw.justify_between ] ]
                     [ Htmls.label
                         [ Attr.for "how_can_we_help"
-                        , Attr.css [ Tw.block, Tw.text_sm, Tw.font_medium, Tw.text_gray_700 ]
+                        , css [ Tw.block, Tw.text_sm, Tw.font_medium, Tw.text_gray_700 ]
                         ]
                         [ text "Comentario" ]
                     , Htmls.span
                         [ Attr.id "how_can_we_help_description"
-                        , Attr.css [ Tw.text_sm, Tw.text_gray_500 ]
+                        , css [ Tw.text_sm, Tw.text_gray_500 ]
                         ]
                         [ text ">Max. 500 caracteres" ]
                     ]
                 , div
-                    [ Attr.css [ Tw.mt_1 ] ]
+                    [ css [ Tw.mt_1 ] ]
                     [ Htmls.textarea
                         [ Attr.id "how_can_we_help"
                         , Attr.name "how_can_we_help"
                         , Aria.ariaDescribedby "how_can_we_help_description"
                         , Attr.rows 4
-                        , Attr.css
+                        , css
                             [ Tw.block
                             , Tw.w_full
                             , Tw.shadow_sm
@@ -517,19 +519,19 @@ viewFormulario model =
 
         viewComoSupoDeNos =
             div
-                [ Attr.css [ TwBp.sm [ Tw.col_span_2 ] ] ]
+                [ css [ TwBp.sm [ Tw.col_span_2 ] ] ]
                 [ Htmls.label
                     [ Attr.for "how_did_you_hear_about_us"
-                    , Attr.css [ Tw.block, Tw.text_sm, Tw.font_medium, Tw.text_gray_700 ]
+                    , css [ Tw.block, Tw.text_sm, Tw.font_medium, Tw.text_gray_700 ]
                     ]
                     [ text "¿Cómo llegó con nosotros?" ]
                 , div
-                    [ Attr.css [ Tw.mt_1 ] ]
+                    [ css [ Tw.mt_1 ] ]
                     [ Htmls.input
                         [ Attr.type_ "text"
                         , Attr.name "how_did_you_hear_about_us"
                         , Attr.id "how_did_you_hear_about_us"
-                        , Attr.css
+                        , css
                             [ Tw.shadow_sm
                             , Css.focus [ Tw.ring_indigo_500, Tw.border_indigo_500 ]
                             , Tw.block
@@ -546,10 +548,10 @@ viewFormulario model =
 
         viewBotonSubmit =
             div
-                [ Attr.css [ Tw.text_right, TwBp.sm [ Tw.col_span_2 ] ] ]
+                [ css [ Tw.text_right, TwBp.sm [ Tw.col_span_2 ] ] ]
                 [ Htmls.button
                     [ Attr.type_ "submit"
-                    , Attr.css
+                    , css
                         [ Tw.inline_flex
                         , Tw.justify_center
                         , Tw.py_2
@@ -570,7 +572,7 @@ viewFormulario model =
                 ]
     in
     div
-        [ Attr.css
+        [ css
             [ Tw.relative
             , Tw.py_8
             , Tw.px_4
@@ -586,9 +588,9 @@ viewFormulario model =
             ]
         ]
         [ div
-            [ Attr.css [ TwBp.lg [ Tw.pr_8 ] ] ]
+            [ css [ TwBp.lg [ Tw.pr_8 ] ] ]
             [ div
-                [ Attr.css
+                [ css
                     [ Tw.max_w_md
                     , Tw.mx_auto
                     , TwBp.lg [ Tw.mx_0 ]
@@ -596,7 +598,7 @@ viewFormulario model =
                     ]
                 ]
                 [ Htmls.h2
-                    [ Attr.css
+                    [ css
                         [ Tw.text_3xl
                         , Tw.font_extrabold
                         , Tw.tracking_tight
@@ -606,7 +608,7 @@ viewFormulario model =
                     ]
                     [ text "¿Cómo Podemos Ayudar?" ]
                 , Htmls.p
-                    [ Attr.css
+                    [ css
                         [ Tw.mt_4
                         , Tw.text_lg
                         , Tw.text_gray_500
@@ -618,7 +620,7 @@ viewFormulario model =
                     [ Attr.action "#"
                     , Attr.method "POST"
                     , Events.onSubmit Enviado
-                    , Attr.css
+                    , css
                         [ Tw.mt_9
                         , Tw.grid
                         , Tw.grid_cols_1
@@ -637,3 +639,5 @@ viewFormulario model =
                 ]
             ]
         ]
+
+

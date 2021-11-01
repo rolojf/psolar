@@ -200,7 +200,7 @@ viewChallenge model =
                 , if model.intentos >= 1 then
                     Htmls.p
                         [ Attr.css
-                            ([ Tw.text_right, Tw.mx_4 ]
+                            ([ Tw.text_right, Tw.pt_4, Tw.mx_4 ]
                                 ++ (if model.intentos == 1 then
                                         [ Tw.text_black ]
 

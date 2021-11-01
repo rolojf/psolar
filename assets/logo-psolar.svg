@@ -8,7 +8,7 @@
    version="1.1"
    id="svg22987"
    inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
-   sodipodi:docname="logo-psolar.svg"
+   sodipodi:docname="logo-psolar2.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -28,29 +28,30 @@
      fit-margin-right="0"
      fit-margin-bottom="0"
      showborder="false"
-     inkscape:zoom="1.5714646"
-     inkscape:cx="336.94681"
-     inkscape:cy="71.90744"
+     inkscape:zoom="1.1111933"
+     inkscape:cx="504.41269"
+     inkscape:cy="38.697137"
      inkscape:window-width="1366"
      inkscape:window-height="711"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1"
+     inkscape:snap-nodes="false" />
   <defs
      id="defs22984">
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
-       id="filter19392"
-       x="-0.12632126"
-       y="-0.094393908"
-       width="1.2526425"
-       height="1.1887878">
+       id="filter23361"
+       x="-0.066700783"
+       y="-0.11141027"
+       width="1.1334016"
+       height="1.2228205">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="1.3694708"
-         id="feGaussianBlur19394" />
+         stdDeviation="2.6309218"
+         id="feGaussianBlur23363" />
     </filter>
   </defs>
   <g
@@ -58,60 +59,32 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#000080;stroke:#000000;stroke-width:0.250519"
+       style="mix-blend-mode:normal;fill:#808080;stroke:none;stroke-width:0.235741;filter:url(#filter23361)"
+       id="rect23204"
+       width="94.664742"
+       height="56.675316"
+       x="132.21017"
+       y="29.176653"
+       transform="matrix(1.2778656,-0.00737514,-0.52542572,0.46368657,-105.87706,-1.9206817)" />
+    <rect
+       style="fill:#1e3a8a;fill-opacity:1;stroke:#000000;stroke-width:0.239579"
        id="rect19410"
-       width="106.43826"
-       height="56.923996"
-       x="87.258194"
-       y="0.20287538"
-       transform="matrix(1,0,-0.78679126,0.61721918,0,0)" />
+       width="127.6459"
+       height="43.410809"
+       x="36.634026"
+       y="0.11362744"
+       transform="matrix(1,0,-0.58745919,0.80925379,0,0)" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:32.7127px;line-height:1.25;font-family:Roboto;-inkscape-font-specification:'Roboto, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:1.96482px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.817816"
-       x="88.157059"
-       y="30.700518"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:32.9087px;line-height:1.25;font-family:Roboto;-inkscape-font-specification:'Roboto, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;letter-spacing:1.97659px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.822715"
+       x="40.920311"
+       y="29.125877"
        id="text19414"
-       transform="matrix(1.0913132,0,-1.168075,0.91632723,0,0)"><tspan
+       transform="matrix(1.0978506,0,-0.67973333,0.91087076,0,0)"><tspan
          sodipodi:role="line"
-         id="tspan19412"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:32.7127px;font-family:Roboto;-inkscape-font-specification:'Roboto, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:0.817816"
-         x="88.157059"
-         y="30.700518">solar</tspan></text>
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:0.277882"
-       id="rect19416"
-       width="42.054585"
-       height="56.99345"
-       x="45.199524"
-       y="0.13894105"
-       transform="matrix(1,0,-0.78679126,0.61721918,0,0)" />
-    <g
-       id="g23172"
-       transform="matrix(0.95120816,0,0,0.96162674,0.52047764,1.3007196)">
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:48.9766px;line-height:1.25;font-family:Roboto;-inkscape-font-specification:'Roboto, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;fill-opacity:1;stroke:none;stroke-width:1.22442;filter:url(#filter19392)"
-         x="24.517841"
-         y="136.14328"
-         id="text19408"
-         transform="matrix(0.90046605,0,-0.96380388,0.75608141,122.43916,-71.915646)"><tspan
-           sodipodi:role="line"
-           id="tspan19406"
-           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:48.9766px;font-family:Roboto;-inkscape-font-specification:'Roboto, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#808080;stroke-width:1.22442"
-           x="24.517841"
-           y="136.14328">P</tspan></text>
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:40.4117px;line-height:1.25;font-family:Roboto;-inkscape-font-specification:'Roboto, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.0103"
-         x="45.609623"
-         y="31.439795"
-         id="text19420"
-         transform="matrix(1.0913132,0,-1.168075,0.91632723,0,0)"><tspan
-           sodipodi:role="line"
-           id="tspan19418"
-           style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:40.4117px;font-family:Roboto;-inkscape-font-specification:'Roboto, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:1.0103"
-           x="45.609623"
-           y="31.439795">P</tspan></text>
-    </g>
+         id="tspan32514"
+         x="40.920311"
+         y="29.125877"
+         style="stroke-width:0.822715">psolar</tspan></text>
   </g>
 </svg>

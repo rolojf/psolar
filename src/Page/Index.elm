@@ -5,9 +5,11 @@ import Cloudinary
 import DataSource exposing (DataSource)
 import Head
 import Head.Seo as Seo
+import HeroIcons
 import Html as Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (class)
 import Html.Events
+import Notifica
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
@@ -126,6 +128,10 @@ view maybeUrl sharedModel model static =
     { title = "Por ahora nada"
     , body =
         [ viewHero model.menuOpen
+        , Notifica.retroFinal
+            HeroIcons.outlineCheckCircle
+            "Maravillos Vas Bien"
+            "Solo no te desesperes por favor hay que echarle ganas"
         ]
     }
 
