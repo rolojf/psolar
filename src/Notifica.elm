@@ -26,9 +26,9 @@ retroFinal icono titulo subtitulo =
     {- Global notification live region, render this permanently at the end of the document -}
     div
         [ Attr.attribute "aria-live" "assertive"
-        , class "fixed inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6 sm:items-start"
+        , class "fixed inset-0 flex items-end px-4 py-6 z-20 pointer-events-none sm:p-6 lg:items-center"
         ]
-        [ div [ class "w-full flex flex-col items-center space-y-4 sm:items-end" ]
+        [ div [ class "w-full flex flex-col items-center space-y-4z sm:items-start lg:items-end" ]
             [ {-
                  Notification panel, dynamically insert this into the live region when it needs to be displayed
 
@@ -40,7 +40,7 @@ retroFinal icono titulo subtitulo =
                    To: "opacity-0"
               -}
               div
-                [ class "max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden" ]
+                [ class "max-w-sm w-full bg-gray-200 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden" ]
                 [ div
                     [ class "p-4" ]
                     [ div
