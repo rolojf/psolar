@@ -2,7 +2,9 @@ module Page.Contacto exposing (Data, Model, Msg, page)
 
 -- exposing (css)
 
+import Browser.Dom as Dom
 import Browser.Navigation
+import Cloudinary
 import Css
 import DataSource exposing (DataSource)
 import Head
@@ -54,7 +56,9 @@ type Msg
     | Telefono String
     | Comentario String
     | Enviado
+    | EsperaPaEnfocar
     | ReMsg Reto.Msg
+    | NoOp
 
 
 init :
@@ -122,7 +126,15 @@ update _ _ _ _ msg model =
 
         Enviado ->
             ( { model | listo = True }
-            , Cmd.none
+            , Task.perform
+                (\_ -> EsperaPaEnfocar)
+                (Process.sleep 100)
+            , Nothing
+            )
+
+        EsperaPaEnfocar ->
+            ( model
+            , Task.attempt (\_ -> NoOp) (Dom.focus "valor-challenge")
             , Nothing
             )
 
@@ -150,6 +162,12 @@ update _ _ _ _ msg model =
 
               else
                 Cmd.none
+            , Nothing
+            )
+
+        NoOp ->
+            ( model
+            , Cmd.none
             , Nothing
             )
 
@@ -222,42 +240,44 @@ view maybeUrl sharedModel model static =
     { title = "Formulario de Contacto"
     , body =
         [ {- div
-            [ Attr.css
-                [ Tw.max_w_7xl
-                , Tw.mx_auto
-                , TwBp.sm [ Tw.px_6 ]
-                , TwBp.lg [ Tw.px_8 ]
-                ]
+             [ Attr.css
+                 [ Tw.max_w_7xl
+                 , Tw.mx_auto
+                 , TwBp.sm [ Tw.px_6 ]
+                 , TwBp.lg [ Tw.px_8 ]
+                 ]
+             ]
+             [
+          -}
+          div
+            [ Attr.css [ Tw.relative, Tw.bg_white ] ]
+            [ viewLayout
+            , viewFormulario model
+            , if model.listo then
+                div
+                    [ Attr.css [ TwBp.lg [ Tw.h_72 ] ] ]
+                    [ case model.usuarioStatus of
+                        Desconocido ->
+                            Reto.view model.reModel |> Htmls.map ReMsg
+
+                        Conocido ->
+                            Htmls.h4 []
+                                [ text "HEY! Sos Familia!!" ]
+
+                        Rechazado ->
+                            Htmls.h4 []
+                                [ text "Pareces un Bot, intenta de nuevo" ]
+
+                        _ ->
+                            Htmls.h4 []
+                                [ text "¿Cómo chingados llegué a este estado?" ]
+                    ]
+
+              else
+                div [] []
             ]
-            [-} div
-                [ Attr.css [ Tw.relative, Tw.bg_white ] ]
-                [ viewLayout
-                , viewFormulario model
-                , if model.listo then
-                    div
-                        [ Attr.css [ TwBp.lg [ Tw.h_72 ] ] ]
-                        [ case model.usuarioStatus of
-                            Desconocido ->
-                                Reto.view model.reModel |> Htmls.map ReMsg
-
-                            Conocido ->
-                                Htmls.h4 []
-                                    [ text "HEY! Sos Familia!!" ]
-
-                            Rechazado ->
-                                Htmls.h4 []
-                                    [ text "Pareces un Bot, intenta de nuevo" ]
-
-                            _ ->
-                                Htmls.h4 []
-                                    [ text "¿Cómo chingados llegué a este estado?" ]
-                        ]
-
-                  else
-                    div [] []
-                ]
-            ]
-        -- ]
+        ]
+            -- ]
             |> List.map Htmls.toUnstyled
     }
 
@@ -273,9 +293,10 @@ viewLayout =
                     [ Tw.h_56
                     , Tw.w_full
                     , Tw.object_cover
+                    , Tw.object_top
                     , TwBp.lg [ Tw.absolute, Tw.h_screen ]
                     ]
-                , Attr.src "https://images.unsplash.com/photo-1556761175-4b46a572b786?ixlib=rb-1.2.1&ixqx=g09zpRVLoT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1567&q=80"
+                , Attr.src <| Cloudinary.url "f_auto" "v1619940728/dreamstime_m_29668275_t0oapr.jpg"
                 , Attr.alt ""
                 ]
                 []
@@ -581,7 +602,8 @@ viewFormulario model =
                         , Tw.tracking_tight
                         , TwBp.sm [ Tw.text_4xl ]
                         ]
-                    , Attr.class "font-serif" ]
+                    , Attr.class "font-serif"
+                    ]
                     [ text "¿Cómo Podemos Ayudar?" ]
                 , Htmls.p
                     [ Attr.css
