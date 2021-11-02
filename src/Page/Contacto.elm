@@ -20,6 +20,7 @@ import Pages.Url
 import Path
 import Process
 import Reto
+import Route
 import Shared
 import Svg.Styled as Svg
 import Svg.Styled.Attributes as SvgAttr
@@ -30,8 +31,7 @@ import View exposing (View)
 
 
 type alias Model =
-    { usuarioStatus : UsuarioSt
-    , nombre : String
+    { nombre : String
     , comoSupo : String
     , correo : String
     , comentario : String
@@ -41,13 +41,6 @@ type alias Model =
     , reModel : Reto.Model
     , respondio : Bool
     }
-
-
-type UsuarioSt
-    = Desconocido
-    | Rechazado
-    | Conocido
-    | DiceQueRegresa
 
 
 type Msg
@@ -69,8 +62,7 @@ init :
     -> StaticPayload templateData routeParams
     -> ( Model, Cmd Msg )
 init _ _ _ =
-    ( { usuarioStatus = Desconocido
-      , nombre = ""
+    ( { nombre = ""
       , comoSupo = ""
       , correo = ""
       , comentario = ""
@@ -92,7 +84,7 @@ update :
     -> Msg
     -> Model
     -> ( Model, Cmd Msg, Maybe Shared.Msg )
-update _ _ _ _ msg model =
+update _ navKey sharedModel _ msg model =
     case msg of
         Nombre cCampo ->
             ( { model | nombre = cCampo }, Cmd.none, Nothing )
@@ -142,29 +134,48 @@ update _ _ _ _ msg model =
 
         ReMsg reMsg ->
             let
-                modeloResultante =
+                modeloQResulta =
                     Reto.update reMsg model.reModel
             in
-            ( { model
-                | reModel = modeloResultante
-                , usuarioStatus =
-                    if modeloResultante.intento == Reto.YaOk then
-                        Conocido
-
-                    else if modeloResultante.intento == Reto.EstaFrito then
-                        Rechazado
-
-                    else
-                        Desconocido
-              }
-            , if modeloResultante.vaDeNuez then
+            ( { model | reModel = modeloQResulta }
+            , if modeloQResulta.vaDeNuez then
                 Task.perform
                     (\_ -> ReMsg Reto.IntentaDeNuez)
                     (Process.sleep 500)
 
               else
-                Cmd.none
-            , Nothing
+                case modeloQResulta.intento of
+                    Reto.YaOk ->
+                         navKey
+                            |> Maybe.map
+                               (\llave ->
+                                   Browser.Navigation.pushUrl
+                                   llave
+                                   (Pages.Url.fromPath (Route.toPath Route.Index)
+                                       |> Pages.Url.toString)
+                               )
+                            |> Maybe.withDefault Cmd.none
+
+                    Reto.EstaFrito ->
+                         navKey
+                            |> Maybe.map
+                               (\llave ->
+                                   Browser.Navigation.pushUrl
+                                   llave
+                                   (Pages.Url.fromPath (Route.toPath Route.Index)
+                                       |> Pages.Url.toString)
+                               )
+                            |> Maybe.withDefault Cmd.none
+                    _ ->
+                        Cmd.none
+            , if modeloQResulta.intento == Reto.YaOk then
+                Just (Shared.SharedMsg <| Shared.CambiaStatus Shared.Conocido)
+
+              else if modeloQResulta.intento == Reto.EstaFrito then
+                Just (Shared.SharedMsg <| Shared.CambiaStatus Shared.Rechazado)
+
+              else
+                Just (Shared.SharedMsg <| Shared.CambiaStatus Shared.Desconocido)
             )
 
         NoOp ->
@@ -258,21 +269,17 @@ view maybeUrl sharedModel model static =
             , if model.listo then
                 div
                     [ css [ TwBp.lg [ Tw.h_72 ] ] ]
-                    [ case model.usuarioStatus of
-                        Desconocido ->
+                    [ case sharedModel.usuarioStatus of
+                        Shared.Desconocido ->
                             Reto.view model.reModel |> Htmls.map ReMsg
 
-                        Conocido ->
+                        Shared.Conocido ->
                             Htmls.h4 []
                                 [ text "HEY! Sos Familia!!" ]
 
-                        Rechazado ->
+                        Shared.Rechazado ->
                             Htmls.h4 []
                                 [ text "Pareces un Bot, intenta de nuevo" ]
-
-                        _ ->
-                            Htmls.h4 []
-                                [ text "¿Cómo chingados llegué a este estado?" ]
                     ]
 
               else
@@ -639,5 +646,3 @@ viewFormulario model =
                 ]
             ]
         ]
-
-

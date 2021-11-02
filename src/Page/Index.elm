@@ -139,12 +139,24 @@ view maybeUrl sharedModel model static =
     { title = "Por ahora nada"
     , body =
         [ viewHero model.menuOpen
-        , Notifica.retroFinal
-            HeroIcons.outlineCheckCircle
-            "Maravillos Vas Bien"
-            "Solo no te desesperes por favor hay que echarle ganas"
-            model.verNotificaciones
-            |> Html.map (\_ -> CierraNoti)
+        , if sharedModel.usuarioStatus == Shared.Conocido then
+            Notifica.retroFinal
+                HeroIcons.outlineCheckCircle
+                "Maravillos Vas Bien"
+                "Solo no te desesperes por favor hay que echarle ganas"
+                model.verNotificaciones
+                |> Html.map (\_ -> CierraNoti)
+
+          else if sharedModel.usuarioStatus == Shared.Rechazado then
+            Notifica.retroFinal
+                HeroIcons.outlineCheckCircle
+                "Pinche Bot Cularo"
+                "Qué esperabas cabrón, solo así y ya?"
+                model.verNotificaciones
+                |> Html.map (\_ -> CierraNoti)
+
+          else
+            div [] []
         ]
     }
 

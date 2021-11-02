@@ -31,7 +31,7 @@ notifAppear : Bool -> Animation
 notifAppear show =
     if show then
         Animation.fromTo
-            { duration = 300
+            { duration = 750
             , options = [ Animation.easeOut ]
             }
             [ P.opacity 0, P.scale 0.92 ]

@@ -1,4 +1,4 @@
-module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
+module Shared exposing (Data, Model, Msg(..), SharedMsg(..), UsuarioSt(..), template)
 
 import Browser.Navigation
 import DataSource
@@ -36,16 +36,24 @@ type Msg
     | SharedMsg SharedMsg
 
 
+type UsuarioSt
+    = Desconocido
+    | Rechazado
+    | Conocido
+
+
 type alias Data =
     ()
 
 
 type SharedMsg
     = NoOp
+    | CambiaStatus UsuarioSt
 
 
 type alias Model =
     { showMobileMenu : Bool
+    , usuarioStatus : UsuarioSt
     }
 
 
@@ -64,7 +72,9 @@ init :
             }
     -> ( Model, Cmd Msg )
 init navigationKey flags maybePagePath =
-    ( { showMobileMenu = False }
+    ( { showMobileMenu = False
+      , usuarioStatus = Desconocido
+      }
     , Cmd.none
     )
 
@@ -75,8 +85,15 @@ update msg model =
         OnPageChange _ ->
             ( { model | showMobileMenu = False }, Cmd.none )
 
-        SharedMsg globalMsg ->
-            ( model, Cmd.none )
+        SharedMsg mensajePasado ->
+            case mensajePasado of
+                CambiaStatus nuevoSt ->
+                    ( { model | usuarioStatus = nuevoSt }
+                    , Cmd.none
+                    )
+
+                NoOp ->
+                    ( model, Cmd.none )
 
 
 subscriptions : Path -> Model -> Sub Msg
