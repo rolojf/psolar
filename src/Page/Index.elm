@@ -139,6 +139,7 @@ view maybeUrl sharedModel model static =
     { title = "Por ahora nada"
     , body =
         [ viewHero model.menuOpen
+        , viewFeatures
         , if sharedModel.usuarioStatus == Shared.Conocido then
             Notifica.retroFinal
                 HeroIcons.outlineCheckCircle
@@ -375,5 +376,250 @@ viewHero menuOpen =
                 , Attr.alt ""
                 ]
                 []
+            ]
+        ]
+
+
+viewFeatures =
+    div
+        [ class "bg-white"
+        ]
+        [ div
+            [ class "max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-24 lg:px-8 lg:grid lg:grid-cols-3 lg:gap-x-8" ]
+            [ div []
+                [ Html.h2
+                    [ class "text-base font-semibold text-indigo-600 uppercase tracking-wide" ]
+                    [ text "Everything you need" ]
+                , Html.p
+                    [ class "mt-2 text-3xl font-extrabold text-gray-900" ]
+                    [ text "All-in-one platform" ]
+                , Html.p
+                    [ class "mt-4 text-lg text-gray-500" ]
+                    [ text "Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada adipiscing sagittis vel nulla nec." ]
+                ]
+            , div
+                [ class "mt-12 lg:mt-0 lg:col-span-2" ]
+                [ Html.dl
+                    [ class "space-y-10 sm:space-y-0 sm:grid sm:grid-cols-2 sm:grid-rows-4 sm:grid-flow-col sm:gap-x-6 sm:gap-y-10 lg:gap-x-8" ]
+                    [ div
+                        [ class "relative" ]
+                        [ Html.dt []
+                            [ {- Heroicon name: outline/check -}
+                              svg
+                                [ SvgAttr.class "absolute h-6 w-6 text-green-500"
+                                , SvgAttr.fill "none"
+                                , SvgAttr.viewBox "0 0 24 24"
+                                , SvgAttr.stroke "currentColor"
+                                , Attr.attribute "aria-hidden" "true"
+                                ]
+                                [ path
+                                    [ SvgAttr.strokeLinecap "round"
+                                    , SvgAttr.strokeLinejoin "round"
+                                    , SvgAttr.strokeWidth "2"
+                                    , SvgAttr.d "M5 13l4 4L19 7"
+                                    ]
+                                    []
+                                ]
+                            , Html.p
+                                [ class "ml-9 text-lg leading-6 font-medium text-gray-900" ]
+                                [ text "Invite team members" ]
+                            ]
+                        , Html.dd
+                            [ class "mt-2 ml-9 text-base text-gray-500" ]
+                            [ text "You can manage phone, email and chat conversations all from a single mailbox." ]
+                        ]
+                    , div
+                        [ class "relative" ]
+                        [ Html.dt []
+                            [ {- Heroicon name: outline/check -}
+                              svg
+                                [ SvgAttr.class "absolute h-6 w-6 text-green-500"
+                                , SvgAttr.fill "none"
+                                , SvgAttr.viewBox "0 0 24 24"
+                                , SvgAttr.stroke "currentColor"
+                                , Attr.attribute "aria-hidden" "true"
+                                ]
+                                [ path
+                                    [ SvgAttr.strokeLinecap "round"
+                                    , SvgAttr.strokeLinejoin "round"
+                                    , SvgAttr.strokeWidth "2"
+                                    , SvgAttr.d "M5 13l4 4L19 7"
+                                    ]
+                                    []
+                                ]
+                            , Html.p
+                                [ class "ml-9 text-lg leading-6 font-medium text-gray-900" ]
+                                [ text "List view" ]
+                            ]
+                        , Html.dd
+                            [ class "mt-2 ml-9 text-base text-gray-500" ]
+                            [ text "You can manage phone, email and chat conversations all from a single mailbox." ]
+                        ]
+                    , div
+                        [ class "relative" ]
+                        [ Html.dt []
+                            [ {- Heroicon name: outline/check -}
+                              svg
+                                [ SvgAttr.class "absolute h-6 w-6 text-green-500"
+                                , SvgAttr.fill "none"
+                                , SvgAttr.viewBox "0 0 24 24"
+                                , SvgAttr.stroke "currentColor"
+                                , Attr.attribute "aria-hidden" "true"
+                                ]
+                                [ path
+                                    [ SvgAttr.strokeLinecap "round"
+                                    , SvgAttr.strokeLinejoin "round"
+                                    , SvgAttr.strokeWidth "2"
+                                    , SvgAttr.d "M5 13l4 4L19 7"
+                                    ]
+                                    []
+                                ]
+                            , Html.p
+                                [ class "ml-9 text-lg leading-6 font-medium text-gray-900" ]
+                                [ text "Keyboard shortcuts" ]
+                            ]
+                        , Html.dd
+                            [ class "mt-2 ml-9 text-base text-gray-500" ]
+                            [ text "You can manage phone, email and chat conversations all from a single mailbox." ]
+                        ]
+                    , div
+                        [ class "relative" ]
+                        [ Html.dt []
+                            [ {- Heroicon name: outline/check -}
+                              svg
+                                [ SvgAttr.class "absolute h-6 w-6 text-green-500"
+                                , SvgAttr.fill "none"
+                                , SvgAttr.viewBox "0 0 24 24"
+                                , SvgAttr.stroke "currentColor"
+                                , Attr.attribute "aria-hidden" "true"
+                                ]
+                                [ path
+                                    [ SvgAttr.strokeLinecap "round"
+                                    , SvgAttr.strokeLinejoin "round"
+                                    , SvgAttr.strokeWidth "2"
+                                    , SvgAttr.d "M5 13l4 4L19 7"
+                                    ]
+                                    []
+                                ]
+                            , Html.p
+                                [ class "ml-9 text-lg leading-6 font-medium text-gray-900" ]
+                                [ text "Calendars" ]
+                            ]
+                        , Html.dd
+                            [ class "mt-2 ml-9 text-base text-gray-500" ]
+                            [ text "You can manage phone, email and chat conversations all from a single mailbox." ]
+                        ]
+                    , div
+                        [ class "relative" ]
+                        [ Html.dt []
+                            [ {- Heroicon name: outline/check -}
+                              svg
+                                [ SvgAttr.class "absolute h-6 w-6 text-green-500"
+                                , SvgAttr.fill "none"
+                                , SvgAttr.viewBox "0 0 24 24"
+                                , SvgAttr.stroke "currentColor"
+                                , Attr.attribute "aria-hidden" "true"
+                                ]
+                                [ path
+                                    [ SvgAttr.strokeLinecap "round"
+                                    , SvgAttr.strokeLinejoin "round"
+                                    , SvgAttr.strokeWidth "2"
+                                    , SvgAttr.d "M5 13l4 4L19 7"
+                                    ]
+                                    []
+                                ]
+                            , Html.p
+                                [ class "ml-9 text-lg leading-6 font-medium text-gray-900" ]
+                                [ text "Notifications" ]
+                            ]
+                        , Html.dd
+                            [ class "mt-2 ml-9 text-base text-gray-500" ]
+                            [ text "Find what you need with advanced filters, bulk actions, and quick views." ]
+                        ]
+                    , div
+                        [ class "relative" ]
+                        [ Html.dt []
+                            [ {- Heroicon name: outline/check -}
+                              svg
+                                [ SvgAttr.class "absolute h-6 w-6 text-green-500"
+                                , SvgAttr.fill "none"
+                                , SvgAttr.viewBox "0 0 24 24"
+                                , SvgAttr.stroke "currentColor"
+                                , Attr.attribute "aria-hidden" "true"
+                                ]
+                                [ path
+                                    [ SvgAttr.strokeLinecap "round"
+                                    , SvgAttr.strokeLinejoin "round"
+                                    , SvgAttr.strokeWidth "2"
+                                    , SvgAttr.d "M5 13l4 4L19 7"
+                                    ]
+                                    []
+                                ]
+                            , Html.p
+                                [ class "ml-9 text-lg leading-6 font-medium text-gray-900" ]
+                                [ text "Boards" ]
+                            ]
+                        , Html.dd
+                            [ class "mt-2 ml-9 text-base text-gray-500" ]
+                            [ text "Find what you need with advanced filters, bulk actions, and quick views." ]
+                        ]
+                    , div
+                        [ class "relative" ]
+                        [ Html.dt []
+                            [ {- Heroicon name: outline/check -}
+                              svg
+                                [ SvgAttr.class "absolute h-6 w-6 text-green-500"
+                                , SvgAttr.fill "none"
+                                , SvgAttr.viewBox "0 0 24 24"
+                                , SvgAttr.stroke "currentColor"
+                                , Attr.attribute "aria-hidden" "true"
+                                ]
+                                [ path
+                                    [ SvgAttr.strokeLinecap "round"
+                                    , SvgAttr.strokeLinejoin "round"
+                                    , SvgAttr.strokeWidth "2"
+                                    , SvgAttr.d "M5 13l4 4L19 7"
+                                    ]
+                                    []
+                                ]
+                            , Html.p
+                                [ class "ml-9 text-lg leading-6 font-medium text-gray-900"
+                                ]
+                                [ text "Reporting" ]
+                            ]
+                        , Html.dd
+                            [ class "mt-2 ml-9 text-base text-gray-500"
+                            ]
+                            [ text "Find what you need with advanced filters, bulk actions, and quick views." ]
+                        ]
+                    , div
+                        [ class "relative" ]
+                        [ Html.dt []
+                            [ {- Heroicon name: outline/check -}
+                              svg
+                                [ SvgAttr.class "absolute h-6 w-6 text-green-500"
+                                , SvgAttr.fill "none"
+                                , SvgAttr.viewBox "0 0 24 24"
+                                , SvgAttr.stroke "currentColor"
+                                , Attr.attribute "aria-hidden" "true"
+                                ]
+                                [ path
+                                    [ SvgAttr.strokeLinecap "round"
+                                    , SvgAttr.strokeLinejoin "round"
+                                    , SvgAttr.strokeWidth "2"
+                                    , SvgAttr.d "M5 13l4 4L19 7"
+                                    ]
+                                    []
+                                ]
+                            , Html.p
+                                [ class "ml-9 text-lg leading-6 font-medium text-gray-900" ]
+                                [ text "Mobile app" ]
+                            ]
+                        , Html.dd
+                            [ class "mt-2 ml-9 text-base text-gray-500" ]
+                            [ text "Find what you need with advanced filters, bulk actions, and quick views." ]
+                        ]
+                    ]
+                ]
             ]
         ]
