@@ -12,7 +12,7 @@ module.exports = {
       extend: {
          fontFamily: {
             sans: [
-               "Fira Sans Condensed",
+               "Fira Sans",
                "system-ui",
                "-apple-system",
                "BlinkMacSystemFont",
@@ -27,7 +27,7 @@ module.exports = {
                '"Segoe UI Symbol"',
                '"Noto Color Emoji"',
             ],
-           serif: ["literata", "Georgia", "Cambria", '"Times New Roman"', "Times", "serif"],
+           serif: ["Roboto Slab", "Georgia", "Cambria", '"Times New Roman"', "Times", "serif"],
          },
       },
    },

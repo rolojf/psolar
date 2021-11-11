@@ -121,10 +121,18 @@ yamlDecoder =
             Decode.map2 Arts
                 (Decode.field "cabeza" Decode.string)
                 (Decode.field "nota" Decode.string)
+
+        mainHeaderDecoder =
+            Decode.map4 HeaderText
+                (Decode.field "preMainHeader" Decode.string)
+                (Decode.field "mainHeaderResaltado" Decode.string)
+                (Decode.field "postMainHeader" Decode.string)
+                (Decode.field "mainSubHeader" Decode.string)
     in
-    Decode.map3 Data
+    Decode.map4 Data
         (Decode.field "title" Decode.string)
         (Decode.field "tags" (Decode.list Decode.string))
+        (Decode.field "mainHead" mainHeaderDecoder)
         (Decode.field "beneficios" beneDecoder)
 
 
@@ -138,6 +146,7 @@ data =
 type alias Data =
     { title : String
     , tags : List String
+    , mainHead : HeaderText
     , beneficios : Beneficios
     }
 
@@ -147,6 +156,14 @@ type alias Beneficios =
     , header : String
     , subHeader : String
     , motivos : List Arts
+    }
+
+
+type alias HeaderText =
+    { preMainHeader : String
+    , mainHeaderResaltado : String
+    , postMainHeader : String
+    , mainSubHeader : String
     }
 
 
@@ -185,7 +202,7 @@ view :
 view maybeUrl sharedModel model static =
     { title = static.data.title
     , body =
-        [ viewHero model.menuOpen
+        [ viewHero model.menuOpen static.data.mainHead
         , viewFeatures static.data.beneficios
         , if sharedModel.usuarioStatus == Shared.Conocido then
             Notifica.retroFinal
@@ -209,7 +226,7 @@ view maybeUrl sharedModel model static =
     }
 
 
-viewHero menuOpen =
+viewHero menuOpen headText =
     let
         direccionEspecial =
             { texto = "Huevón"
@@ -378,20 +395,20 @@ viewHero menuOpen =
                         [ class "sm:text-center lg:text-left"
                         ]
                         [ Html.h1
-                            [ class "text-4xl font-serif tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl" ]
+                            [ class "text-4xl font-serif font-extrabold text-gray-900 sm:text-5xl" ]
                             [ Html.span
                                 [ class "block xl:inline" ]
-                                [ text "Servicio a " ]
+                                [ text headText.preMainHeader ]
                             , Html.span
                                 [ class "block text-blue-900 xl:inline" ]
-                                [ text " Panel Solar " ]
+                                [ text <| " " ++ headText.mainHeaderResaltado ++ " " ]
                             , Html.span
                                 [ class "block xl:inline" ]
-                                [ text " para Ahorrar Más" ]
+                                [ text headText.postMainHeader ]
                             ]
                         , Html.p
                             [ class "mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" ]
-                            [ text "Revisiones para confirmar si todo está bien, o si no hay algo que afecte. Mantenimiento para prevenir y corregir.  Cuida tu inversión y produce más." ]
+                            [ text headText.mainSubHeader ]
                         , div
                             [ class "mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start" ]
                             [ div
@@ -457,7 +474,7 @@ viewFeatures bene =
                     [ class "text-base font-semibold text-indigo-600 uppercase tracking-wide" ]
                     [ text bene.preHeader ]
                 , Html.p
-                    [ class "mt-2 text-3xl font-extrabold text-gray-900" ]
+                    [ class "mt-2 text-3xl font-extrabold text-gray-900 font-serif tracking-wide" ]
                     [ text bene.header ]
                 , Html.p
                     [ class "mt-4 text-lg text-gray-500" ]
