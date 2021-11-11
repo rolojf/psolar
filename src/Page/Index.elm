@@ -223,9 +223,30 @@ view maybeUrl sharedModel model static =
 
           else
             div [] []
-        , Footer.viewFooter
+        , indexViewFooter
         ]
     }
+
+
+indexViewFooter =
+    let
+        funcNavega =
+            [ Footer.ligaAlPie "#" "About"
+            , Footer.ligaAlPie "#" "Blog"
+            , Footer.ligaAlPie "#" "Jobs"
+            , Footer.ligaAlPie "#" "Press"
+            , Footer.ligaAlPie "#" "Accesibility"
+            , Footer.ligaAlPie "#" "Partners"
+            ]
+
+        funcViewSocialIcons =
+            [ Footer.ligaIcono "facebook.com" "facebook" Footer.Facebook
+            , Footer.ligaIcono "instagram.com" "Instagram" Footer.Instagram
+            , Footer.ligaIcono "twitter.com" "Twitter" Footer.Twitter
+            , Footer.ligaIcono "github.com" "GitHub" Footer.Github
+            ]
+    in
+    Footer.viewFooter funcNavega funcViewSocialIcons
 
 
 viewHero menuOpen headText =
