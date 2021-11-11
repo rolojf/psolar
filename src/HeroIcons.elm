@@ -75,3 +75,21 @@ outlineCheckCircle =
             ]
             []
         ]
+
+
+outlineCheck =
+    svg
+        [ SvgAttr.class "absolute h-6 w-6 text-green-500"
+        , SvgAttr.fill "none"
+        , SvgAttr.viewBox "0 0 24 24"
+        , SvgAttr.stroke "currentColor"
+        , Attr.attribute "aria-hidden" "true"
+        ]
+        [ path
+            [ SvgAttr.strokeLinecap "round"
+            , SvgAttr.strokeLinejoin "round"
+            , SvgAttr.strokeWidth "2"
+            , SvgAttr.d "M5 13l4 4L19 7"
+            ]
+            []
+        ]

@@ -1,0 +1,29 @@
+---
+title: Hello, World!
+tags:
+  - elm
+  - cabrón
+beneficios:
+  preHeader: este es el rollo del preHeader
+  header: Para confirmar que todo esté bien
+  subHeader: este es el rollo del subheader, no se que poner aquí por ahorita, pero ya veremos
+  motivos:
+    - art:
+        cabeza: salir de dudas
+        nota: ¿porqué ya no siento que esté ahorrando como antes? No se si en el panel solar, hicieron el trabajo bien Que tanto debería producir el panel solar comparado con otros similares Saber si hay algo que esté afectando Entender el recibo de luz y si se está tomando en cuenta lo generado por el panel
+    - art:
+        cabeza: Para prevenir fallas
+        nota: Posibles cortos o falsos contactos en conectores y conexiones, De sujeción de los paneles (que no salgan volando), Rigidez de la estructura, Anclajes o contrapesos firmes, prevenir filtraciones
+    - art:
+        cabeza: Para que el panel produzca y ahorre más
+        nota: limpieza, Afectación por sombras, Algún panel se desconectó
+    - art:
+        cabeza: Para que funcione el sistema de monitoreo
+        nota: y avise de fallas
+    - art:
+        cabeza: Muchas veces para corregir errores en la instalación
+        nota: Que no se conectó correctamente a tierra física, No se puso cableado o interruptores especiales para panel solar, Para ahorrarse unos pesos no se puso calibre correcto para el cableado
+    - art:
+        cabeza: Muchas veces el problema está en lo que se gasta, no en el panel
+        nota: Revisar si el consumo eléctrico es proporcional al las toneladas de los climas, Revisar si hay \"fugas\" o sea gasto eléctrico cuando todo está apagado, Algún aparato puede estar gastando demasiado, Puntos calientes por falso contacto, Errores en diseño del cableado, calibre y distancias del cableado
+---
