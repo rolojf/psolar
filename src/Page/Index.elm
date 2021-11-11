@@ -4,6 +4,7 @@ import Browser.Navigation
 import Cloudinary
 import DataSource exposing (DataSource)
 import DataSource.File as File
+import Footer
 import Head
 import Head.Seo as Seo
 import HeroIcons
@@ -222,6 +223,7 @@ view maybeUrl sharedModel model static =
 
           else
             div [] []
+        , Footer.viewFooter
         ]
     }
 
