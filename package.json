@@ -8,11 +8,11 @@
     "dev": "concurrently \"elm-pages dev\" \"tailwindcss -o public/tailwind.css --watch --jit\""
   },
   "devDependencies": {
-    "concurrently": "^6.3.0",
+    "concurrently": "^6.4.0",
     "elm-optimize-level-2": "0.2.3",
-    "elm-pages": "^2.1.9",
-    "elm-review": "2.6.1",
-    "elm-tooling": "1.6.0",
+    "elm-pages": "2.1.9",
+    "elm-review": "2.7.0",
+    "elm-tooling": "1.7.0",
     "tailwindcss": "^2.2.19"
   },
   "dependencies": {

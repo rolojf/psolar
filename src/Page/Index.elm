@@ -9,6 +9,7 @@ import Head
 import Head.Seo as Seo
 import HeroIcons
 import Html as Html exposing (Html, div, text)
+import Html.Styled as Htmls
 import Html.Attributes as Attr exposing (class)
 import Html.Events
 import Notifica
@@ -230,7 +231,8 @@ view maybeUrl sharedModel model static =
 
 indexViewFooter =
     let
-        funcNavega =
+        viewPieNavega : List (Htmls.Html msg)
+        viewPieNavega =
             [ Footer.ligaAlPie "#" "About"
             , Footer.ligaAlPie "#" "Blog"
             , Footer.ligaAlPie "#" "Jobs"
@@ -239,14 +241,18 @@ indexViewFooter =
             , Footer.ligaAlPie "#" "Partners"
             ]
 
-        funcViewSocialIcons =
+        viewPieSocialIcons : List (Htmls.Html msg)
+        viewPieSocialIcons =
             [ Footer.ligaIcono "facebook.com" "facebook" Footer.Facebook
             , Footer.ligaIcono "instagram.com" "Instagram" Footer.Instagram
             , Footer.ligaIcono "twitter.com" "Twitter" Footer.Twitter
             , Footer.ligaIcono "github.com" "GitHub" Footer.Github
             ]
     in
-    Footer.viewFooter funcNavega funcViewSocialIcons
+    Footer.viewFooter
+       viewPieNavega
+       viewPieSocialIcons
+       "REFTEX INGENIERIA, S.A. de C.V. - 2021"
 
 
 viewHero menuOpen headText =

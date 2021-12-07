@@ -53,9 +53,30 @@ ligaIcono direccion srCual iconoSocial =
                 HeroIcons.svgGithub |> Htmls.fromUnstyled
         ]
 
+{-| De la página donde se llame la función viewFooter
+Hay que definir dos cosas:
 
-viewFooter : List (Htmls.Html msg) -> List (Htmls.Html msg) -> Html msg
-viewFooter ligasNav icons2show =
+primero:
+   viewPieNavega : List (Html msg)
+
+usando la función:
+   Footer.ligaAlPie "#" "About"
+
+y segundo:
+   viewPieSocialIcons : List (Htmls.Html msg)
+
+usando la función:
+    Footer.ligaIcono "facebook.com" "facebook" Footer.Facebook
+
+Finalmente llamar esta función estableciendo también el texto tipo String
+que va en el footer y será la variable copyR.
+
+Así el footer queda desacoplado de sus ligas e íconos que se establecen en cada página.
+
+-}
+
+viewFooter : List (Htmls.Html msg) -> List (Htmls.Html msg) -> String -> Html msg
+viewFooter ligasNav icons2show copyR =
     Htmls.footer
         []
         [ div
@@ -104,7 +125,7 @@ viewFooter ligasNav icons2show =
                             , Tw.text_gray_500
                             ]
                         ]
-                        [ Htmls.text "&copy; 2020 Workflow, Inc. All rights reserved." ]
+                        [ Htmls.text copyR ]
                     ]
                 ]
             ]
