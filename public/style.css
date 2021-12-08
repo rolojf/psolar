@@ -1,23 +1,5 @@
 @import 'tailwind.css';
+@import 'gal.css';
+@import 'reto.css';
 @import url('https://free.bboxtype.com/embedfonts/?family=FiraSans:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap');
-.la-base-modal {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.ohnomiel{
-        opacity: 0;
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 0;
-        width: 0;
-        z-index: -1;
-    }
