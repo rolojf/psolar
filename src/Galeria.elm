@@ -91,24 +91,17 @@ update msg model =
             )
 
 
-view : Model -> Html Msg
-view model =
+view : Array String -> Array String -> Model -> Html Msg
+view listadoCompletoImgs textos model =
     div []
         [ div
             [ Attr.id "slider-container" ]
-            [ viewSlider model.cualSlideActivo model.aminar ]
+            [ viewSlider listadoCompletoImgs textos model.cualSlideActivo model.aminar ]
         ]
 
 
-listadoCompletoImgs : Array String
-listadoCompletoImgs =
-    List.map
-        (\cual -> "https://picsum.photos/seed/" ++ String.fromChar cual ++ "/700/700")
-        (String.toList "abcdefghijklmnopqrst")
-        |> Array.fromList
-
-
-viewSlider slideActivo animar =
+viewSlider : Array String -> Array String -> Int -> Amimacion -> Html Msg
+viewSlider listadoCompletoImgs textos slideActivo animar =
     let
         despliega4 : Array String -> List (Html msg)
         despliega4 subListado =
@@ -149,16 +142,6 @@ viewSlider slideActivo animar =
                             (desdeCual + 4)
                             listadoCompletoImgs
                 ]
-
-        textos : Array String
-        textos =
-            [ "Uno"
-            , "Dos"
-            , "tres"
-            , "cuatro"
-            , "cinco"
-            ]
-                |> Array.fromList
 
         despliegaTexto : Html msg
         despliegaTexto =
@@ -214,6 +197,7 @@ viewSlider slideActivo animar =
             , despliegaTexto
             ]
         ]
+
 
 
 -- HELPERS ELM SIMPLE ANIMATION

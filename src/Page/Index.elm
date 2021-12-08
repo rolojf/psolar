@@ -1,5 +1,6 @@
 module Page.Index exposing (Data, Model, Msg, page)
 
+import Array exposing (Array)
 import Browser.Navigation
 import Cloudinary
 import DataSource exposing (DataSource)
@@ -243,12 +244,36 @@ view maybeUrl sharedModel model static =
 
           else
             div [] []
-        , Galeria.view model.galModel |> Htmls.toUnstyled |> Html.map Gal
+        , viewGaleria model.galModel
         , indexViewFooter
         ]
     }
 
 
+viewGaleria : Galeria.Model -> Html Msg
+viewGaleria modeloDeGal =
+    let
+        textos : Array String
+        textos =
+            [ "Uno"
+            , "Dos"
+            , "tres"
+            , "cuatro"
+            , "cinco"
+            ]
+                |> Array.fromList
+
+        listadoCompletoImgs : Array String
+        listadoCompletoImgs =
+            List.map
+                (\cual -> "https://picsum.photos/seed/" ++ String.fromChar cual ++ "/700/700")
+                (String.toList "abcdefghijklmnopqrst")
+                |> Array.fromList
+    in
+    Galeria.view listadoCompletoImgs textos modeloDeGal |> Htmls.toUnstyled |> Html.map Gal
+
+
+indexViewFooter : Html msg
 indexViewFooter =
     let
         viewPieNavega : List (Htmls.Html msg)
