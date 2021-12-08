@@ -44,6 +44,7 @@ type Msg
 type Effect
     = EsperaLuegoPara
     | Nada
+    | LanzaPara
 
 
 runEffect : Effect -> Cmd Msg
@@ -55,24 +56,47 @@ runEffect efecto =
         Nada ->
             Cmd.none
 
+        LanzaPara ->
+            Task.perform (\_ -> Para) (Process.sleep 1)
+
 
 update : Msg -> Model -> ( Model, Effect )
 update msg model =
     case msg of
         Avanza ->
             ( { model
-                | cambia = 1
+                | cambia =
+                    if model.showSlider then
+                        1
+
+                    else
+                        0
                 , aminar = Sale
+                , showSlider = True
               }
-            , EsperaLuegoPara
+            , if model.showSlider then
+                EsperaLuegoPara
+
+              else
+                LanzaPara
             )
 
         Retrocede ->
             ( { model
-                | cambia = -1
+                | cambia =
+                    if model.showSlider then
+                        -1
+
+                    else
+                        0
                 , aminar = Sale
+                , showSlider = True
               }
-            , EsperaLuegoPara
+            , if model.showSlider then
+                EsperaLuegoPara
+
+              else
+                LanzaPara
             )
 
         Para ->
@@ -135,38 +159,33 @@ viewSlider showIt listadoCompletoImgs textos slideActivo animar =
                             listadoCompletoImgs
                 ]
 
-        despliegaContenido : Html msg
-        despliegaContenido =
+        seccionTexto =
             div
-                [ class "item" ]
+                [ class "content" ]
                 [ div
-                    [ class "content" ]
-                    [ div
-                        [ class "wrap" ]
-                        (textos
-                            |> Array.get slideActivo
-                            |> Maybe.withDefault ""
-                            |> String.toList
-                            |> List.indexedMap
-                                (\indice letra ->
-                                    case animar of
-                                        Sale ->
-                                            animatedStyledNode
-                                                Htmls.span
-                                                (letraVa indice)
-                                                [ class "letter" ]
-                                                [ text (String.fromChar letra) ]
+                    [ class "wrap" ]
+                    (textos
+                        |> Array.get slideActivo
+                        |> Maybe.withDefault ""
+                        |> String.toList
+                        |> List.indexedMap
+                            (\indice letra ->
+                                case animar of
+                                    Sale ->
+                                        animatedStyledNode
+                                            Htmls.span
+                                            (letraVa indice)
+                                            [ class "letter" ]
+                                            [ text (String.fromChar letra) ]
 
-                                        Entra ->
-                                            animatedStyledNode
-                                                Htmls.span
-                                                (letraViene indice)
-                                                [ class "letter" ]
-                                                [ text (String.fromChar letra) ]
-                                )
-                        )
-                    ]
-                , seccionDeImagenes (4 * slideActivo)
+                                    Entra ->
+                                        animatedStyledNode
+                                            Htmls.span
+                                            (letraViene indice)
+                                            [ class "letter" ]
+                                            [ text (String.fromChar letra) ]
+                            )
+                    )
                 ]
     in
     div
@@ -186,7 +205,17 @@ viewSlider showIt listadoCompletoImgs textos slideActivo animar =
             , div
                 [ class "explore-btn" ]
                 [ text "Explore" ]
-            , if showIt then despliegaContenido  else div [] []
+            , if showIt then
+                div
+                    [ class "item" ]
+                    [ seccionDeImagenes (4 * slideActivo)
+                    , seccionTexto
+                    ]
+
+              else
+                div [ class "item" ]
+                    [ seccionTexto
+                    ]
             ]
         ]
 
