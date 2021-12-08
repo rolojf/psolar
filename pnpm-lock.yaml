@@ -8,7 +8,7 @@ specifiers:
   concurrently: ^6.4.0
   elm-optimize-level-2: 0.2.3
   elm-pages: 2.1.9
-  elm-review: 2.7.0
+  elm-review: 2.6.1
   elm-tooling: 1.7.0
   tailwindcss: ^2.2.19
 
@@ -22,7 +22,7 @@ devDependencies:
   concurrently: 6.4.0
   elm-optimize-level-2: 0.2.3
   elm-pages: 2.1.9
-  elm-review: 2.7.0
+  elm-review: 2.6.1
   elm-tooling: 1.7.0
   tailwindcss: 2.2.19
 
@@ -762,8 +762,8 @@ packages:
       - utf-8-validate
     dev: true
 
-  /elm-review/2.7.0:
-    resolution: {integrity: sha512-PvZj6M6rHYpyAGp2MKF/TzeDawioQacBTkVxzlBBGuMoO4LXw2PMIm/NmhkxcD38l5SvDIwpWmyDKvEsMaWNhQ==}
+  /elm-review/2.6.1:
+    resolution: {integrity: sha512-sWkHt1DMXkRyPqhMAIym4+5OVJHUmexvrYY5cdVkKr9Qdw+6ND1wH6V1ACu4vge3YdonG7UC+6gCYeHkgI760g==}
     engines: {node: '>=10.0.0'}
     hasBin: true
     dependencies:

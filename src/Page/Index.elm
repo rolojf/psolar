@@ -243,10 +243,10 @@ indexViewFooter =
 
         viewPieSocialIcons : List (Htmls.Html msg)
         viewPieSocialIcons =
-            [ Footer.ligaIcono "facebook.com" "facebook" Footer.Facebook
-            , Footer.ligaIcono "instagram.com" "Instagram" Footer.Instagram
-            , Footer.ligaIcono "twitter.com" "Twitter" Footer.Twitter
-            , Footer.ligaIcono "github.com" "GitHub" Footer.Github
+            [ Footer.ligaIcono "github.com" "GitHub" Footer.Github
+            , Footer.ligaIcono "linkedin.com" "LinkedIn" Footer.LinkedIn
+            , Footer.ligaIcono "whatsapp.com" "Whatsapp" Footer.WhatsApp
+            , Footer.ligaIcono "correo.com" "Correo" Footer.Email
             ]
     in
     Footer.viewFooter
