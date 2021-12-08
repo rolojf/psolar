@@ -1,6 +1,7 @@
 module Page.Index exposing (Data, Model, Msg, page)
 
 import Array exposing (Array)
+import Browser.Dom as Dom
 import Browser.Navigation
 import Cloudinary
 import DataSource exposing (DataSource)
@@ -20,6 +21,7 @@ import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Path
+import Process
 import Route
 import Shared
 import Simple.Animation as Animation exposing (Animation)
@@ -27,6 +29,7 @@ import Simple.Animation.Animated as Animated
 import Simple.Animation.Property as P
 import Svg exposing (path, svg)
 import Svg.Attributes as SvgAttr
+import Task
 import View exposing (View)
 
 
@@ -34,6 +37,7 @@ type alias Model =
     { menuOpen : Bool
     , verNotificaciones : Bool
     , galModel : Galeria.Model
+    , pos : Maybe Dom.Element
     }
 
 
@@ -50,8 +54,9 @@ init _ _ _ =
     ( { menuOpen = False
       , verNotificaciones = True
       , galModel = Galeria.newModel
+      , pos = Nothing
       }
-    , Cmd.none
+    , Task.attempt CheckGalInView (Dom.getElement "slider-container")
     )
 
 
@@ -84,6 +89,8 @@ type Msg
     = ToggleMenu
     | CierraNoti
     | Gal Galeria.Msg
+    | CheckGalInView (Result Dom.Error Dom.Element)
+    | WaitToCheckAgainGalInView
 
 
 update :
@@ -120,6 +127,39 @@ update _ _ _ _ msg model =
                 | galModel = Tuple.first galResponse
               }
             , Cmd.map Gal <| Galeria.runEffect <| Tuple.second galResponse
+            , Nothing
+            )
+
+        CheckGalInView resultaPos ->
+            let
+                modeloDeLaGal =
+                    model.galModel
+
+                onView =
+                    case resultaPos of
+                        Ok pos ->
+                            if (pos.element.y - 0.5 * pos.viewport.height) < pos.viewport.y then
+                                ( True, 100 )
+
+                            else
+                                ( False, 1.0 - (pos.viewport.y / pos.element.y) )
+
+                        _ ->
+                            ( False, 1.0 )
+
+                modeloNuevoGal =
+                    { modeloDeLaGal | showSlider = Tuple.first onView }
+            in
+            ( { model | galModel = modeloNuevoGal }
+            , Task.perform
+                (\_ -> WaitToCheckAgainGalInView)
+                (Process.sleep <| 2000 * Tuple.second onView)
+            , Nothing
+            )
+
+        WaitToCheckAgainGalInView ->
+            ( model
+            , Task.attempt CheckGalInView (Dom.getElement "slider-container")
             , Nothing
             )
 
