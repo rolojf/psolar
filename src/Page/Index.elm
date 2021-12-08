@@ -5,13 +5,14 @@ import Cloudinary
 import DataSource exposing (DataSource)
 import DataSource.File as File
 import Footer
+import Galeria
 import Head
 import Head.Seo as Seo
 import HeroIcons
 import Html as Html exposing (Html, div, text)
-import Html.Styled as Htmls
 import Html.Attributes as Attr exposing (class)
 import Html.Events
+import Html.Styled as Htmls
 import Notifica
 import OptimizedDecoder as Decode exposing (Decoder)
 import Page exposing (Page, StaticPayload)
@@ -31,6 +32,7 @@ import View exposing (View)
 type alias Model =
     { menuOpen : Bool
     , verNotificaciones : Bool
+    , galModel : Galeria.Model
     }
 
 
@@ -46,6 +48,7 @@ init :
 init _ _ _ =
     ( { menuOpen = False
       , verNotificaciones = True
+      , galModel = Galeria.newModel
       }
     , Cmd.none
     )
@@ -79,6 +82,7 @@ subscriptions _ _ _ _ _ =
 type Msg
     = ToggleMenu
     | CierraNoti
+    | Gal Galeria.Msg
 
 
 update :
@@ -100,6 +104,21 @@ update _ _ _ _ msg model =
         CierraNoti ->
             ( { model | verNotificaciones = False }
             , Cmd.none
+            , Nothing
+            )
+
+        Gal msgPaGal ->
+            let
+                galResponse : ( Galeria.Model, Galeria.Effect )
+                galResponse =
+                    Galeria.update
+                        msgPaGal
+                        model.galModel
+            in
+            ( { model
+                | galModel = Tuple.first galResponse
+              }
+            , Cmd.map Gal <| Galeria.runEffect <| Tuple.second galResponse
             , Nothing
             )
 
@@ -224,6 +243,7 @@ view maybeUrl sharedModel model static =
 
           else
             div [] []
+        , Galeria.view model.galModel |> Htmls.toUnstyled |> Html.map Gal
         , indexViewFooter
         ]
     }
@@ -250,9 +270,9 @@ indexViewFooter =
             ]
     in
     Footer.viewFooter
-       viewPieNavega
-       viewPieSocialIcons
-       "REFTEX INGENIERIA, S.A. de C.V. - 2021"
+        viewPieNavega
+        viewPieSocialIcons
+        "REFTEX INGENIERIA, S.A. de C.V. - 2021"
 
 
 viewHero menuOpen headText =

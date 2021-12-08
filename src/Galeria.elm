@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Galeria exposing (..)
 
 import Array exposing (Array)
 import Browser
@@ -17,10 +17,6 @@ import Tailwind.Utilities as Tw
 import Task
 
 
-
--- MAIN
-
-
 type Amimacion
     = Entra
     | Sale
@@ -35,8 +31,8 @@ type alias Model =
     }
 
 
-init : Model
-init =
+newModel : Model
+newModel =
     { showSlider = False
     , inicializado = False
     , cualSlideActivo = 0
@@ -45,17 +41,28 @@ init =
     }
 
 
-
--- UPDATE
-
-
 type Msg
     = Avanza
     | Retrocede
     | Para
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+type Effect
+    = EsperaLuegoPara
+    | Nada
+
+
+runEffect : Effect -> Cmd Msg
+runEffect efecto =
+    case efecto of
+        EsperaLuegoPara ->
+            Task.perform (\_ -> Para) (Process.sleep 1300)
+
+        Nada ->
+            Cmd.none
+
+
+update : Msg -> Model -> ( Model, Effect )
 update msg model =
     case msg of
         Avanza ->
@@ -63,7 +70,7 @@ update msg model =
                 | cambia = 1
                 , aminar = Sale
               }
-            , Task.perform (\_ -> Para) (Process.sleep 1300)
+            , EsperaLuegoPara
             )
 
         Retrocede ->
@@ -71,7 +78,7 @@ update msg model =
                 | cambia = -1
                 , aminar = Sale
               }
-            , Task.perform (\_ -> Para) (Process.sleep 1300)
+            , EsperaLuegoPara
             )
 
         Para ->
@@ -80,12 +87,8 @@ update msg model =
                 , aminar = Entra
                 , cambia = 0
               }
-            , Cmd.none
+            , Nada
             )
-
-
-
--- VIEW
 
 
 view : Model -> Html Msg
@@ -211,24 +214,6 @@ viewSlider slideActivo animar =
             , despliegaTexto
             ]
         ]
-
-
-
--- DETECT ENTER
-
-
-ifIsEnter : msg -> D.Decoder msg
-ifIsEnter msg =
-    D.field "key" D.string
-        |> D.andThen
-            (\key ->
-                if key == "Enter" then
-                    D.succeed msg
-
-                else
-                    D.fail "some other key"
-            )
-
 
 
 -- HELPERS ELM SIMPLE ANIMATION
