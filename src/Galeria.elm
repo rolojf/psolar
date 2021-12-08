@@ -89,11 +89,11 @@ view : Array String -> Array String -> Model -> Html Msg
 view listadoCompletoImgs textos model =
     div
         [ Attr.id "slider-container" ]
-        [ viewSlider listadoCompletoImgs textos model.cualSlideActivo model.aminar ]
+        [ viewSlider model.showSlider listadoCompletoImgs textos model.cualSlideActivo model.aminar ]
 
 
-viewSlider : Array String -> Array String -> Int -> Amimacion -> Html Msg
-viewSlider listadoCompletoImgs textos slideActivo animar =
+viewSlider : Bool -> Array String -> Array String -> Int -> Amimacion -> Html Msg
+viewSlider showIt listadoCompletoImgs textos slideActivo animar =
     let
         despliega4 : Array String -> List (Html msg)
         despliega4 subListado =
@@ -135,8 +135,8 @@ viewSlider listadoCompletoImgs textos slideActivo animar =
                             listadoCompletoImgs
                 ]
 
-        despliegaTexto : Html msg
-        despliegaTexto =
+        despliegaContenido : Html msg
+        despliegaContenido =
             div
                 [ class "item" ]
                 [ div
@@ -186,7 +186,7 @@ viewSlider listadoCompletoImgs textos slideActivo animar =
             , div
                 [ class "explore-btn" ]
                 [ text "Explore" ]
-            , despliegaTexto
+            , if showIt then despliegaContenido  else div [] []
             ]
         ]
 
