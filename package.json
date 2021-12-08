@@ -10,7 +10,7 @@
   "devDependencies": {
     "concurrently": "^6.4.0",
     "elm-optimize-level-2": "0.2.3",
-    "elm-pages": "2.1.9",
+    "elm-pages": "2.1.11",
     "elm-review": "2.6.1",
     "elm-tooling": "1.7.0",
     "tailwindcss": "^2.2.19"
