@@ -7,9 +7,6 @@ import Html exposing (Html)
 import Html.Styled as Htmls exposing (div)
 import Html.Styled.Attributes as Attr
 import Html.Styled.Attributes.Aria as Aria
-import Html.Styled.Events as Events
-import Svg.Styled as Svg exposing (path, svg)
-import Svg.Styled.Attributes as SvgAttr
 import Tailwind.Breakpoints as TwBp
 import Tailwind.Utilities as Tw
 
@@ -89,53 +86,51 @@ viewFooter ligasNav icons2show copyR =
     Htmls.footer
         []
         [ div
+            [ Attr.css [ Tw.bg_white ] ]
+            --, Tw.py_4 ] ]
             []
+        , div
+            [ Attr.css [ Tw.bg_gray_200 ] ]
             [ div
-                [ Attr.css [ Tw.bg_white, Tw.py_4 ] ]
-                []
-            , div
-                [ Attr.css [ Tw.bg_gray_200 ] ]
-                [ div
+                [ Attr.css
+                    [ Tw.max_w_7xl
+                    , Tw.mx_auto
+                    , Tw.py_12
+                    , Tw.px_4
+                    , Tw.overflow_hidden
+                    , TwBp.lg [ Tw.px_8 ]
+                    , TwBp.sm [ Tw.px_6 ]
+                    ]
+                ]
+                [ Htmls.nav
                     [ Attr.css
-                        [ Tw.max_w_7xl
-                        , Tw.mx_auto
-                        , Tw.py_12
-                        , Tw.px_4
-                        , Tw.overflow_hidden
-                        , TwBp.lg [ Tw.px_8 ]
-                        , TwBp.sm [ Tw.px_6 ]
+                        [ Tw.neg_mx_5
+                        , Tw.neg_my_2
+                        , Tw.flex
+                        , Tw.flex_wrap
+                        , Tw.justify_center
+                        ]
+                    , Aria.ariaLabel "Footer"
+                    ]
+                    ligasNav
+                , div
+                    [ Attr.css
+                        [ Tw.mt_8
+                        , Tw.flex
+                        , Tw.justify_center
+                        , Tw.space_x_6
                         ]
                     ]
-                    [ Htmls.nav
-                        [ Attr.css
-                            [ Tw.neg_mx_5
-                            , Tw.neg_my_2
-                            , Tw.flex
-                            , Tw.flex_wrap
-                            , Tw.justify_center
-                            ]
-                        , Aria.ariaLabel "Footer"
+                    icons2show
+                , Htmls.p
+                    [ Attr.css
+                        [ Tw.mt_8
+                        , Tw.text_center
+                        , Tw.text_base
+                        , Tw.text_gray_500
                         ]
-                        ligasNav
-                    , div
-                        [ Attr.css
-                            [ Tw.mt_8
-                            , Tw.flex
-                            , Tw.justify_center
-                            , Tw.space_x_6
-                            ]
-                        ]
-                        icons2show
-                    , Htmls.p
-                        [ Attr.css
-                            [ Tw.mt_8
-                            , Tw.text_center
-                            , Tw.text_base
-                            , Tw.text_gray_500
-                            ]
-                        ]
-                        [ Htmls.text copyR ]
                     ]
+                    [ Htmls.text copyR ]
                 ]
             ]
         ]

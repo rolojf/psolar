@@ -1,19 +1,13 @@
 module Galeria exposing (..)
 
 import Array exposing (Array)
-import Browser
-import Css.Global
 import Html.Styled as Htmls exposing (Html, div, text)
 import Html.Styled.Attributes as Attr exposing (class, css)
 import Html.Styled.Events as Event
-import Json.Decode as D
-import Json.Encode as E
 import Process
 import Simple.Animation as Animation exposing (Animation)
 import Simple.Animation.Animated as Animated
 import Simple.Animation.Property as P
-import Tailwind.Breakpoints as TwBp
-import Tailwind.Utilities as Tw
 import Task
 
 
@@ -93,11 +87,9 @@ update msg model =
 
 view : Array String -> Array String -> Model -> Html Msg
 view listadoCompletoImgs textos model =
-    div []
-        [ div
-            [ Attr.id "slider-container" ]
-            [ viewSlider listadoCompletoImgs textos model.cualSlideActivo model.aminar ]
-        ]
+    div
+        [ Attr.id "slider-container" ]
+        [ viewSlider listadoCompletoImgs textos model.cualSlideActivo model.aminar ]
 
 
 viewSlider : Array String -> Array String -> Int -> Amimacion -> Html Msg
