@@ -137,21 +137,26 @@ update _ _ _ _ msg model =
                     case resultaPos of
                         Ok pos ->
                             if (pos.element.y - 0.7 * pos.viewport.height) < pos.viewport.y then
-                                ( True, 100 )
+                                ( True, Nothing )
 
                             else
-                                ( False, 1.0 - (pos.viewport.y / pos.element.y) )
+                                ( False, Just (1.0 - (pos.viewport.y / pos.element.y)) )
 
                         _ ->
-                            ( False, 1.0 )
+                            ( False, Just 1.0 )
 
                 modeloNuevoGal =
                     { modeloDeLaGal | showSlider = Tuple.first onView }
             in
             ( { model | galModel = modeloNuevoGal }
-            , Task.perform
-                (\_ -> WaitToCheckAgainGalInView)
-                (Process.sleep <| 2000 * Tuple.second onView)
+            , case Tuple.second onView of
+                Just waitingTime ->
+                    Task.perform
+                        (\_ -> WaitToCheckAgainGalInView)
+                        (Process.sleep <| 2000 * waitingTime)
+
+                Nothing ->
+                    Cmd.none
             , Nothing
             )
 
