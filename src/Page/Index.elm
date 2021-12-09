@@ -37,7 +37,6 @@ type alias Model =
     { menuOpen : Bool
     , verNotificaciones : Bool
     , galModel : Galeria.Model
-    , pos : Maybe Dom.Element
     }
 
 
@@ -54,7 +53,6 @@ init _ _ _ =
     ( { menuOpen = False
       , verNotificaciones = True
       , galModel = Galeria.newModel
-      , pos = Nothing
       }
     , Task.attempt CheckGalInView (Dom.getElement "slider-container")
     )
@@ -138,7 +136,7 @@ update _ _ _ _ msg model =
                 onView =
                     case resultaPos of
                         Ok pos ->
-                            if (pos.element.y - 0.5 * pos.viewport.height) < pos.viewport.y then
+                            if (pos.element.y - 0.7 * pos.viewport.height) < pos.viewport.y then
                                 ( True, 100 )
 
                             else
