@@ -89,6 +89,7 @@ type Msg
     | Gal Galeria.Msg
     | CheckGalInView (Result Dom.Error Dom.Element)
     | WaitToCheckAgainGalInView
+    | WaitToGalAutoRotate
 
 
 update :
@@ -156,13 +157,35 @@ update _ _ _ _ msg model =
                         (Process.sleep <| 2000 * waitingTime)
 
                 Nothing ->
-                    Cmd.none
+                    Task.perform
+                        (\_ -> WaitToGalAutoRotate)
+                        (Process.sleep <| 10000)
             , Nothing
             )
 
         WaitToCheckAgainGalInView ->
             ( model
             , Task.attempt CheckGalInView (Dom.getElement "slider-container")
+            , Nothing
+            )
+
+        WaitToGalAutoRotate ->
+            let
+                galResponse : ( Galeria.Model, Galeria.Effect )
+                galResponse =
+                    Galeria.update
+                        Galeria.Avanza
+                        model.galModel
+            in
+            ( { model
+                | galModel = Tuple.first galResponse
+              }
+            , Cmd.batch
+                [ Cmd.map Gal <| Galeria.runEffect <| Tuple.second galResponse
+                , Task.perform
+                    (\_ -> WaitToGalAutoRotate)
+                    (Process.sleep <| 10000)
+                ]
             , Nothing
             )
 

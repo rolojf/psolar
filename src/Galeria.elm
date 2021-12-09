@@ -3,7 +3,7 @@ module Galeria exposing (..)
 import Array exposing (Array)
 import Html.Styled as Htmls exposing (Html, div, text)
 import Html.Styled.Attributes as Attr exposing (class, css)
-import Html.Styled.Events as Event
+import Html.Styled.Events as EventS
 import Process
 import Simple.Animation as Animation exposing (Animation)
 import Simple.Animation.Animated as Animated
@@ -194,12 +194,12 @@ viewSlider showIt listadoCompletoImgs textos slideActivo animar =
             [ class "nav" ]
             [ div
                 [ class "next"
-                , Event.onClick Avanza
+                , EventS.onClick Avanza
                 ]
                 []
             , div
                 [ class "prev"
-                , Event.onClick Retrocede
+                , EventS.onClick Retrocede
                 ]
                 []
             , div
