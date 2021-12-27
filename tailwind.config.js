@@ -1,13 +1,15 @@
 module.exports = {
-   purge: {
-      enabled: true,
-      content: ["./src/**/*.elm"],
-      defaultExtractor: (content) => {
-         mmatchado = content.match(/class\s+"(.+)"/).groups || [];
-         return mmatchado;
-      },
+   content: {
+      files: ['./src/**/*.elm'],
+      extract: {
+         elm: (contenido) => {
+            let matchado = contenido.match(/class\s+"(.+)"/) ;
+            if (matchado === null) 
+                { return []}
+                { return (matchado[1].split(" "))};
+         }
+      }
    },
-   darkMode: false, // or 'media' or 'class'
    theme: {
       extend: {
          fontFamily: {
@@ -31,7 +33,6 @@ module.exports = {
          },
       },
    },
-   variants: {},
    plugins: [
       require("@tailwindcss/typography"),
       require("@tailwindcss/forms"),
