@@ -209,8 +209,10 @@ update url maybeKey sharedM staticP msg model =
 
         WaitToGalAutoRotate ->
             if model.avanzoManual then
-                ( model
-                , Cmd.none
+                ( { model | avanzoManual = False }
+                , Task.perform
+                    (\_ -> WaitToGalAutoRotate)
+                    (Process.sleep <| 12500)
                 , Nothing
                 )
 
@@ -228,7 +230,7 @@ update url maybeKey sharedM staticP msg model =
                             else
                                 Avanza
                         )
-                        (Process.sleep 1300)
+                        (Task.succeed ())
                     ]
                 , Nothing
                 )
@@ -322,6 +324,36 @@ update url maybeKey sharedM staticP msg model =
             )
 
 
+type alias Data =
+    { title : String
+    , tags : List String
+    , mainHead : HeaderText
+    , beneficios : Beneficios
+    }
+
+
+type alias Beneficios =
+    { preHeader : String
+    , header : String
+    , subHeader : String
+    , motivos : List Arts
+    }
+
+
+type alias HeaderText =
+    { preMainHeader : String
+    , mainHeaderResaltado : String
+    , postMainHeader : String
+    , mainSubHeader : String
+    }
+
+
+type alias Arts =
+    { cabeza : String
+    , nota : String
+    }
+
+
 yamlDecoder : Decoder Data
 yamlDecoder =
     let
@@ -361,36 +393,6 @@ data =
     File.onlyFrontmatter
         yamlDecoder
         "data/index.yaml"
-
-
-type alias Data =
-    { title : String
-    , tags : List String
-    , mainHead : HeaderText
-    , beneficios : Beneficios
-    }
-
-
-type alias Beneficios =
-    { preHeader : String
-    , header : String
-    , subHeader : String
-    , motivos : List Arts
-    }
-
-
-type alias HeaderText =
-    { preMainHeader : String
-    , mainHeaderResaltado : String
-    , postMainHeader : String
-    , mainSubHeader : String
-    }
-
-
-type alias Arts =
-    { cabeza : String
-    , nota : String
-    }
 
 
 head :
@@ -446,33 +448,6 @@ view maybeUrl sharedModel model static =
         , indexViewFooter
         ]
     }
-
-
-textosGal : Array String
-textosGal =
-    [ "Uno"
-    , "Dos"
-    , "tres"
-    , "cuatro"
-    , "cinco"
-    ]
-        |> Array.fromList
-
-
-viewGaleria : Model -> Html Msg
-viewGaleria modeloDeGal =
-    let
-        listadoCompletoImgs : Array String
-        listadoCompletoImgs =
-            List.map
-                (\cual -> "https://picsum.photos/seed/" ++ String.fromChar cual ++ "/700/700")
-                (String.toList "abcdefghijklmnopqrst")
-                |> Array.fromList
-    in
-    viewGal
-        listadoCompletoImgs
-        textosGal
-        modeloDeGal
 
 
 indexViewFooter : Html msg
@@ -766,6 +741,33 @@ viewFeatures bene =
         ]
 
 
+textosGal : Array String
+textosGal =
+    [ "Uno"
+    , "Dos"
+    , "tres"
+    , "cuatro"
+    , "cinco"
+    ]
+        |> Array.fromList
+
+
+viewGaleria : Model -> Html Msg
+viewGaleria modeloDeGal =
+    let
+        listadoCompletoImgs : Array String
+        listadoCompletoImgs =
+            List.map
+                (\cual -> "https://picsum.photos/seed/" ++ String.fromChar cual ++ "/700/700")
+                (String.toList "abcdefghijklmnopqrst")
+                |> Array.fromList
+    in
+    viewGal
+        listadoCompletoImgs
+        textosGal
+        modeloDeGal
+
+
 viewGal : Array String -> Array String -> Model -> Html Msg
 viewGal listadoCompletoImgs textos model =
     div
@@ -782,6 +784,70 @@ viewGal listadoCompletoImgs textos model =
 viewSlider : Bool -> Array String -> Array String -> Int -> Amimacion -> Html Msg
 viewSlider showIt listadoCompletoImgs textos slideActivo animar =
     let
+        letraVa : Int -> Animation
+        letraVa orden =
+            Animation.fromTo
+                { duration = 400
+                , options =
+                    [ Animation.delay (orden * 70)
+                    , Animation.easeInQuint
+                    ]
+                }
+                [ P.opacity 1
+                , P.y 0
+                ]
+                [ P.opacity 0
+                , P.y -60.0
+                ]
+
+        letraViene : Int -> Animation
+        letraViene orden =
+            Animation.fromTo
+                { duration = 600
+                , options =
+                    [ Animation.delay (1000 + orden * 70)
+                    , Animation.easeOutQuint
+                    ]
+                }
+                [ P.opacity 0
+                , P.y 60.0
+                ]
+                [ P.opacity 1
+                , P.y 0
+                ]
+
+        fotoVa : Int -> Animation
+        fotoVa orden =
+            Animation.fromTo
+                { duration = 400
+                , options =
+                    [ Animation.delay (500 + 120 * orden)
+                    , Animation.easeInCubic
+                    ]
+                }
+                [ P.opacity 1
+                , P.y 0
+                ]
+                [ P.opacity 0
+                , P.y -600.0
+                ]
+
+        fotoViene : Int -> Animation
+        fotoViene orden =
+            Animation.fromTo
+                { duration = 400
+                , options =
+                    [ Animation.delay (200 * orden)
+                    , Animation.easeInCubic
+                    ]
+                }
+                [ P.opacity 0
+                , P.y 600
+                ]
+                [ P.opacity 1
+                , P.y 0
+                ]
+
         despliega4 : Array String -> List (Html msg)
         despliega4 subListado =
             Array.toIndexedList subListado
@@ -880,84 +946,4 @@ viewSlider showIt listadoCompletoImgs textos slideActivo animar =
                     [ seccionTexto
                     ]
             ]
-        ]
-
-
-
--- ELM GAL ANIMATIONS
-
-
-letraVa : Int -> Animation
-letraVa orden =
-    Animation.fromTo
-        { duration = 400
-        , options =
-            [ Animation.delay (orden * 70)
-            , Animation.easeInQuint
-            ]
-        }
-        [ P.opacity 1
-        , P.y 0
-        ]
-        [ P.opacity 0
-        , P.y -60.0
-        ]
-
-
-letraViene : Int -> Animation
-letraViene orden =
-    Animation.fromTo
-        { duration = 600
-        , options =
-            [ Animation.delay (1000 + orden * 70)
-            , Animation.easeOutQuint
-            ]
-        }
-        [ P.opacity 0
-        , P.y 60.0
-        ]
-        [ P.opacity 1
-        , P.y 0
-        ]
-
-
-fotoVa : Int -> Animation
-fotoVa orden =
-    Animation.fromTo
-        { duration = 400
-        , options =
-            [ Animation.delay (500 + 120 * orden)
-            , Animation.easeInCubic
-            ]
-        }
-        [ P.opacity 1
-        , P.y 0
-
-        --, P.rotate -5
-        ]
-        [ P.opacity 0
-
-        --, P.rotate -20
-        , P.y -600.0
-        ]
-
-
-fotoViene : Int -> Animation
-fotoViene orden =
-    Animation.fromTo
-        { duration = 400
-        , options =
-            [ Animation.delay (200 * orden)
-            , Animation.easeInCubic
-            ]
-        }
-        [ P.opacity 0
-        , P.y 600
-
-        --, P.rotate -20
-        ]
-        [ P.opacity 1
-
-        --, P.rotate -5
-        , P.y 0
         ]
