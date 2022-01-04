@@ -52,7 +52,7 @@ init :
 init _ _ _ =
     ( { menuOpen = False
       , verNotificaciones = True
-      , galModel = Galeria.newModel
+      , galModel = Galeria.newModel <| Array.length textosGal
       }
     , Task.attempt CheckGalInView (Dom.getElement "slider-container")
     )
@@ -131,13 +131,15 @@ update _ _ _ _ msg model =
 
         CheckGalInView resultaPos ->
             let
-                modeloDeLaGal =
-                    model.galModel
+                galInSight pos =
+                    (pos.element.y - 0.7 * pos.viewport.height) < pos.viewport.y
 
+                onView : ( Bool, Maybe Float )
+                -- (in sight, Maybe esperar cuanto)
                 onView =
                     case resultaPos of
                         Ok pos ->
-                            if (pos.element.y - 0.7 * pos.viewport.height) < pos.viewport.y then
+                            if galInSight pos then
                                 ( True, Nothing )
 
                             else
@@ -145,6 +147,9 @@ update _ _ _ _ msg model =
 
                         _ ->
                             ( False, Just 1.0 )
+
+                modeloDeLaGal =
+                    model.galModel
 
                 modeloNuevoGal =
                     { modeloDeLaGal | showSlider = Tuple.first onView }
@@ -174,7 +179,12 @@ update _ _ _ _ msg model =
                 galResponse : ( Galeria.Model, Galeria.Effect )
                 galResponse =
                     Galeria.update
-                        Galeria.Avanza
+                        (if model.galModel.avanzoManual == Galeria.Izq then
+                            Galeria.Retrocede
+
+                         else
+                            Galeria.Avanza
+                        )
                         model.galModel
             in
             ( { model
@@ -316,19 +326,20 @@ view maybeUrl sharedModel model static =
     }
 
 
+textosGal : Array String
+textosGal =
+    [ "Uno"
+    , "Dos"
+    , "tres"
+    , "cuatro"
+    , "cinco"
+    ]
+        |> Array.fromList
+
+
 viewGaleria : Galeria.Model -> Html Msg
 viewGaleria modeloDeGal =
     let
-        textos : Array String
-        textos =
-            [ "Uno"
-            , "Dos"
-            , "tres"
-            , "cuatro"
-            , "cinco"
-            ]
-                |> Array.fromList
-
         listadoCompletoImgs : Array String
         listadoCompletoImgs =
             List.map
@@ -336,7 +347,7 @@ viewGaleria modeloDeGal =
                 (String.toList "abcdefghijklmnopqrst")
                 |> Array.fromList
     in
-    Galeria.view listadoCompletoImgs textos modeloDeGal |> Htmls.toUnstyled |> Html.map Gal
+    Galeria.view listadoCompletoImgs textosGal modeloDeGal |> Htmls.toUnstyled |> Html.map Gal
 
 
 indexViewFooter : Html msg

@@ -16,22 +16,32 @@ type Amimacion
     | Sale
 
 
+type AvManual
+    = None
+    | Izq
+    | Der
+
+
 type alias Model =
     { showSlider : Bool
+    , avanzoManual : AvManual
     , inicializado : Bool
     , cualSlideActivo : Int
     , aminar : Amimacion
     , cambia : Int
+    , cuantasFotos : Int
     }
 
 
-newModel : Model
-newModel =
+newModel : Int -> Model
+newModel cFotos =
     { showSlider = False
+    , avanzoManual = None
     , inicializado = False
     , cualSlideActivo = 0
     , aminar = Entra
     , cambia = 0
+    , cuantasFotos = cFotos
     }
 
 
@@ -100,8 +110,24 @@ update msg model =
             )
 
         Para ->
+            let
+                nuevoSlideActivo : Int
+                nuevoSlideActivo =
+                    model.cualSlideActivo + model.cambia
+
+                nuevoSlideActivoValidado : Int
+                nuevoSlideActivoValidado =
+                    if nuevoSlideActivo < 0 then
+                        model.cuantasFotos - 1
+
+                    else if nuevoSlideActivo == model.cuantasFotos then
+                        0
+
+                    else
+                        nuevoSlideActivo
+            in
             ( { model
-                | cualSlideActivo = model.cualSlideActivo + model.cambia
+                | cualSlideActivo = nuevoSlideActivoValidado
                 , aminar = Entra
                 , cambia = 0
               }
@@ -113,7 +139,13 @@ view : Array String -> Array String -> Model -> Html Msg
 view listadoCompletoImgs textos model =
     div
         [ Attr.id "slider-container" ]
-        [ viewSlider model.showSlider listadoCompletoImgs textos model.cualSlideActivo model.aminar ]
+        [ viewSlider
+            model.showSlider
+            listadoCompletoImgs
+            textos
+            model.cualSlideActivo
+            model.aminar
+        ]
 
 
 viewSlider : Bool -> Array String -> Array String -> Int -> Amimacion -> Html Msg
