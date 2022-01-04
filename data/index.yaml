@@ -4,31 +4,31 @@ tags:
   - elm
   - cabrón
 mainHead:
-  preMainHeader: Servicio a
+  preMainHeader: Damos mantenimiento a
   mainHeaderResaltado: Panel Solar
-  postMainHeader: para Ahorrar Más
-  mainSubHeader: Revisiones para confirmar si todo está bien, o si no hay algo que afecte. Mantenimiento para prevenir y corregir. Cuida tu inversión y produce más.
+  postMainHeader: para que ahorres más
+  mainSubHeader: "Servicios de revisión para confirmar todo bien. Diagnóstico para solución de problemas. Reparaciones. Mantenimiento preventivo. Ampliaciones. Todo para el Cuidado de Tu Inversión."
 beneficios:
-  preHeader: este es el rollo del preHeader
-  header: Para confirmar que todo esté bien
-  subHeader: este es el rollo del subheader, no se que poner aquí por ahorita, pero ya veremos
+  preHeader: Contrata Servicio al Panel Solar
+  header: Afianza Tu Inversión para muchos años
+  subHeader: Conviene más el mantenimiento preventivo
   motivos:
     - art:
-        cabeza: salir de dudas
-        nota: ¿porqué ya no siento que esté ahorrando como antes? No se si en el panel solar, hicieron el trabajo bien Que tanto debería producir el panel solar comparado con otros similares Saber si hay algo que esté afectando Entender el recibo de luz y si se está tomando en cuenta lo generado por el panel
+        cabeza: "Que el panel produzca bien"
+        nota: "Sistemas de monitoreo. Descartar afectación por sombras o suciedad. Revisar si algún panel está fallando."
     - art:
-        cabeza: Para prevenir fallas
-        nota: Posibles cortos o falsos contactos en conectores y conexiones, De sujeción de los paneles (que no salgan volando), Rigidez de la estructura, Anclajes o contrapesos firmes, prevenir filtraciones
+        cabeza: "Confirma instalación bien hecha"
+        nota: "Lista de verificación según la norma: que está bien y que falló. Que es urgente, importante y deseable."
     - art:
-        cabeza: Para que el panel produzca y ahorre más
-        nota: limpieza, Afectación por sombras, Algún panel se desconectó
+        cabeza: "Porque no se ve el ahorro esperado"
+        nota: "Revisar que consumo eléctrico sea normal. Verificación instalación eléctrica. Validar tarifa CFE sea fotovoltaica."
     - art:
-        cabeza: Para que funcione el sistema de monitoreo
-        nota: y avise de fallas
+        cabeza: "Evita cortos circuitos o falsos contactos"
+        nota: "Revisamos conectores, conexiones y tierra física. Evita accidentes e intermitencias."
     - art:
-        cabeza: Muchas veces para corregir errores en la instalación
-        nota: Que no se conectó correctamente a tierra física, No se puso cableado o interruptores especiales para panel solar, Para ahorrarse unos pesos no se puso calibre correcto para el cableado
+        cabeza: "Que no salga volando por el viento"
+        nota: "Revisamos la sujeción de los paneles (torque), rigidez de la estructura, firmeza de anclajes o contrapesos."
     - art:
-        cabeza: Muchas veces el problema está en lo que se gasta, no en el panel
-        nota: Revisar si el consumo eléctrico es proporcional al las toneladas de los climas, Revisar si hay \"fugas\" o sea gasto eléctrico cuando todo está apagado, Algún aparato puede estar gastando demasiado, Puntos calientes por falso contacto, Errores en diseño del cableado, calibre y distancias del cableado
+        cabeza: "Poner Más Paneles, aprovechando"
+        nota: "Revisar si caben, el inversor o cableado eléctrico soporta paneles adicionales para aprovechar lo que ya se tiene."
 ---
