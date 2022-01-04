@@ -7,14 +7,14 @@ import Cloudinary
 import DataSource exposing (DataSource)
 import DataSource.File as File
 import Footer
-import Galeria
 import Head
 import Head.Seo as Seo
 import HeroIcons
 import Html as Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (class)
-import Html.Events
+import Html.Events as Event
 import Html.Styled as Htmls
+import Html.Styled.Attributes as AttrS
 import Notifica
 import OptimizedDecoder as Decode exposing (Decoder)
 import Page exposing (Page, StaticPayload)
@@ -36,8 +36,26 @@ import View exposing (View)
 type alias Model =
     { menuOpen : Bool
     , verNotificaciones : Bool
-    , galModel : Galeria.Model
+    , showSlider : Bool
+    , avanzoManual : Bool
+    , dirAvance : DirAvanceManual
+    , inicializado : Bool
+    , cualSlideActivo : Int
+    , aminar : Amimacion
+    , cambia : Int
+    , cuantasFotos : Int
     }
+
+
+type Amimacion
+    = Entra
+    | Sale
+
+
+type DirAvanceManual
+    = None
+    | Izq
+    | Der
 
 
 type alias RouteParams =
@@ -52,7 +70,14 @@ init :
 init _ _ _ =
     ( { menuOpen = False
       , verNotificaciones = True
-      , galModel = Galeria.newModel <| Array.length textosGal
+      , showSlider = False
+      , avanzoManual = False
+      , dirAvance = None
+      , inicializado = False
+      , cualSlideActivo = 0
+      , aminar = Entra
+      , cambia = 0
+      , cuantasFotos = Array.length textosGal
       }
     , Task.attempt CheckGalInView (Dom.getElement "slider-container")
     )
@@ -86,10 +111,33 @@ subscriptions _ _ _ _ _ =
 type Msg
     = ToggleMenu
     | CierraNoti
-    | Gal Galeria.Msg
     | CheckGalInView (Result Dom.Error Dom.Element)
     | WaitToCheckAgainGalInView
     | WaitToGalAutoRotate
+    | Avanza
+    | Retrocede
+    | Para
+    | PresionoBotonIzq
+    | PresionoBotonDer
+
+
+type Effect
+    = EsperaLuegoPara
+    | Nada
+    | LanzaPara
+
+
+runEffect : Effect -> Cmd Msg
+runEffect efecto =
+    case efecto of
+        EsperaLuegoPara ->
+            Task.perform (\_ -> Para) (Process.sleep 1300)
+
+        Nada ->
+            Cmd.none
+
+        LanzaPara ->
+            Task.perform (\_ -> Para) (Task.succeed ())
 
 
 update :
@@ -100,7 +148,7 @@ update :
     -> Msg
     -> Model
     -> ( Model, Cmd Msg, Maybe Shared.Msg )
-update _ _ _ _ msg model =
+update url maybeKey sharedM staticP msg model =
     case msg of
         ToggleMenu ->
             ( { model | menuOpen = not model.menuOpen }
@@ -114,48 +162,33 @@ update _ _ _ _ msg model =
             , Nothing
             )
 
-        Gal msgPaGal ->
-            let
-                galResponse : ( Galeria.Model, Galeria.Effect )
-                galResponse =
-                    Galeria.update
-                        msgPaGal
-                        model.galModel
-            in
-            ( { model
-                | galModel = Tuple.first galResponse
-              }
-            , Cmd.map Gal <| Galeria.runEffect <| Tuple.second galResponse
-            , Nothing
-            )
-
         CheckGalInView resultaPos ->
             let
                 galInSight pos =
                     (pos.element.y - 0.7 * pos.viewport.height) < pos.viewport.y
 
-                onView : ( Bool, Maybe Float )
-                -- (in sight, Maybe esperar cuanto)
+                onView : Maybe Float
                 onView =
                     case resultaPos of
                         Ok pos ->
                             if galInSight pos then
-                                ( True, Nothing )
+                                Nothing
 
                             else
-                                ( False, Just (1.0 - (pos.viewport.y / pos.element.y)) )
+                                Just (1.0 - (pos.viewport.y / pos.element.y))
 
                         _ ->
-                            ( False, Just 1.0 )
-
-                modeloDeLaGal =
-                    model.galModel
-
-                modeloNuevoGal =
-                    { modeloDeLaGal | showSlider = Tuple.first onView }
+                            Just 1.0
             in
-            ( { model | galModel = modeloNuevoGal }
-            , case Tuple.second onView of
+            ( { model
+                | showSlider =
+                    if onView == Nothing then
+                        True
+
+                    else
+                        False
+              }
+            , case onView of
                 Just waitingTime ->
                     Task.perform
                         (\_ -> WaitToCheckAgainGalInView)
@@ -164,7 +197,7 @@ update _ _ _ _ msg model =
                 Nothing ->
                     Task.perform
                         (\_ -> WaitToGalAutoRotate)
-                        (Process.sleep <| 10000)
+                        (Process.sleep <| 6500)
             , Nothing
             )
 
@@ -175,27 +208,116 @@ update _ _ _ _ msg model =
             )
 
         WaitToGalAutoRotate ->
-            let
-                galResponse : ( Galeria.Model, Galeria.Effect )
-                galResponse =
-                    Galeria.update
-                        (if model.galModel.avanzoManual == Galeria.Izq then
-                            Galeria.Retrocede
+            if model.avanzoManual then
+                ( model
+                , Cmd.none
+                , Nothing
+                )
 
-                         else
-                            Galeria.Avanza
+            else
+                ( model
+                , Cmd.batch
+                    [ Task.perform
+                        (\_ -> WaitToGalAutoRotate)
+                        (Process.sleep <| 6500)
+                    , Task.perform
+                        (\_ ->
+                            if model.dirAvance == Izq then
+                                Retrocede
+
+                            else
+                                Avanza
                         )
-                        model.galModel
+                        (Process.sleep 1300)
+                    ]
+                , Nothing
+                )
+
+        PresionoBotonIzq ->
+            update
+                url
+                maybeKey
+                sharedM
+                staticP
+                Retrocede
+                { model
+                    | dirAvance = Izq
+                    , avanzoManual = True
+                }
+
+        PresionoBotonDer ->
+            update
+                url
+                maybeKey
+                sharedM
+                staticP
+                Avanza
+                { model
+                    | dirAvance = Der
+                    , avanzoManual = True
+                }
+
+        Avanza ->
+            ( { model
+                | cambia =
+                    if model.showSlider then
+                        1
+
+                    else
+                        0
+                , aminar = Sale
+                , showSlider = True
+              }
+            , if model.showSlider then
+                Task.perform (\_ -> Para) (Process.sleep 1300)
+
+              else
+                Task.perform (\_ -> Para) (Task.succeed ())
+            , Nothing
+            )
+
+        Retrocede ->
+            ( { model
+                | cambia =
+                    if model.showSlider then
+                        -1
+
+                    else
+                        0
+                , aminar = Sale
+                , showSlider = True
+              }
+            , if model.showSlider then
+                Task.perform (\_ -> Para) (Process.sleep 1300)
+
+              else
+                Task.perform (\_ -> Para) (Task.succeed ())
+            , Nothing
+            )
+
+        Para ->
+            let
+                nuevoSlideActivo : Int
+                nuevoSlideActivo =
+                    model.cualSlideActivo + model.cambia
+
+                nuevoSlideActivoValidado : Int
+                nuevoSlideActivoValidado =
+                    if nuevoSlideActivo < 0 then
+                        model.cuantasFotos - 1
+
+                    else if nuevoSlideActivo == model.cuantasFotos then
+                        0
+
+                    else
+                        nuevoSlideActivo
             in
             ( { model
-                | galModel = Tuple.first galResponse
+                | cualSlideActivo = nuevoSlideActivoValidado
+                , aminar = Entra
+                , cambia = 0
               }
-            , Cmd.batch
-                [ Cmd.map Gal <| Galeria.runEffect <| Tuple.second galResponse
-                , Task.perform
-                    (\_ -> WaitToGalAutoRotate)
-                    (Process.sleep <| 10000)
-                ]
+            , Cmd.none
             , Nothing
             )
 
@@ -320,7 +442,7 @@ view maybeUrl sharedModel model static =
 
           else
             div [] []
-        , viewGaleria model.galModel
+        , viewGaleria model
         , indexViewFooter
         ]
     }
@@ -337,7 +459,7 @@ textosGal =
         |> Array.fromList
 
 
-viewGaleria : Galeria.Model -> Html Msg
+viewGaleria : Model -> Html Msg
 viewGaleria modeloDeGal =
     let
         listadoCompletoImgs : Array String
@@ -347,7 +469,10 @@ viewGaleria modeloDeGal =
                 (String.toList "abcdefghijklmnopqrst")
                 |> Array.fromList
     in
-    Galeria.view listadoCompletoImgs textosGal modeloDeGal |> Htmls.toUnstyled |> Html.map Gal
+    viewGal
+        listadoCompletoImgs
+        textosGal
+        modeloDeGal
 
 
 indexViewFooter : Html msg
@@ -449,7 +574,7 @@ viewHero menuOpen headText =
                         [ Html.button
                             [ Attr.type_ "button"
                             , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                            , Html.Events.onClick ToggleMenu
+                            , Event.onClick ToggleMenu
                             ]
                             [ Html.span
                                 [ class "sr-only" ]
@@ -513,7 +638,7 @@ viewHero menuOpen headText =
                                             [ Attr.type_ "button"
                                             , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                                             , Attr.attribute "aria-expanded" "false"
-                                            , Html.Events.onClick ToggleMenu
+                                            , Event.onClick ToggleMenu
                                             ]
                                             [ Html.span
                                                 [ class "sr-only" ]
@@ -638,4 +763,201 @@ viewFeatures bene =
                     (List.map viewArts bene.motivos)
                 ]
             ]
+        ]
+
+
+viewGal : Array String -> Array String -> Model -> Html Msg
+viewGal listadoCompletoImgs textos model =
+    div
+        [ Attr.id "slider-container" ]
+        [ viewSlider
+            model.showSlider
+            listadoCompletoImgs
+            textos
+            model.cualSlideActivo
+            model.aminar
+        ]
+
+
+viewSlider : Bool -> Array String -> Array String -> Int -> Amimacion -> Html Msg
+viewSlider showIt listadoCompletoImgs textos slideActivo animar =
+    let
+        despliega4 : Array String -> List (Html msg)
+        despliega4 subListado =
+            Array.toIndexedList subListado
+                |> List.foldl
+                    -- (a -> b -> b) -> b -> List a -> b -//- tuple  -> Html msg
+                    (\( indice, direccion ) listadoAc ->
+                        div
+                            [ class <| "img img-" ++ String.fromInt (indice + 1) ]
+                            [ case animar of
+                                Sale ->
+                                    Animated.html
+                                        Html.img
+                                        (fotoVa indice)
+                                        [ Attr.src direccion ]
+                                        []
+
+                                Entra ->
+                                    Animated.html
+                                        Html.img
+                                        (fotoViene indice)
+                                        [ Attr.src direccion ]
+                                        []
+                            ]
+                            :: listadoAc
+                    )
+                    []
+
+        seccionDeImagenes desdeCual =
+            div
+                [ class "imgs" ]
+                [ div
+                    [ class "grid" ]
+                  <|
+                    despliega4 <|
+                        Array.slice
+                            desdeCual
+                            (desdeCual + 4)
+                            listadoCompletoImgs
+                ]
+
+        seccionTexto =
+            div
+                [ class "content" ]
+                [ div
+                    [ class "wrap" ]
+                    (textos
+                        |> Array.get slideActivo
+                        |> Maybe.withDefault ""
+                        |> String.toList
+                        |> List.indexedMap
+                            (\indice letra ->
+                                case animar of
+                                    Sale ->
+                                        Animated.html
+                                            Html.span
+                                            (letraVa indice)
+                                            [ class "letter" ]
+                                            [ text (String.fromChar letra) ]
+
+                                    Entra ->
+                                        Animated.html
+                                            Html.span
+                                            (letraViene indice)
+                                            [ class "letter" ]
+                                            [ text (String.fromChar letra) ]
+                            )
+                    )
+                ]
+    in
+    div
+        [ class "slider" ]
+        [ div
+            [ class "nav" ]
+            [ div
+                [ class "next"
+                , Event.onClick PresionoBotonDer
+                ]
+                []
+            , div
+                [ class "prev"
+                , Event.onClick PresionoBotonIzq
+                ]
+                []
+            , div
+                [ class "explore-btn" ]
+                [ text "Explore" ]
+            , if showIt then
+                div
+                    [ class "item" ]
+                    [ seccionDeImagenes (4 * slideActivo)
+                    , seccionTexto
+                    ]
+
+              else
+                div [ class "item" ]
+                    [ seccionTexto
+                    ]
+            ]
+        ]
+
+
+
+-- ELM GAL ANIMATIONS
+
+
+letraVa : Int -> Animation
+letraVa orden =
+    Animation.fromTo
+        { duration = 400
+        , options =
+            [ Animation.delay (orden * 70)
+            , Animation.easeInQuint
+            ]
+        }
+        [ P.opacity 1
+        , P.y 0
+        ]
+        [ P.opacity 0
+        , P.y -60.0
+        ]
+
+
+letraViene : Int -> Animation
+letraViene orden =
+    Animation.fromTo
+        { duration = 600
+        , options =
+            [ Animation.delay (1000 + orden * 70)
+            , Animation.easeOutQuint
+            ]
+        }
+        [ P.opacity 0
+        , P.y 60.0
+        ]
+        [ P.opacity 1
+        , P.y 0
+        ]
+
+
+fotoVa : Int -> Animation
+fotoVa orden =
+    Animation.fromTo
+        { duration = 400
+        , options =
+            [ Animation.delay (500 + 120 * orden)
+            , Animation.easeInCubic
+            ]
+        }
+        [ P.opacity 1
+        , P.y 0
+
+        --, P.rotate -5
+        ]
+        [ P.opacity 0
+
+        --, P.rotate -20
+        , P.y -600.0
+        ]
+
+
+fotoViene : Int -> Animation
+fotoViene orden =
+    Animation.fromTo
+        { duration = 400
+        , options =
+            [ Animation.delay (200 * orden)
+            , Animation.easeInCubic
+            ]
+        }
+        [ P.opacity 0
+        , P.y 600
+
+        --, P.rotate -20
+        ]
+        [ P.opacity 1
+
+        --, P.rotate -5
+        , P.y 0
         ]
