@@ -67,7 +67,11 @@ runEffect efecto =
             Cmd.none
 
         LanzaPara ->
-            Task.perform (\_ -> Para) (Process.sleep 1)
+            Task.perform (\_ -> Para) (Task.succeed ())
+
+
+
+-- (Process.sleep 1)
 
 
 update : Msg -> Model -> ( Model, Effect )
