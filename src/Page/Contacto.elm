@@ -152,7 +152,7 @@ update _ navKey sharedModel _ msg model =
                 mandaForma =
                     Http.post
                         { url = "https://usebasin.com/f/41489cfac434"
-                        , body = Http.emptyBody
+                        , body = Http.jsonBody cuerpoPost
                         , expect = Http.expectString RespondeBasin
                         }
             in
