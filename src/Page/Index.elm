@@ -15,6 +15,7 @@ import Html.Attributes as Attr exposing (class)
 import Html.Events as Event
 import Html.Styled as Htmls
 import Html.Styled.Attributes as AttrS
+import Http
 import Notifica
 import OptimizedDecoder as Decode exposing (Decoder)
 import Page exposing (Page, StaticPayload)
@@ -192,8 +193,9 @@ update url maybeKey sharedM staticP msg model =
                 Just waitingTime ->
                     Task.perform
                         (\_ -> WaitToCheckAgainGalInView)
-                        (Process.sleep <| 200000 * waitingTime) -- debe ser 2000
+                        (Process.sleep <| 200000 * waitingTime)
 
+                -- debe ser 2000
                 Nothing ->
                     Task.perform
                         (\_ -> WaitToGalAutoRotate)
@@ -431,9 +433,29 @@ view maybeUrl sharedModel model static =
                 Notifica.retroFinal
                     HeroIcons.outlineCheckCircle
                     "Maravillos Vas Bien"
-                    (Debug.toString respBasin)
+                    (case respBasin of
+                        Ok _ ->
+                            "Información recibida, nos comunicaremos pronto"
+
+                        Err cual ->
+                            case cual of
+                                Http.BadUrl urlBad ->
+                                    urlBad
+
+                                Http.Timeout ->
+                                    "Se tardó mucho."
+
+                                Http.NetworkError ->
+                                    "Falló el internet."
+
+                                Http.BadStatus codigo ->
+                                    "Código de error " ++ String.fromInt codigo
+
+                                Http.BadBody infoEnviada ->
+                                    "Error en info enviada" ++ String.left 20 infoEnviada
+                    )
                     model.verNotificaciones
-                       |> Html.map (\_ -> CierraNoti)
+                    |> Html.map (\_ -> CierraNoti)
 
             Shared.Rechazado ->
                 Notifica.retroFinal
@@ -441,10 +463,11 @@ view maybeUrl sharedModel model static =
                     "Pinche Bot Cularo"
                     "Qué esperabas cabrón, solo así y ya?"
                     model.verNotificaciones
-                        |> Html.map (\_ -> CierraNoti)
+                    |> Html.map (\_ -> CierraNoti)
 
             Shared.Desconocido ->
                 div [] []
+
         --, viewGaleria model
         , indexViewFooter
         ]
@@ -457,24 +480,26 @@ indexViewFooter =
         viewPieNavega : List (Htmls.Html msg)
         viewPieNavega =
             []
-            {-
-            [ Footer.ligaAlPie "#" "About"
-            , Footer.ligaAlPie "#" "Blog"
-            , Footer.ligaAlPie "#" "Jobs"
-            , Footer.ligaAlPie "#" "Press"
-            , Footer.ligaAlPie "#" "Accesibility"
-            , Footer.ligaAlPie "#" "Partners"
-            ]-}
 
+        {-
+           [ Footer.ligaAlPie "#" "About"
+           , Footer.ligaAlPie "#" "Blog"
+           , Footer.ligaAlPie "#" "Jobs"
+           , Footer.ligaAlPie "#" "Press"
+           , Footer.ligaAlPie "#" "Accesibility"
+           , Footer.ligaAlPie "#" "Partners"
+           ]
+        -}
         viewPieSocialIcons : List (Htmls.Html msg)
         viewPieSocialIcons =
             [ Footer.ligaIcono "https://github.com/rolojf/psolar" "GitHub" Footer.Github
             , Footer.ligaIcono "https://www.linkedin.com/in/rolando-flores-gzz-80887163/" "LinkedIn" Footer.LinkedIn
+
             --, Footer.ligaIcono "whatsapp.com" "Whatsapp" Footer.WhatsApp
             , Footer.ligaIcono
-                (Route.Contacto |> Route.toPath |> Path.toRelative )
-                 "Correo"
-                 Footer.Email
+                (Route.Contacto |> Route.toPath |> Path.toRelative)
+                "Correo"
+                Footer.Email
             ]
     in
     Footer.viewFooter
