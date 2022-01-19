@@ -213,7 +213,7 @@ update _ navKey sharedModel _ msg model =
                             )
                     )
                 |> Maybe.withDefault Cmd.none
-            , Shared.Conocido respuesta "Nada"
+            , Shared.Conocido respuesta
                 |> Shared.CambiaStatus
                 |> Shared.SharedMsg
                 |> Just

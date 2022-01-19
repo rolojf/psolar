@@ -40,7 +40,7 @@ type Msg
 type UsuarioSt
     = Desconocido
     | Rechazado
-    | Conocido (Result Http.Error String) String
+    | Conocido (Result Http.Error String)
 
 
 type alias Data =

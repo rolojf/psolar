@@ -427,11 +427,11 @@ view maybeUrl sharedModel model static =
         [ viewHero model.menuOpen static.data.mainHead
         , viewFeatures static.data.beneficios
         , case sharedModel.usuarioStatus of
-            Shared.Conocido respBasin x ->
+            Shared.Conocido respBasin ->
                 Notifica.retroFinal
                     HeroIcons.outlineCheckCircle
                     "Maravillos Vas Bien"
-                    ((Debug.toString respBasin) ++ " " ++ x)
+                    (Debug.toString respBasin)
                     model.verNotificaciones
                        |> Html.map (\_ -> CierraNoti)
 
