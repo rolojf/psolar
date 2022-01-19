@@ -192,7 +192,7 @@ update url maybeKey sharedM staticP msg model =
                 Just waitingTime ->
                     Task.perform
                         (\_ -> WaitToCheckAgainGalInView)
-                        (Process.sleep <| 2000 * waitingTime)
+                        (Process.sleep <| 200000 * waitingTime) -- debe ser 2000
 
                 Nothing ->
                     Task.perform
@@ -426,24 +426,25 @@ view maybeUrl sharedModel model static =
     , body =
         [ viewHero model.menuOpen static.data.mainHead
         , viewFeatures static.data.beneficios
-        , if sharedModel.usuarioStatus == Shared.Conocido then
-            Notifica.retroFinal
-                HeroIcons.outlineCheckCircle
-                "Maravillos Vas Bien"
-                "Solo no te desesperes por favor hay que echarle ganas"
-                model.verNotificaciones
-                |> Html.map (\_ -> CierraNoti)
+        , case sharedModel.usuarioStatus of
+            Shared.Conocido respBasin x ->
+                Notifica.retroFinal
+                    HeroIcons.outlineCheckCircle
+                    "Maravillos Vas Bien"
+                    ((Debug.toString respBasin) ++ " " ++ x)
+                    model.verNotificaciones
+                       |> Html.map (\_ -> CierraNoti)
 
-          else if sharedModel.usuarioStatus == Shared.Rechazado then
-            Notifica.retroFinal
-                HeroIcons.outlineCheckCircle
-                "Pinche Bot Cularo"
-                "Qué esperabas cabrón, solo así y ya?"
-                model.verNotificaciones
-                |> Html.map (\_ -> CierraNoti)
+            Shared.Rechazado ->
+                Notifica.retroFinal
+                    HeroIcons.outlineCheckCircle
+                    "Pinche Bot Cularo"
+                    "Qué esperabas cabrón, solo así y ya?"
+                    model.verNotificaciones
+                        |> Html.map (\_ -> CierraNoti)
 
-          else
-            div [] []
+            Shared.Desconocido ->
+                div [] []
         --, viewGaleria model
         , indexViewFooter
         ]

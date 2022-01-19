@@ -7,6 +7,7 @@ import Browser.Navigation
 import Cloudinary
 import Css
 import DataSource exposing (DataSource)
+import Json.Encode as Encode
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
@@ -14,6 +15,7 @@ import Html.Styled as Htmls exposing (div, text)
 import Html.Styled.Attributes as Attr exposing (class, css)
 import Html.Styled.Attributes.Aria as Aria
 import Html.Styled.Events as Events
+import Http
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
@@ -40,6 +42,7 @@ type alias Model =
     , listo : Bool
     , reModel : Reto.Model
     , respondio : Bool
+    , deBasin : Result Http.Error String
     }
 
 
@@ -54,6 +57,7 @@ type Msg
     | EsperaPaEnfocar
     | ReMsg Reto.Msg
     | NoOp
+    | RespondeBasin (Result Http.Error String)
 
 
 init :
@@ -71,6 +75,7 @@ init _ _ _ =
       , listo = False
       , reModel = Reto.newModel
       , respondio = False
+      , deBasin = Err (Http.BadStatus 9999)
       }
     , Cmd.none
     )
@@ -136,6 +141,20 @@ update _ navKey sharedModel _ msg model =
             let
                 modeloQResulta =
                     Reto.update reMsg model.reModel
+
+                cuerpoPost : Encode.Value
+                cuerpoPost =
+                    Encode.object
+                            [ ( "name", Encode.string model.nombre )
+                            , ( "age", Encode.string model.correo )
+                            ]
+
+                mandaForma =
+                    Http.post
+                        { url = "https://usebasin.com/f/41489cfac434"
+                        , body = Http.emptyBody
+                        , expect = Http.expectString RespondeBasin
+                        }
             in
             ( { model | reModel = modeloQResulta }
             , if modeloQResulta.vaDeNuez then
@@ -146,30 +165,24 @@ update _ navKey sharedModel _ msg model =
               else
                 case modeloQResulta.intento of
                     Reto.YaOk ->
-                         navKey
-                            |> Maybe.map
-                               (\llave ->
-                                   Browser.Navigation.pushUrl
-                                   llave
-                                   (Pages.Url.fromPath (Route.toPath Route.Index)
-                                       |> Pages.Url.toString)
-                               )
-                            |> Maybe.withDefault Cmd.none
+                        mandaForma
 
                     Reto.EstaFrito ->
-                         navKey
+                        navKey
                             |> Maybe.map
-                               (\llave ->
-                                   Browser.Navigation.pushUrl
-                                   llave
-                                   (Pages.Url.fromPath (Route.toPath Route.Index)
-                                       |> Pages.Url.toString)
-                               )
+                                (\llave ->
+                                    Browser.Navigation.pushUrl
+                                        llave
+                                        (Pages.Url.fromPath (Route.toPath Route.Index)
+                                            |> Pages.Url.toString
+                                        )
+                                )
                             |> Maybe.withDefault Cmd.none
+
                     _ ->
                         Cmd.none
             , if modeloQResulta.intento == Reto.YaOk then
-                Just (Shared.SharedMsg <| Shared.CambiaStatus Shared.Conocido)
+                Nothing
 
               else if modeloQResulta.intento == Reto.EstaFrito then
                 Just (Shared.SharedMsg <| Shared.CambiaStatus Shared.Rechazado)
@@ -182,6 +195,24 @@ update _ navKey sharedModel _ msg model =
             ( model
             , Cmd.none
             , Nothing
+            )
+
+        RespondeBasin respuesta ->
+            ( { model | deBasin = respuesta }
+            , navKey
+                |> Maybe.map
+                    (\llave ->
+                        Browser.Navigation.pushUrl
+                            llave
+                            (Pages.Url.fromPath (Route.toPath Route.Index)
+                                |> Pages.Url.toString
+                            )
+                    )
+                |> Maybe.withDefault Cmd.none
+            , (Shared.Conocido respuesta "Nada")
+                |> Shared.CambiaStatus
+                |> Shared.SharedMsg
+                |> Just
             )
 
 
@@ -273,9 +304,9 @@ view maybeUrl sharedModel model static =
                         Shared.Desconocido ->
                             Reto.view model.reModel |> Htmls.map ReMsg
 
-                        Shared.Conocido ->
+                        Shared.Conocido _ _ ->
                             Htmls.h4 []
-                                [ text "HEY! Sos Familia!!" ]
+                                [ text (Debug.toString model.deBasin) ]
 
                         Shared.Rechazado ->
                             Htmls.h4 []

@@ -14,6 +14,7 @@ import Svg.Styled.Attributes as AttrSvg
 import Tailwind.Breakpoints as TwBp
 import Tailwind.Utilities as Tw
 import View exposing (View)
+import Http
 
 
 template : SharedTemplate Msg Model Data msg
@@ -39,7 +40,7 @@ type Msg
 type UsuarioSt
     = Desconocido
     | Rechazado
-    | Conocido
+    | Conocido (Result Http.Error String) String
 
 
 type alias Data =
