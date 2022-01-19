@@ -7,7 +7,6 @@ import Browser.Navigation
 import Cloudinary
 import Css
 import DataSource exposing (DataSource)
-import Json.Encode as Encode
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
@@ -16,6 +15,7 @@ import Html.Styled.Attributes as Attr exposing (class, css)
 import Html.Styled.Attributes.Aria as Aria
 import Html.Styled.Events as Events
 import Http
+import Json.Encode as Encode
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
@@ -145,9 +145,9 @@ update _ navKey sharedModel _ msg model =
                 cuerpoPost : Encode.Value
                 cuerpoPost =
                     Encode.object
-                            [ ( "name", Encode.string model.nombre )
-                            , ( "age", Encode.string model.correo )
-                            ]
+                        [ ( "name", Encode.string model.nombre )
+                        , ( "age", Encode.string model.correo )
+                        ]
 
                 mandaForma =
                     Http.post
@@ -209,7 +209,7 @@ update _ navKey sharedModel _ msg model =
                             )
                     )
                 |> Maybe.withDefault Cmd.none
-            , (Shared.Conocido respuesta "Nada")
+            , Shared.Conocido respuesta "Nada"
                 |> Shared.CambiaStatus
                 |> Shared.SharedMsg
                 |> Just
@@ -300,24 +300,18 @@ view maybeUrl sharedModel model static =
             , if model.listo then
                 div
                     [ css [ TwBp.lg [ Tw.h_72 ] ] ]
-                    [ case sharedModel.usuarioStatus of
-                        Shared.Desconocido ->
-                            Reto.view model.reModel |> Htmls.map ReMsg
+                    [ if sharedModel.usuarioStatus == Shared.Desconocido then
+                        Reto.view model.reModel
+                            |> Htmls.map ReMsg
 
-                        Shared.Conocido _ _ ->
-                            Htmls.h4 []
-                                [ text (Debug.toString model.deBasin) ]
-
-                        Shared.Rechazado ->
-                            Htmls.h4 []
-                                [ text "Pareces un Bot, intenta de nuevo" ]
+                      else
+                        Htmls.text ""
                     ]
 
               else
                 div [] []
             ]
         ]
-            -- ]
             |> List.map Htmls.toUnstyled
     }
 
