@@ -146,7 +146,11 @@ update _ navKey sharedModel _ msg model =
                 cuerpoPost =
                     Encode.object
                         [ ( "name", Encode.string model.nombre )
-                        , ( "age", Encode.string model.correo )
+                        , ( "apellido", Encode.string model.apellido )
+                        , ( "correo", Encode.string model.correo )
+                        , ( "telefono", Encode.string model.telefono )
+                        , ( "llego", Encode.string model.comoSupo )
+                        , ( "comentario", Encode.string model.comentario )
                         ]
 
                 mandaForma =
