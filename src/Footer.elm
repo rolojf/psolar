@@ -9,6 +9,7 @@ import Html.Styled.Attributes as Attr
 import Html.Styled.Attributes.Aria as Aria
 import Tailwind.Breakpoints as TwBp
 import Tailwind.Utilities as Tw
+import Route
 
 
 ligaAlPie : String -> String -> Htmls.Html msg

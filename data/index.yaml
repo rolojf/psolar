@@ -14,14 +14,14 @@ beneficios:
   subHeader: Conviene más el mantenimiento preventivo
   motivos:
     - art:
-        cabeza: "Que el panel produzca bien"
+        cabeza: "Que esté produciendo bien"
         nota: "Sistemas de monitoreo. Descartar afectación por sombras o suciedad. Revisar si algún panel está fallando."
     - art:
         cabeza: "Confirma instalación bien hecha"
         nota: "Lista de verificación según la norma: que está bien y que falló. Que es urgente, importante y deseable."
     - art:
-        cabeza: "Porque no se ve el ahorro esperado"
-        nota: "Revisar que consumo eléctrico sea normal. Verificación instalación eléctrica. Validar tarifa CFE sea fotovoltaica."
+        cabeza: "Que se vea el ahorro esperado"
+        nota: "Revisar si el consumo eléctrico es normal según los climas. Revisamos la instalación eléctrica y tarifas CFE."
     - art:
         cabeza: "Evita cortos circuitos o falsos contactos"
         nota: "Revisamos conectores, conexiones y tierra física. Evita accidentes e intermitencias."

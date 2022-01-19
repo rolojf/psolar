@@ -20,9 +20,9 @@ import OptimizedDecoder as Decode exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
-import Path
+import Path exposing (Path)
 import Process
-import Route
+import Route exposing (Route)
 import Shared
 import Simple.Animation as Animation exposing (Animation)
 import Simple.Animation.Animated as Animated
@@ -444,7 +444,7 @@ view maybeUrl sharedModel model static =
 
           else
             div [] []
-        , viewGaleria model
+        --, viewGaleria model
         , indexViewFooter
         ]
     }
@@ -455,26 +455,31 @@ indexViewFooter =
     let
         viewPieNavega : List (Htmls.Html msg)
         viewPieNavega =
+            []
+            {-
             [ Footer.ligaAlPie "#" "About"
             , Footer.ligaAlPie "#" "Blog"
             , Footer.ligaAlPie "#" "Jobs"
             , Footer.ligaAlPie "#" "Press"
             , Footer.ligaAlPie "#" "Accesibility"
             , Footer.ligaAlPie "#" "Partners"
-            ]
+            ]-}
 
         viewPieSocialIcons : List (Htmls.Html msg)
         viewPieSocialIcons =
-            [ Footer.ligaIcono "github.com" "GitHub" Footer.Github
-            , Footer.ligaIcono "linkedin.com" "LinkedIn" Footer.LinkedIn
-            , Footer.ligaIcono "whatsapp.com" "Whatsapp" Footer.WhatsApp
-            , Footer.ligaIcono "correo.com" "Correo" Footer.Email
+            [ Footer.ligaIcono "https://github.com/rolojf/psolar" "GitHub" Footer.Github
+            , Footer.ligaIcono "https://www.linkedin.com/in/rolando-flores-gzz-80887163/" "LinkedIn" Footer.LinkedIn
+            --, Footer.ligaIcono "whatsapp.com" "Whatsapp" Footer.WhatsApp
+            , Footer.ligaIcono
+                (Route.Contacto |> Route.toPath |> Path.toRelative )
+                 "Correo"
+                 Footer.Email
             ]
     in
     Footer.viewFooter
         viewPieNavega
         viewPieSocialIcons
-        "REFTEX INGENIERIA, S.A. de C.V. - 2021"
+        "REFTEX INGENIERIA, S.A. de C.V. - 2022"
 
 
 viewHero menuOpen headText =
