@@ -428,50 +428,58 @@ view maybeUrl sharedModel model static =
     , body =
         [ viewHero model.menuOpen static.data.mainHead
         , viewFeatures static.data.beneficios
-        , case sharedModel.usuarioStatus of
-            Shared.Conocido respBasin ->
-                Notifica.retroFinal
-                    HeroIcons.outlineCheckCircle
-                    "Maravillos Vas Bien"
-                    (case respBasin of
-                        Ok _ ->
-                            "Información recibida, nos comunicaremos pronto"
-
-                        Err cual ->
-                            case cual of
-                                Http.BadUrl urlBad ->
-                                    urlBad
-
-                                Http.Timeout ->
-                                    "Se tardó mucho."
-
-                                Http.NetworkError ->
-                                    "Falló el internet."
-
-                                Http.BadStatus codigo ->
-                                    "Código de error " ++ String.fromInt codigo
-
-                                Http.BadBody infoEnviada ->
-                                    "Error en info enviada" ++ String.left 20 infoEnviada
-                    )
-                    model.verNotificaciones
-                    |> Html.map (\_ -> CierraNoti)
-
-            Shared.Rechazado ->
-                Notifica.retroFinal
-                    HeroIcons.outlineCheckCircle
-                    "Pinche Bot Cularo"
-                    "Qué esperabas cabrón, solo así y ya?"
-                    model.verNotificaciones
-                    |> Html.map (\_ -> CierraNoti)
-
-            Shared.Desconocido ->
-                div [] []
+        , viewNotificacion sharedModel.usuarioStatus model.verNotificaciones
 
         --, viewGaleria model
         , indexViewFooter
         ]
     }
+
+
+viewNotificacion usrStatus verNotif =
+    let
+        respFromPost : Result Http.Error String -> String
+        respFromPost resp =
+            case resp of
+                Ok _ ->
+                    "Información recibida, nos comunicaremos pronto"
+
+                Err cual ->
+                    case cual of
+                        Http.BadUrl urlBad ->
+                            urlBad
+
+                        Http.Timeout ->
+                            "Se tardó mucho."
+
+                        Http.NetworkError ->
+                            "Falló el internet."
+
+                        Http.BadStatus codigo ->
+                            "Código de error " ++ String.fromInt codigo
+
+                        Http.BadBody infoEnviada ->
+                            "Error en info enviada" ++ String.left 20 infoEnviada
+    in
+    case usrStatus of
+        Shared.Conocido respBasin ->
+            Notifica.retroFinal
+                HeroIcons.outlineCheckCircle
+                "Maravillos Vas Bien"
+                (respFromPost respBasin)
+                verNotif
+                |> Html.map (\_ -> CierraNoti)
+
+        Shared.Rechazado ->
+            Notifica.retroFinal
+                HeroIcons.outlineCheckCircle
+                "Pinche Bot Cularo"
+                "Qué esperabas cabrón, solo así y ya?"
+                verNotif
+                |> Html.map (\_ -> CierraNoti)
+
+        Shared.Desconocido ->
+            div [] []
 
 
 indexViewFooter : Html msg
