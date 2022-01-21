@@ -62,11 +62,7 @@ type alias RouteParams =
     {}
 
 
-init :
-    Maybe PageUrl
-    -> Shared.Model
-    -> StaticPayload templateData routeParams
-    -> ( Model, Cmd Msg )
+init : Maybe PageUrl -> Shared.Model -> StaticPayload templateData routeParams -> ( Model, Cmd Msg )
 init _ _ _ =
     ( { menuOpen = False
       , verNotificaciones = Just True
@@ -97,13 +93,7 @@ page =
             }
 
 
-subscriptions :
-    Maybe PageUrl
-    -> routeParams
-    -> Path.Path
-    -> Model
-    -> Shared.Model
-    -> Sub Msg
+subscriptions : Maybe PageUrl -> routeParams -> Path.Path -> Model -> Shared.Model -> Sub Msg
 subscriptions _ _ _ _ _ =
     Sub.none
 
@@ -140,14 +130,7 @@ runEffect efecto =
             Task.perform (\_ -> Para) (Task.succeed ())
 
 
-update :
-    PageUrl
-    -> Maybe Browser.Navigation.Key
-    -> Shared.Model
-    -> StaticPayload templateData routeParams
-    -> Msg
-    -> Model
-    -> ( Model, Cmd Msg, Maybe Shared.Msg )
+update : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
 update url maybeKey sharedM staticP msg model =
     case msg of
         ToggleMenu ->
@@ -394,9 +377,7 @@ data =
         "data/index.yaml"
 
 
-head :
-    StaticPayload Data RouteParams
-    -> List Head.Tag
+head : StaticPayload Data RouteParams -> List Head.Tag
 head static =
     Seo.summary
         { canonicalUrlOverride = Nothing
@@ -414,12 +395,7 @@ head static =
         |> Seo.website
 
 
-view :
-    Maybe PageUrl
-    -> Shared.Model
-    -> Model
-    -> StaticPayload Data RouteParams
-    -> View Msg
+view : Maybe PageUrl -> Shared.Model -> Model -> StaticPayload Data RouteParams -> View Msg
 view maybeUrl sharedModel model static =
     { title = static.data.title
     , body =
