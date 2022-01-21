@@ -490,7 +490,10 @@ notifAppear show =
             if siAmimar then
                 Animation.fromTo
                     { duration = 750
-                    , options = [ Animation.easeOut ]
+                    , options =
+                        [ Animation.delay 1100
+                        , Animation.easeOut
+                        ]
                     }
                     [ P.opacity 0, P.scale 0.92 ]
                     [ P.opacity 1, P.scale 1 ]
