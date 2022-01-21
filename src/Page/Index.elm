@@ -363,11 +363,9 @@ yamlDecoder =
                 (Decode.field "preHeader" Decode.string)
                 (Decode.field "header" Decode.string)
                 (Decode.field "subHeader" Decode.string)
-                (Decode.field
-                    "motivos"
-                 <|
-                    Decode.list <|
-                        Decode.field "art" artsDecoder
+                (Decode.field "art" artsDecoder
+                    |> Decode.list
+                    |> Decode.field "motivos"
                 )
 
         artsDecoder =
