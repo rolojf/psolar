@@ -408,6 +408,7 @@ view maybeUrl sharedModel model static =
         ]
     }
 
+-- Notificación
 
 viewNotificacion : Shared.UsuarioSt -> Maybe Bool -> Html Msg
 viewNotificacion usrStatus verNotif =
@@ -537,6 +538,7 @@ retroFinal icono titulo subtitulo debeAparecer =
             ]
         ]
 
+-- View Footer
 
 indexViewFooter : Html msg
 indexViewFooter =
@@ -571,6 +573,7 @@ indexViewFooter =
         viewPieSocialIcons
         "REFTEX INGENIERIA, S.A. de C.V. - 2022"
 
+-- View of Above the Fold
 
 viewHero menuOpen headText =
     let
@@ -759,19 +762,18 @@ viewHero menuOpen headText =
                             [ class "mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start" ]
                             [ div
                                 [ class "rounded-md shadow" ]
-                                [ Html.a
-                                    [ Attr.href "#"
-                                    , class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
-                                    ]
-                                    [ text "Get started" ]
+                                [ Route.link
+                                     Route.Contacto
+                                     [ class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
+                                     [ text "¡Contáctanos!" ]
                                 ]
                             , div
                                 [ class "mt-3 sm:mt-0 sm:ml-3" ]
                                 [ Html.a
-                                    [ Attr.href "#"
+                                    [ Attr.href "#features"
                                     , class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
                                     ]
-                                    [ text "Live demo" ]
+                                    [ text "más info." ]
                                 ]
                             ]
                         ]
@@ -783,12 +785,13 @@ viewHero menuOpen headText =
             [ Html.img
                 [ class "h-56 w-full object-cover object-top sm:h-72 md:h-96 lg:w-full lg:h-full lg:object-right"
                 , Attr.src (Cloudinary.url "f_auto,q_auto:best" "dreamstime_s_30697263_clymr0.jpg")
-                , Attr.alt ""
+                , Attr.alt "Expertos trajamos por ti"
                 ]
                 []
             ]
         ]
 
+-- View Features
 
 viewFeatures : Beneficios -> Html msg
 viewFeatures bene =
@@ -812,6 +815,7 @@ viewFeatures bene =
     in
     div
         [ class "bg-white"
+        , Attr.id "features"
         ]
         [ div
             [ class "max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-24 lg:px-8 lg:grid lg:grid-cols-3 lg:gap-x-8" ]
@@ -835,7 +839,7 @@ viewFeatures bene =
             ]
         ]
 
-
+-- View Galeria
 textosGal : Array String
 textosGal =
     [ "Uno"
