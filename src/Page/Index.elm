@@ -35,7 +35,7 @@ import View exposing (View)
 
 type alias Model =
     { menuOpen : Bool
-    , verNotificaciones : Bool
+    , verNotificaciones : Maybe Bool
     , showSlider : Bool
     , avanzoManual : Bool
     , dirAvance : DirAvanceManual
@@ -69,7 +69,7 @@ init :
     -> ( Model, Cmd Msg )
 init _ _ _ =
     ( { menuOpen = False
-      , verNotificaciones = True
+      , verNotificaciones = Just True
       , showSlider = False
       , avanzoManual = False
       , dirAvance = None
@@ -157,7 +157,7 @@ update url maybeKey sharedM staticP msg model =
             )
 
         CierraNoti ->
-            ( { model | verNotificaciones = False }
+            ( { model | verNotificaciones = Just False }
             , Cmd.none
             , Nothing
             )
@@ -433,36 +433,37 @@ view maybeUrl sharedModel model static =
     }
 
 
+viewNotificacion : Shared.UsuarioSt -> Maybe Bool -> Html Msg
 viewNotificacion usrStatus verNotif =
     let
         respFromPost : Result Http.Error String -> String
         respFromPost resp =
             case resp of
                 Ok _ ->
-                    "Información recibida, nos comunicaremos pronto"
+                    "Registrado Ok, nos comunicaremos pronto."
 
                 Err cual ->
                     case cual of
                         Http.BadUrl urlBad ->
-                            urlBad
+                            "Pero, error en programa " ++ urlBad
 
                         Http.Timeout ->
-                            "Se tardó mucho."
+                            "No respondió el servidor, Intente de nuevo."
 
                         Http.NetworkError ->
                             "Falló el internet."
 
                         Http.BadStatus codigo ->
-                            "Código de error " ++ String.fromInt codigo
+                            "Servidor regresó error " ++ String.fromInt codigo
 
                         Http.BadBody infoEnviada ->
-                            "Error en info enviada" ++ String.left 20 infoEnviada
+                            "Problemas con la información " ++ String.left 20 infoEnviada
     in
     case usrStatus of
         Shared.Conocido respBasin ->
             retroFinal
                 HeroIcons.outlineCheckCircle
-                "Maravillos Vas Bien"
+                "Formulario Recibido"
                 (respFromPost respBasin)
                 verNotif
                 |> Html.map (\_ -> CierraNoti)
@@ -470,8 +471,8 @@ viewNotificacion usrStatus verNotif =
         Shared.Rechazado ->
             retroFinal
                 HeroIcons.outlineCheckCircle
-                "Pinche Bot Cularo"
-                "Qué esperabas cabrón, solo así y ya?"
+                "¡Información no registrada!"
+                "Era necesario resolver la ecuación."
                 verNotif
                 |> Html.map (\_ -> CierraNoti)
 
@@ -479,29 +480,34 @@ viewNotificacion usrStatus verNotif =
             div [] []
 
 
-notifAppear : Bool -> Animation
+notifAppear : Maybe Bool -> Animation
 notifAppear show =
-    if show then
-        Animation.fromTo
-            { duration = 750
-            , options = [ Animation.easeOut ]
-            }
-            [ P.opacity 0, P.scale 0.92 ]
-            [ P.opacity 1, P.scale 1 ]
+    case show of
+        Nothing ->
+            Animation.empty
 
-    else
-        Animation.fromTo
-            { duration = 125
-            , options = [ Animation.easeIn ]
-            }
-            [ P.opacity 1, P.scale 1, P.y 0.8 ]
-            [ P.opacity 0, P.scale 0.92, P.y 0 ]
+        Just siAmimar ->
+            if siAmimar then
+                Animation.fromTo
+                    { duration = 750
+                    , options = [ Animation.easeOut ]
+                    }
+                    [ P.opacity 0, P.scale 0.92 ]
+                    [ P.opacity 1, P.scale 1 ]
+
+            else
+                Animation.fromTo
+                    { duration = 125
+                    , options = [ Animation.easeIn ]
+                    }
+                    [ P.opacity 1, P.scale 1, P.y 0.8 ]
+                    [ P.opacity 0, P.scale 0.92, P.y 0 ]
 
 
-retroFinal : Html Msg -> String -> String -> Bool -> Html Msg
-retroFinal icono titulo subtitulo aparece =
+retroFinal : Html Msg -> String -> String -> Maybe Bool -> Html Msg
+retroFinal icono titulo subtitulo debeAparecer =
     Animated.div
-        (notifAppear aparece)
+        (notifAppear debeAparecer)
         [ Attr.attribute "aria-live" "assertive"
         , class "fixed inset-0 flex items-end px-4 py-6 z-20 pointer-events-none sm:p-6 lg:items-center"
         ]
