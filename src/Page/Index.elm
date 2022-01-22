@@ -607,16 +607,20 @@ viewHero menuOpen headText =
               }
             ]
 
-        clasesComunItems =
-            "font-medium hover:text-gray-900"
+        clasesMenuItems : Bool -> Bool -> String
+        clasesMenuItems esMovil especial =
+            case ( esMovil, especial ) of
+                ( True, True ) ->
+                    "block w-full px-5 py-3 text-center font-medium text-blue-900 bg-gray-50 hover:bg-gray-200"
 
-        clasesMenuItems : Bool -> String
-        clasesMenuItems esMovil =
-            if esMovil then
-                "block px-3 py-2 rounded-md text-base text-gray-700 hover:bg-gray-50 " ++ clasesComunItems
+                ( True, False ) ->
+                    "block px-5 py-3 rounded-md font-medium text-base text-gray-700 hover:text-gray-900 hover:bg-gray-50"
 
-            else
-                clasesComunItems ++ " text-gray-500"
+                ( False, True ) ->
+                    "font-medium text-blue-900 hover:text-blue-500"
+
+                ( False, False ) ->
+                    "font-medium text-gray-500 hover:text-gray-900"
 
         menuItem : String -> { texto : String, dir : LigaTipo } -> Html msg
         menuItem clases dirToLink =
@@ -624,7 +628,7 @@ viewHero menuOpen headText =
                 Otra camino ->
                     Html.a
                         [ Attr.href <| Path.toRelative camino
-                        , class clases --<| clasesMenuItems cualMenu
+                        , class clases
                         ]
                         [ text dirToLink.texto ]
 
@@ -632,7 +636,6 @@ viewHero menuOpen headText =
                     Route.link
                         rutaLiga
                         [ class clases ]
-                        --<| clasesMenuItems cualMenu ]
                         [ text dirToLink.texto ]
 
         menuAppear : Bool -> Animation
@@ -684,14 +687,12 @@ viewHero menuOpen headText =
                     [ class "px-2 pt-2 pb-3 space-y-1" ]
                     (List.append
                         (List.map
-                            (menuItem <|
-                                clasesMenuItems True
-                            )
+                            (menuItem <| clasesMenuItems True False)
                             direcciones
                         )
                         (List.singleton <|
                             menuItem
-                                "block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
+                                (clasesMenuItems True True)
                                 direccionEspecial
                         )
                     )
@@ -756,12 +757,12 @@ viewHero menuOpen headText =
                                 [ class "hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
                                 (List.append
                                     (List.map
-                                        (menuItem <| clasesMenuItems False)
+                                        (menuItem <| clasesMenuItems False False)
                                         direcciones
                                     )
                                     (List.singleton <|
                                         menuItem
-                                            "text-indigo-600 hover:text-indigo-500"
+                                            (clasesMenuItems False True)
                                             direccionEspecial
                                     )
                                 )
@@ -798,7 +799,7 @@ viewHero menuOpen headText =
                                 [ class "rounded-md shadow" ]
                                 [ Route.link
                                     Route.Contacto
-                                    [ class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
+                                    [ class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-900 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
                                     [ text "¡Contáctanos!" ]
                                 ]
                             , div
