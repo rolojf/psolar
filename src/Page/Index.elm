@@ -408,7 +408,10 @@ view maybeUrl sharedModel model static =
         ]
     }
 
+
+
 -- Notificación
+
 
 viewNotificacion : Shared.UsuarioSt -> Maybe Bool -> Html Msg
 viewNotificacion usrStatus verNotif =
@@ -538,7 +541,10 @@ retroFinal icono titulo subtitulo debeAparecer =
             ]
         ]
 
+
+
 -- View Footer
+
 
 indexViewFooter : Html msg
 indexViewFooter =
@@ -573,22 +579,31 @@ indexViewFooter =
         viewPieSocialIcons
         "REFTEX INGENIERIA, S.A. de C.V. - 2022"
 
+
+
 -- View of Above the Fold
+
+
+type LigaTipo
+    = Otra Path
+    | Interna Route
+
 
 viewHero menuOpen headText =
     let
+        direccionEspecial : { texto : String, dir : LigaTipo }
         direccionEspecial =
-            { texto = "Huevón"
-            , dir = Pages.Url.fromPath (Route.toPath Route.Contacto)
+            { texto = "Comunícate"
+            , dir = Interna Route.Contacto
             }
 
-        direcciones : List { texto : String, dir : Pages.Url.Url }
+        direcciones : List { texto : String, dir : LigaTipo }
         direcciones =
-            [ { texto = "Contáctanos"
-              , dir = Pages.Url.fromPath (Route.toPath Route.Contacto)
-              }
-            , { texto = "Háblanos"
-              , dir = Pages.Url.fromPath (Route.toPath Route.Contacto)
+            [ { texto = "Más Información"
+              , dir =
+                    "#features"
+                        |> Path.fromString
+                        |> Otra
               }
             ]
 
@@ -603,13 +618,22 @@ viewHero menuOpen headText =
             else
                 clasesComunItems ++ " text-gray-500"
 
-        menuItems : Bool -> { texto : String, dir : Pages.Url.Url } -> Html msg
-        menuItems cualMenu direccion =
-            Html.a
-                [ Attr.href <| Pages.Url.toString direccion.dir
-                , class <| clasesMenuItems cualMenu
-                ]
-                [ text direccion.texto ]
+        menuItem : String -> { texto : String, dir : LigaTipo } -> Html msg
+        menuItem clases dirToLink =
+            case dirToLink.dir of
+                Otra camino ->
+                    Html.a
+                        [ Attr.href <| Path.toRelative camino
+                        , class clases --<| clasesMenuItems cualMenu
+                        ]
+                        [ text dirToLink.texto ]
+
+                Interna rutaLiga ->
+                    Route.link
+                        rutaLiga
+                        [ class clases ]
+                        --<| clasesMenuItems cualMenu ]
+                        [ text dirToLink.texto ]
 
         menuAppear : Bool -> Animation
         menuAppear show =
@@ -658,12 +682,19 @@ viewHero menuOpen headText =
                     ]
                 , div
                     [ class "px-2 pt-2 pb-3 space-y-1" ]
-                    (List.map (menuItems True) direcciones)
-                , Html.a
-                    [ Attr.href "#"
-                    , class "block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
-                    ]
-                    [ text direccionEspecial.texto ]
+                    (List.append
+                        (List.map
+                            (menuItem <|
+                                clasesMenuItems True
+                            )
+                            direcciones
+                        )
+                        (List.singleton <|
+                            menuItem
+                                "block w-full px-5 py-3 text-center font-medium text-indigo-600 bg-gray-50 hover:bg-gray-100"
+                                direccionEspecial
+                        )
+                    )
                 ]
     in
     div
@@ -723,13 +754,16 @@ viewHero menuOpen headText =
                                 ]
                             , div
                                 [ class "hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
-                                (List.map (menuItems False) direcciones
-                                    ++ [ Html.a
-                                            [ Attr.href "#"
-                                            , class "text-indigo-600 hover:text-indigo-500"
-                                            ]
-                                            [ text direccionEspecial.texto ]
-                                       ]
+                                (List.append
+                                    (List.map
+                                        (menuItem <| clasesMenuItems False)
+                                        direcciones
+                                    )
+                                    (List.singleton <|
+                                        menuItem
+                                            "text-indigo-600 hover:text-indigo-500"
+                                            direccionEspecial
+                                    )
                                 )
                             ]
                         ]
@@ -763,9 +797,9 @@ viewHero menuOpen headText =
                             [ div
                                 [ class "rounded-md shadow" ]
                                 [ Route.link
-                                     Route.Contacto
-                                     [ class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
-                                     [ text "¡Contáctanos!" ]
+                                    Route.Contacto
+                                    [ class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
+                                    [ text "¡Contáctanos!" ]
                                 ]
                             , div
                                 [ class "mt-3 sm:mt-0 sm:ml-3" ]
@@ -791,7 +825,10 @@ viewHero menuOpen headText =
             ]
         ]
 
+
+
 -- View Features
+
 
 viewFeatures : Beneficios -> Html msg
 viewFeatures bene =
@@ -839,7 +876,11 @@ viewFeatures bene =
             ]
         ]
 
+
+
 -- View Galeria
+
+
 textosGal : Array String
 textosGal =
     [ "Uno"
