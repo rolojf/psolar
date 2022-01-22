@@ -21,6 +21,7 @@ import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Path exposing (Path)
+import Prb
 import Process
 import Route exposing (Route)
 import Shared
@@ -379,18 +380,24 @@ data =
 
 head : StaticPayload Data RouteParams -> List Head.Tag
 head static =
+    let
+        imagen : Seo.Image
+        imagen =
+            { alt = "Logo PSOLAR.MX"
+            , dimensions = Just { width = 723, height = 716 }
+            , mimeType = Just "png"
+            , url =
+                Pages.Url.external <|
+                    Cloudinary.url "f_webp" "v1642824483/logoMod_mryxdq.png"
+            }
+    in
     Seo.summary
         { canonicalUrlOverride = Nothing
-        , siteName = "psolar"
-        , image =
-            { url = Pages.Url.external "TODO"
-            , alt = "elm-pages logo"
-            , dimensions = Nothing
-            , mimeType = Nothing
-            }
-        , description = "TODO"
+        , siteName = "psolar.mx"
+        , image = imagen
+        , description = "Servicio Experto a Panel Solar"
         , locale = Nothing
-        , title = "TODO title" -- metadata.title -- TODO
+        , title = "Servicio a Panel Solar"
         }
         |> Seo.website
 

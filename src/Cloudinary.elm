@@ -1,9 +1,6 @@
 module Cloudinary exposing (url)
 
-url :
-    String
-    -> String
-    -> String
+url : String -> String -> String
 url transforms asset =
     let
         base =
