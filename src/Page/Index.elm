@@ -392,7 +392,7 @@ head static =
     in
     Seo.summary
         { canonicalUrlOverride = Nothing
-        , siteName = "psolar.mx"
+        , siteName = "PSOLAR"
         , image = imagen
         , description = "Servicio Experto a Panel Solar"
         , locale = Nothing
