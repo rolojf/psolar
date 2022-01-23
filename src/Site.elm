@@ -45,8 +45,26 @@ head static =
 manifest : Data -> Manifest.Config
 manifest static =
     Manifest.init
-        { name = "psolar"
-        , description = "Description"
+        { name = "PSOLAR"
+        , description = "Servicios de Revisión, Mantenimiento e Ampliación de Proyoectos de Panel Solar."
         , startUrl = Route.Index |> Route.toPath
-        , icons = []
+        , icons =
+            [ icon MimeType.Png 192 (Pages.Url.external "./android-chrome-192x192.png")
+            , icon MimeType.Png 512 (Pages.Url.external "./android-chrome-512x512.png")
+            ]
         }
+        |> Manifest.withShortName "psolar"
+
+
+webp : MimeType.MimeImage
+webp =
+    MimeType.OtherImage "webp"
+
+
+icon : MimeType.MimeImage -> Int -> Pages.Url.Url -> Manifest.Icon
+icon format width fuente =
+    { src = fuente
+    , sizes = [ ( width, width ) ]
+    , mimeType = format |> Just
+    , purposes = [ Manifest.IconPurposeAny, Manifest.IconPurposeMaskable ]
+    }
