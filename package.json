@@ -3,10 +3,10 @@
   "scripts": {
     "postinstall": "elm-tooling install",
     "elm": "elm-pages dev",
-    "build": "tailwindcss -o public/tailwind.css --minify && elm-pages build",
-    "tail": "tailwindcss -o public/tailwind.css",
-    "dev": "concurrently \"elm-pages dev\" \"tailwindcss -o public/tailwind.css --watch \"",
-    "server": "python -m http.server 8888 --bind localhost --directory dist",
+    "build": "tailwindcss -i public/input.css -o public/tailwind.css --minify && elm-pages build",
+    "tail": "tailwindcss -i public/input.css -o public/tailwind.css",
+    "dev": "concurrently \"elm-pages dev\" \"tailwindcss -i public/input.css -o public/tailwind.css --watch \"",
+    "server": "python -m http.server 8421 --bind 127.0.0.12 --directory dist",
     "deploy": "aws s3 sync ./dist s3://psolar.mx --delete"
   },
   "devDependencies": {
@@ -21,6 +21,6 @@
     "elm-review": "2.7.0",
     "elm-tooling": "1.7.0",
     "postcss": "^8.4.5",
-    "tailwindcss": "^3.0.15"
+    "tailwindcss": "^3.0.16"
   }
 }
