@@ -613,35 +613,35 @@ viewHero menuOpen headText =
               }
             ]
 
-        clasesMenuItems : Bool -> Bool -> String
-        clasesMenuItems esMovil especial =
+        clasesMenuItems : (Bool, Bool) -> Html.Attribute msg
+        clasesMenuItems (esMovil, especial) =
             case ( esMovil, especial ) of
                 ( True, True ) ->
-                    "block w-full px-5 py-3 text-center font-medium text-blue-900 bg-gray-50 hover:bg-gray-200"
+                    class "block w-full px-5 py-3 text-center font-medium text-blue-900 bg-gray-50 hover:bg-gray-200"
 
                 ( True, False ) ->
-                    "block px-5 py-3 rounded-md font-medium text-base text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                    class "block px-5 py-3 rounded-md font-medium text-base text-gray-700 hover:text-gray-900 hover:bg-gray-50"
 
                 ( False, True ) ->
-                    "font-medium text-blue-900 hover:text-blue-500"
+                    class "font-medium text-blue-900 hover:text-blue-500"
 
                 ( False, False ) ->
-                    "font-medium text-gray-500 hover:text-gray-900"
+                    class "font-medium text-gray-500 hover:text-gray-900"
 
-        menuItem : String -> { texto : String, dir : LigaTipo } -> Html msg
-        menuItem clases dirToLink =
+        menuItem : (Bool, Bool) -> { texto : String, dir : LigaTipo } -> Html msg
+        menuItem tipClases dirToLink =
             case dirToLink.dir of
                 Otra camino ->
                     Html.a
                         [ Attr.href <| Path.toRelative camino
-                        , class clases
+                        , (clasesMenuItems tipClases)
                         ]
                         [ text dirToLink.texto ]
 
                 Interna rutaLiga ->
                     Route.link
                         rutaLiga
-                        [ class clases ]
+                        [ (clasesMenuItems tipClases) ]
                         [ text dirToLink.texto ]
 
         menuAppear : Bool -> Animation
@@ -693,12 +693,13 @@ viewHero menuOpen headText =
                     [ class "px-2 pt-2 pb-3 space-y-1" ]
                     (List.append
                         (List.map
-                            (menuItem <| clasesMenuItems True False)
+                            (menuItem
+                                (True, False))
                             direcciones
                         )
                         (List.singleton <|
                             menuItem
-                                (clasesMenuItems True True)
+                                (True, True)
                                 direccionEspecial
                         )
                     )
@@ -763,12 +764,12 @@ viewHero menuOpen headText =
                                 [ class "hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
                                 (List.append
                                     (List.map
-                                        (menuItem <| clasesMenuItems False False)
+                                        (menuItem (False, False))
                                         direcciones
-                                    )
+                                        )
                                     (List.singleton <|
                                         menuItem
-                                            (clasesMenuItems False True)
+                                            (False, True)
                                             direccionEspecial
                                     )
                                 )
