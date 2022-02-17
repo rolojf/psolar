@@ -81,6 +81,18 @@ init _ _ _ =
     )
 
 
+superUpdate :
+    PageUrl
+    -> Maybe Browser.Navigation.Key
+    -> Shared.Model
+    -> StaticPayload templateData routeParams
+    -> Msg
+    -> Model
+    -> ( Model, Cmd Msg, Maybe Shared.Msg )
+superUpdate url navKey sharedModel static msg model =
+    update url navKey sharedModel static msg model
+
+
 update :
     PageUrl
     -> Maybe Browser.Navigation.Key
@@ -220,13 +232,7 @@ update _ navKey sharedModel _ msg model =
             )
 
 
-subscriptions :
-    Maybe PageUrl
-    -> routeParams
-    -> Path.Path
-    -> Model
-    -> Shared.Model
-    -> Sub Msg
+subscriptions : Maybe PageUrl -> routeParams -> Path.Path -> Model -> Shared.Model -> Sub Msg
 subscriptions _ _ _ _ _ =
     Sub.none
 
@@ -244,7 +250,7 @@ page =
         |> Page.buildWithSharedState
             { view = view
             , init = init
-            , update = update
+            , update = superUpdate
             , subscriptions = subscriptions
             }
 
