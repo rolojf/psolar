@@ -4,6 +4,7 @@ import Browser.Navigation
 import DataSource
 import Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (class)
+import Http
 import Pages.Flags
 import Pages.PageUrl exposing (PageUrl)
 import Path exposing (Path)
@@ -14,7 +15,6 @@ import Svg.Styled.Attributes as AttrSvg
 import Tailwind.Breakpoints as TwBp
 import Tailwind.Utilities as Tw
 import View exposing (View)
-import Http
 
 
 template : SharedTemplate Msg Model Data msg
@@ -50,11 +50,13 @@ type alias Data =
 type SharedMsg
     = NoOp
     | CambiaStatus UsuarioSt
+    | ErrorAlNotificar Http.Error
 
 
 type alias Model =
     { showMobileMenu : Bool
     , usuarioStatus : UsuarioSt
+    , errorAlNotificar : Maybe Http.Error
     }
 
 
@@ -75,6 +77,7 @@ init :
 init navigationKey flags maybePagePath =
     ( { showMobileMenu = False
       , usuarioStatus = Desconocido
+      , errorAlNotificar = Nothing
       }
     , Cmd.none
     )
@@ -95,6 +98,11 @@ update msg model =
 
                 NoOp ->
                     ( model, Cmd.none )
+
+                ErrorAlNotificar cualError ->
+                    ( { model | errorAlNotificar = Just cualError }
+                    , Cmd.none
+                    )
 
 
 subscriptions : Path -> Model -> Sub Msg
@@ -119,8 +127,35 @@ view :
     -> { body : Html msg, title : String }
 view sharedData page model toMsg pageView =
     { body =
-        Html.div
+        div
             []
-            pageView.body
+            ((case model.errorAlNotificar of
+                Nothing ->
+                    []
+
+                Just error ->
+                    [ div [] [ text <| viewHttpError error ] ]
+             )
+                ++ pageView.body
+            )
     , title = pageView.title
     }
+
+
+viewHttpError : Http.Error -> String
+viewHttpError error =
+    case error of
+        Http.BadUrl texto ->
+            "Bad Url " ++ texto ++ " al reportar evento."
+
+        Http.Timeout ->
+            "Se tardo en reportar evento."
+
+        Http.NetworkError ->
+            "Falla de red al reportar evento."
+
+        Http.BadStatus cual ->
+            "Status que regreso " ++ String.fromInt cual ++ " al reportar evento."
+
+        Http.BadBody texto ->
+            "Mensaje mal compuesto al reportar evento. " ++ texto

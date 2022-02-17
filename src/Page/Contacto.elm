@@ -54,11 +54,12 @@ type Msg
     | Apellido String
     | Telefono String
     | Comentario String
-    | Enviado
+    | CompletadoFormulario
     | EsperaPaEnfocar
     | ReMsg Reto.Msg
     | NoOp
     | RespondeBasin (Result Http.Error String)
+    | Notificado (Result Http.Error ())
 
 
 init :
@@ -91,7 +92,23 @@ superUpdate :
     -> Model
     -> ( Model, Cmd Msg, Maybe Shared.Msg )
 superUpdate url navKey sharedModel static msg model =
-    update url navKey sharedModel static msg model
+    let
+        analyticsEvent : Analytics.Event
+        analyticsEvent =
+            track msg
+
+        ( newModel, cmd, siSharedMsg ) =
+            update url navKey sharedModel static msg model
+    in
+    ( newModel
+    , Cmd.batch
+        [ cmd
+        , Analytics.toCmd
+            analyticsEvent
+            Notificado
+        ]
+    , siSharedMsg
+    )
 
 
 update :
@@ -136,7 +153,7 @@ update _ navKey sharedModel _ msg model =
         Comentario cCampo ->
             ( { model | comentario = cCampo }, Cmd.none, Nothing )
 
-        Enviado ->
+        CompletadoFormulario ->
             ( { model | listo = True }
             , Task.perform
                 (\_ -> EsperaPaEnfocar)
@@ -232,6 +249,17 @@ update _ navKey sharedModel _ msg model =
                 |> Just
             )
 
+        Notificado resulto ->
+            ( model
+            , Cmd.none
+            , case resulto of
+                Err quePaso ->
+                    Just (Shared.SharedMsg <| Shared.ErrorAlNotificar quePaso)
+
+                Ok _ ->
+                    Nothing
+            )
+
 
 track : Msg -> Analytics.Event
 track msg =
@@ -254,8 +282,8 @@ track msg =
         Comentario _ ->
             Analytics.none
 
-        Enviado ->
-            Analytics.none
+        CompletadoFormulario ->
+            Analytics.eventoXReportar "completo-formulario"
 
         EsperaPaEnfocar ->
             Analytics.none
@@ -267,6 +295,9 @@ track msg =
             Analytics.none
 
         RespondeBasin resultado ->
+            Analytics.none
+
+        Notificado _ ->
             Analytics.none
 
 
@@ -699,7 +730,7 @@ viewFormulario model =
                 , Htmls.form
                     [ Attr.action "#"
                     , Attr.method "POST"
-                    , Events.onSubmit Enviado
+                    , Events.onSubmit CompletadoFormulario
                     , css
                         [ Tw.mt_9
                         , Tw.grid

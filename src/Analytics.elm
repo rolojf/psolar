@@ -1,6 +1,6 @@
 module Analytics exposing
     ( Event
-    , name
+    , eventoXReportar
     , none
     , toCmd
     )
@@ -25,8 +25,8 @@ type Event
 -------------------------------------------------------------------------------
 
 
-name : String -> Event
-name str =
+eventoXReportar : String -> Event
+eventoXReportar str =
     Event str
 
 
@@ -35,19 +35,15 @@ none =
     None
 
 
-type Msg
-    = Notificado (Result Http.Error ())
-
-
-toCmd : Event -> Cmd Msg
-toCmd event =
+toCmd : Event -> (Result Http.Error () -> msg) -> Cmd msg
+toCmd event msg =
     case event of
         Event cualEvento ->
             Http.get
                 { url =
                     "https://h8uqc13y50.execute-api.us-east-2.amazonaws.com/msg/"
                         ++ cualEvento
-                , expect = Http.expectWhatever Notificado
+                , expect = Http.expectWhatever msg
                 }
 
         None ->
