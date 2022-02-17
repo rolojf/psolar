@@ -2,6 +2,7 @@ module Page.Contacto exposing (Data, Model, Msg, page)
 
 -- exposing (css)
 
+import Analytics
 import Browser.Dom as Dom
 import Browser.Navigation
 import Cloudinary
