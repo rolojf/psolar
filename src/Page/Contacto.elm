@@ -233,6 +233,43 @@ update _ navKey sharedModel _ msg model =
             )
 
 
+track : Msg -> Analytics.Event
+track msg =
+    case msg of
+        Nombre _ ->
+            Analytics.none
+
+        ComoSupo _ ->
+            Analytics.none
+
+        Correo _ ->
+            Analytics.none
+
+        Apellido _ ->
+            Analytics.none
+
+        Telefono _ ->
+            Analytics.none
+
+        Comentario _ ->
+            Analytics.none
+
+        Enviado ->
+            Analytics.none
+
+        EsperaPaEnfocar ->
+            Analytics.none
+
+        ReMsg _ ->
+            Analytics.none
+
+        NoOp ->
+            Analytics.none
+
+        RespondeBasin resultado ->
+            Analytics.none
+
+
 subscriptions : Maybe PageUrl -> routeParams -> Path.Path -> Model -> Shared.Model -> Sub Msg
 subscriptions _ _ _ _ _ =
     Sub.none
