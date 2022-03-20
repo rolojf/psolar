@@ -62,11 +62,7 @@ type Msg
     | Notificado (Result Http.Error ())
 
 
-init :
-    Maybe PageUrl
-    -> Shared.Model
-    -> StaticPayload templateData routeParams
-    -> ( Model, Cmd Msg )
+init : Maybe PageUrl -> Shared.Model -> StaticPayload templateData routeParams -> ( Model, Cmd Msg )
 init _ _ _ =
     ( { nombre = ""
       , comoSupo = ""
@@ -83,14 +79,7 @@ init _ _ _ =
     )
 
 
-superUpdate :
-    PageUrl
-    -> Maybe Browser.Navigation.Key
-    -> Shared.Model
-    -> StaticPayload templateData routeParams
-    -> Msg
-    -> Model
-    -> ( Model, Cmd Msg, Maybe Shared.Msg )
+superUpdate : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
 superUpdate url navKey sharedModel static msg model =
     let
         analyticsEvent : Analytics.Event
@@ -111,14 +100,7 @@ superUpdate url navKey sharedModel static msg model =
     )
 
 
-update :
-    PageUrl
-    -> Maybe Browser.Navigation.Key
-    -> Shared.Model
-    -> StaticPayload templateData routeParams
-    -> Msg
-    -> Model
-    -> ( Model, Cmd Msg, Maybe Shared.Msg )
+update : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
 update _ navKey sharedModel _ msg model =
     case msg of
         Nombre cCampo ->

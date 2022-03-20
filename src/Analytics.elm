@@ -41,7 +41,8 @@ toCmd event msg =
         Event cualEvento ->
             Http.get
                 { url =
-                    "https://h8uqc13y50.execute-api.us-east-2.amazonaws.com/msg/"
+                    --"https://h8uqc13y50.execute-api.us-east-2.amazonaws.com/msg/"
+                    "https://psolar.mx/api-v1/msg/"
                         ++ cualEvento
                 , expect = Http.expectWhatever msg
                 }

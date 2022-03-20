@@ -1,5 +1,6 @@
 module Page.Index exposing (Data, Model, Msg, page)
 
+import Analytics
 import Array exposing (Array)
 import Browser.Dom as Dom
 import Browser.Navigation
@@ -88,7 +89,7 @@ page =
         |> Page.buildWithSharedState
             { view = view
             , init = init
-            , update = update
+            , update = superUpdate
             , subscriptions = subscriptions
             }
 
@@ -109,6 +110,7 @@ type Msg
     | Para
     | PresionoBotonIzq
     | PresionoBotonDer
+    | Notificado (Result Http.Error ())
 
 
 type Effect
@@ -128,6 +130,64 @@ runEffect efecto =
 
         LanzaPara ->
             Task.perform (\_ -> Para) (Task.succeed ())
+
+
+superUpdate : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
+superUpdate url navKey sharedModel static msg model =
+    let
+        analyticsEvent : Analytics.Event
+        analyticsEvent =
+            track msg
+
+        ( newModel, cmd, siSharedMsg ) =
+            update url navKey sharedModel static msg model
+    in
+    ( newModel
+    , Cmd.batch
+        [ cmd
+        , Analytics.toCmd
+            analyticsEvent
+            Notificado
+        ]
+    , siSharedMsg
+    )
+
+
+track : Msg -> Analytics.Event
+track msg =
+    case msg of
+        ToggleMenu ->
+            Analytics.none
+
+        CierraNoti ->
+            Analytics.none
+
+        CheckGalInView resultadoPues ->
+            Analytics.none
+
+        WaitToCheckAgainGalInView ->
+            Analytics.none
+
+        WaitToGalAutoRotate ->
+            Analytics.none
+
+        Avanza ->
+            Analytics.none
+
+        Retrocede ->
+            Analytics.none
+
+        Para ->
+            Analytics.none
+
+        PresionoBotonIzq ->
+            Analytics.none
+
+        PresionoBotonDer ->
+            Analytics.none
+
+        Notificado _ ->
+            Analytics.none
 
 
 update : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
@@ -305,6 +365,17 @@ update url maybeKey sharedM staticP msg model =
               }
             , Cmd.none
             , Nothing
+            )
+
+        Notificado resulto ->
+            ( model
+            , Cmd.none
+            , case resulto of
+                Err quePaso ->
+                    Just (Shared.SharedMsg <| Shared.ErrorAlNotificar quePaso)
+
+                Ok _ ->
+                    Nothing
             )
 
 
@@ -613,8 +684,8 @@ viewHero menuOpen headText =
               }
             ]
 
-        clasesMenuItems : (Bool, Bool) -> Html.Attribute msg
-        clasesMenuItems (esMovil, especial) =
+        clasesMenuItems : ( Bool, Bool ) -> Html.Attribute msg
+        clasesMenuItems ( esMovil, especial ) =
             case ( esMovil, especial ) of
                 ( True, True ) ->
                     class "block w-full px-5 py-3 text-center font-medium text-blue-900 bg-gray-50 hover:bg-gray-200"
@@ -628,20 +699,20 @@ viewHero menuOpen headText =
                 ( False, False ) ->
                     class "font-medium text-gray-500 hover:text-gray-900"
 
-        menuItem : (Bool, Bool) -> { texto : String, dir : LigaTipo } -> Html msg
+        menuItem : ( Bool, Bool ) -> { texto : String, dir : LigaTipo } -> Html msg
         menuItem tipClases dirToLink =
             case dirToLink.dir of
                 Otra camino ->
                     Html.a
                         [ Attr.href <| Path.toRelative camino
-                        , (clasesMenuItems tipClases)
+                        , clasesMenuItems tipClases
                         ]
                         [ text dirToLink.texto ]
 
                 Interna rutaLiga ->
                     Route.link
                         rutaLiga
-                        [ (clasesMenuItems tipClases) ]
+                        [ clasesMenuItems tipClases ]
                         [ text dirToLink.texto ]
 
         menuAppear : Bool -> Animation
@@ -694,12 +765,13 @@ viewHero menuOpen headText =
                     (List.append
                         (List.map
                             (menuItem
-                                (True, False))
+                                ( True, False )
+                            )
                             direcciones
                         )
                         (List.singleton <|
                             menuItem
-                                (True, True)
+                                ( True, True )
                                 direccionEspecial
                         )
                     )
@@ -764,12 +836,12 @@ viewHero menuOpen headText =
                                 [ class "hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
                                 (List.append
                                     (List.map
-                                        (menuItem (False, False))
+                                        (menuItem ( False, False ))
                                         direcciones
-                                        )
+                                    )
                                     (List.singleton <|
                                         menuItem
-                                            (False, True)
+                                            ( False, True )
                                             direccionEspecial
                                     )
                                 )
