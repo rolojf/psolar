@@ -1,12 +1,14 @@
 module.exports = {
    content: {
-      files: ['./src/**/*.elm'],
+      files: ["./src/**/*.elm"],
       extract: {
          elm: (contenido) => {
             let matchado = contenido.match(/class\s+"(.+?)"/);
-            return matchado ? matchado[1].split(" ") : [];
-         }
-      }
+            let regresa = matchado ? matchado[1].split(" ") : [];
+            //if (regresa.length > 0 ) {console.log(regresa)};
+            return regresa;
+         },
+      },
    },
    theme: {
       extend: {
@@ -27,7 +29,7 @@ module.exports = {
                '"Segoe UI Symbol"',
                '"Noto Color Emoji"',
             ],
-           serif: ["Roboto Slab", "Georgia", "Cambria", '"Times New Roman"', "Times", "serif"],
+            serif: ["Roboto Slab", "Georgia", "Cambria", '"Times New Roman"', "Times", "serif"],
          },
       },
    },
