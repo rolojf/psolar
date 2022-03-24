@@ -1,7 +1,8 @@
-module View exposing (View, map, placeholder)
+module View exposing (View, map, placeholder, Liga, LigaTipo(..))
 
 import Html as Html exposing (Html)
-import Route
+import Path exposing (Path)
+import Route exposing (Route)
 
 
 type alias View msg =
@@ -11,10 +12,13 @@ type alias View msg =
     }
 
 type alias Liga =
-    { direccion : Route.Route
+    { direccion : LigaTipo
     , queDice : String
     }
 
+type LigaTipo
+    = Externa Path
+    | Interna Route
 
 map : (msg1 -> msg2) -> View msg1 -> View msg2
 map fn doc =

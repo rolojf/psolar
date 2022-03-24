@@ -146,26 +146,23 @@ view sharedData page model toMsg pageView =
     }
 
 
-type LigaTipo
-    = Otra Path
-    | Interna Route
 
 
 viewHero menuOpen =
     let
-        direccionEspecial : { texto : String, dir : LigaTipo }
+        direccionEspecial : { texto : String, dir : View.LigaTipo }
         direccionEspecial =
             { texto = "Comunícate"
-            , dir = Interna Route.Contacto
+            , dir = View.Interna Route.Contacto
             }
 
-        direcciones : List { texto : String, dir : LigaTipo }
+        direcciones : List { texto : String, dir : View.LigaTipo }
         direcciones =
             [ { texto = "Más Información"
               , dir =
                     "#features"
                         |> Path.fromString
-                        |> Otra
+                        |> View.Externa
               }
             ]
 
@@ -184,17 +181,17 @@ viewHero menuOpen =
                 ( False, False ) ->
                     class "font-medium text-gray-500 hover:text-gray-900"
 
-        menuItem : ( Bool, Bool ) -> { texto : String, dir : LigaTipo } -> Html Msg
+        menuItem : ( Bool, Bool ) -> { texto : String, dir : View.LigaTipo } -> Html Msg
         menuItem tipClases dirToLink =
             case dirToLink.dir of
-                Otra camino ->
+                View.Externa camino ->
                     Html.a
                         [ Attr.href <| Path.toRelative camino
                         , clasesMenuItems tipClases
                         ]
                         [ text dirToLink.texto ]
 
-                Interna rutaLiga ->
+                View.Interna rutaLiga ->
                     Route.link
                         rutaLiga
                         [ clasesMenuItems tipClases ]
