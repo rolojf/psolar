@@ -474,7 +474,7 @@ head static =
 view : Maybe PageUrl -> Shared.Model -> Model -> StaticPayload Data RouteParams -> View Msg
 view maybeUrl sharedModel model static =
     { title = static.data.title
-    , withMenu = Nothing
+    , withMenu = View.NoMenu
     , body =
         [ viewHero model.menuOpen static.data.mainHead
         , viewFeatures static.data.beneficios

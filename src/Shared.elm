@@ -121,29 +121,22 @@ data =
     DataSource.succeed ()
 
 
-view :
-    Data
-    ->
-        { path : Path
-        , route : Maybe Route
-        }
-    -> Model
-    -> (Msg -> msg)
-    -> View msg
-    -> { body : Html msg, title : String }
+view : Data -> { path : Path, route : Maybe Route } -> Model -> (Msg -> msg) -> View msg -> { body : Html msg, title : String }
 view sharedData page model toMsg pageView =
     { body =
         div
             []
             (viewErroresAlNotificar model.errorAlNotificar
                 ++ (case pageView.withMenu of
-                        Nothing ->
+                        View.NoMenu ->
                             pageView.body
 
-                        Just ligas -> pageView.body
-                            {- viewHero
-                                False
-                                (toMsg pageView.body) -}
+                        View.SiMenu ligas complmentos ->
+                            pageView.body
+                    {- viewHero
+                       False
+                       (toMsg pageView.body)
+                    -}
                    )
             )
     , title = pageView.title
