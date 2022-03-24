@@ -109,6 +109,7 @@ view : Maybe PageUrl -> Shared.Model -> Model -> StaticPayload Data RouteParams 
 view maybeUrl sharedModel model static =
     { title = "unoDosTres"
     , body = [ viewHero model.menuOpen ]
+    , withMenu = Nothing
     }
 
 

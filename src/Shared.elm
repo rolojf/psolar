@@ -115,16 +115,9 @@ data =
     DataSource.succeed ()
 
 
-view :
-    Data
-    ->
-        { path : Path
+view :     Data     ->         { path : Path
         , route : Maybe Route
-        }
-    -> Model
-    -> (Msg -> msg)
-    -> View msg
-    -> { body : Html msg, title : String }
+        }     -> Model     -> (Msg -> msg)     -> View msg     -> { body : Html msg, title : String }
 view sharedData page model toMsg pageView =
     { body =
         div

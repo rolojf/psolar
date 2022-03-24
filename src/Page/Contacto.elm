@@ -343,6 +343,7 @@ view :
     -> View Msg
 view maybeUrl sharedModel model static =
     { title = "Formulario de Contacto"
+    , withMenu = Nothing
     , body =
         [ {- div
              [ css
