@@ -24,12 +24,13 @@ type alias MenuComplemento msg =
 
 
 type alias Liga =
-    { direccion : LigaTipo
+    { dir : LigaTipo
     , queDice : String
+    , especial : Bool
     }
 
 type LigaTipo
-    = Externa Path
+    = Otra Path
     | Interna Route
 
 map : (msg1 -> msg2) -> View msg1 -> View msg2

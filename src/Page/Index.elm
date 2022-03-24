@@ -661,12 +661,20 @@ indexViewFooter =
 -- View of Above the Fold
 
 
-type LigaTipo
-    = Otra Path
-    | Interna Route
-
-
-
+ligas : List View.Liga
+ligas =
+    [ { queDice = "Comunícate"
+      , dir = View.Interna Route.Contacto
+      , especial = True
+      }
+    , { queDice = "Más Información"
+      , dir =
+            "#features"
+                |> Path.fromString
+                |> View.Otra
+      , especial = False
+      }
+    ]
 
 
 viewHero menuOpen headText =
@@ -824,14 +832,14 @@ viewHero menuOpen headText =
 
         viewHeroAfter =
             div
-              [ class "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
-              [ Html.img
-                  [ class "h-56 w-full object-cover object-top sm:h-72 md:h-96 lg:w-full lg:h-full lg:object-right"
-                  , Attr.src (Cloudinary.url "f_auto,q_auto:best" "dreamstime_s_30697263_clymr0.jpg")
-                  , Attr.alt "Expertos trajamos por ti"
-                  ]
-                  []
-              ]
+                [ class "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
+                [ Html.img
+                    [ class "h-56 w-full object-cover object-top sm:h-72 md:h-96 lg:w-full lg:h-full lg:object-right"
+                    , Attr.src (Cloudinary.url "f_auto,q_auto:best" "dreamstime_s_30697263_clymr0.jpg")
+                    , Attr.alt "Expertos trajamos por ti"
+                    ]
+                    []
+                ]
     in
     div
         [ class "relative bg-white overflow-hidden" ]

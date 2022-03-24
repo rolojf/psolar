@@ -131,19 +131,17 @@ view sharedData page model toMsg pageView =
                         View.NoMenu ->
                             pageView.body
 
-                        View.SiMenu ligas complmentos ->
-                            pageView.body
-                    {- viewHero
-                       False
-                       (toMsg pageView.body)
-                    -}
+                        View.SiMenu ligas complementos ->
+                          viewHero
+                             False
+                             (complementos |> Html.map toMsg)
                    )
             )
     , title = pageView.title
     }
 
 
-viewHero menuOpen mainPorVer =
+viewHero menuOpen complementos =
     let
         direccionEspecial : { texto : String, dir : View.LigaTipo }
         direccionEspecial =
@@ -319,10 +317,11 @@ viewHero menuOpen mainPorVer =
                         [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
                         [ movilMenu ]
                     ]
+                 , complementos.mainHero
                  ]
-                    ++ mainPorVer
                 )
             ]
+        , complementos.afterHero
         ]
 
 
