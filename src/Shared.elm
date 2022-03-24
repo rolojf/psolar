@@ -16,8 +16,6 @@ import SharedTemplate exposing (SharedTemplate)
 import Simple.Animation as Animation exposing (Animation)
 import Simple.Animation.Animated as Animated
 import Simple.Animation.Property as P
-import Svg exposing (path, svg)
-import Svg.Attributes as SvgAttr
 import View exposing (View)
 
 
@@ -39,6 +37,7 @@ type Msg
         , fragment : Maybe String
         }
     | SharedMsg SharedMsg
+    | ToggleMenu
 
 
 type UsuarioSt
@@ -93,6 +92,9 @@ update msg model =
         OnPageChange _ ->
             ( { model | showMobileMenu = False }, Cmd.none )
 
+        ToggleMenu ->
+            ( model, Cmd.none )
+
         SharedMsg mensajePasado ->
             case mensajePasado of
                 CambiaStatus nuevoSt ->
@@ -134,13 +136,21 @@ view sharedData page model toMsg pageView =
         div
             []
             (viewErroresAlNotificar model.errorAlNotificar
-                ++ pageView.body
+                ++ (case pageView.withMenu of
+                        Nothing ->
+                            pageView.body
+
+                        Just ligas -> pageView.body
+                            {- viewHero
+                                False
+                                (toMsg pageView.body) -}
+                   )
             )
     , title = pageView.title
     }
 
 
-viewHero menuOpen =
+viewHero menuOpen mainPorVer =
     let
         direccionEspecial : { texto : String, dir : View.LigaTipo }
         direccionEspecial =
@@ -189,8 +199,8 @@ viewHero menuOpen =
                         [ clasesMenuItems tipClases ]
                         [ text dirToLink.texto ]
 
-        menuAppear : Bool -> Animation
-        menuAppear show =
+        showMovilMenu : Bool -> Animation
+        showMovilMenu show =
             if show then
                 Animation.fromTo
                     { duration = 180
@@ -225,8 +235,7 @@ viewHero menuOpen =
                         [ Html.button
                             [ Attr.type_ "button"
                             , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-
-                            -- , Event.onClick ToggleMenu
+                            , Event.onClick ToggleMenu
                             ]
                             [ Html.span
                                 [ class "sr-only" ]
@@ -258,18 +267,8 @@ viewHero menuOpen =
             [ class "max-w-7xl mx-auto" ]
             [ div
                 [ class "relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32" ]
-                [ svg
-                    [ SvgAttr.class "hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
-                    , SvgAttr.fill "currentColor"
-                    , SvgAttr.viewBox "0 0 100 100"
-                    , SvgAttr.preserveAspectRatio "none"
-                    , Attr.attribute "aria-hidden" "true"
-                    ]
-                    [ Svg.polygon
-                        [ SvgAttr.points "50,0 100,0 50,100 0,100" ]
-                        []
-                    ]
-                , div []
+                ([ HeroIcons.menuSan1
+                 , div []
                     [ div
                         [ class "relative pt-6 px-4 sm:px-6 lg:px-8" ]
                         [ Html.nav
@@ -297,8 +296,7 @@ viewHero menuOpen =
                                             [ Attr.type_ "button"
                                             , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                                             , Attr.attribute "aria-expanded" "false"
-
-                                            --, Event.onClick ToggleMenu
+                                            , Event.onClick ToggleMenu
                                             ]
                                             [ Html.span
                                                 [ class "sr-only" ]
@@ -324,11 +322,13 @@ viewHero menuOpen =
                             ]
                         ]
                     , Animated.div
-                        (menuAppear menuOpen)
+                        (showMovilMenu menuOpen)
                         [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
                         [ movilMenu ]
                     ]
-                ]
+                 ]
+                    ++ mainPorVer
+                )
             ]
         ]
 

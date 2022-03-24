@@ -15,7 +15,6 @@ import Html as Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (class)
 import Html.Events as Event
 import Html.Styled as Htmls
-import Html.Styled.Attributes as AttrS
 import Http
 import OptimizedDecoder as Decode exposing (Decoder)
 import Page exposing (Page, StaticPayload)
@@ -667,6 +666,9 @@ type LigaTipo
     | Interna Route
 
 
+
+
+
 viewHero menuOpen headText =
     let
         direccionEspecial : { texto : String, dir : LigaTipo }
@@ -777,6 +779,59 @@ viewHero menuOpen headText =
                         )
                     )
                 ]
+
+        viewHeroMain =
+            Html.main_
+                [ class "mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28" ]
+                [ div
+                    [ class "sm:text-center lg:text-left"
+                    ]
+                    [ Html.h1
+                        [ class "text-4xl font-serif font-extrabold text-gray-900 sm:text-5xl" ]
+                        [ Html.span
+                            [ class "block xl:inline" ]
+                            [ text headText.preMainHeader ]
+                        , Html.span
+                            [ class "block text-blue-900 xl:inline" ]
+                            [ text <| " " ++ headText.mainHeaderResaltado ++ " " ]
+                        , Html.span
+                            [ class "block xl:inline" ]
+                            [ text headText.postMainHeader ]
+                        ]
+                    , Html.p
+                        [ class "mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" ]
+                        [ text headText.mainSubHeader ]
+                    , div
+                        [ class "mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start" ]
+                        [ div
+                            [ class "rounded-md shadow" ]
+                            [ Route.link
+                                Route.Contacto
+                                [ class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-900 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
+                                [ text "¡Contáctanos!" ]
+                            ]
+                        , div
+                            [ class "mt-3 sm:mt-0 sm:ml-3" ]
+                            [ Html.a
+                                [ Attr.href "#features"
+                                , class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
+                                ]
+                                [ text "más info." ]
+                            ]
+                        ]
+                    ]
+                ]
+
+        viewHeroAfter =
+            div
+              [ class "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
+              [ Html.img
+                  [ class "h-56 w-full object-cover object-top sm:h-72 md:h-96 lg:w-full lg:h-full lg:object-right"
+                  , Attr.src (Cloudinary.url "f_auto,q_auto:best" "dreamstime_s_30697263_clymr0.jpg")
+                  , Attr.alt "Expertos trajamos por ti"
+                  ]
+                  []
+              ]
     in
     div
         [ class "relative bg-white overflow-hidden" ]
@@ -853,57 +908,10 @@ viewHero menuOpen headText =
                         [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
                         [ movilMenu ]
                     ]
-                , Html.main_
-                    [ class "mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28" ]
-                    [ div
-                        [ class "sm:text-center lg:text-left"
-                        ]
-                        [ Html.h1
-                            [ class "text-4xl font-serif font-extrabold text-gray-900 sm:text-5xl" ]
-                            [ Html.span
-                                [ class "block xl:inline" ]
-                                [ text headText.preMainHeader ]
-                            , Html.span
-                                [ class "block text-blue-900 xl:inline" ]
-                                [ text <| " " ++ headText.mainHeaderResaltado ++ " " ]
-                            , Html.span
-                                [ class "block xl:inline" ]
-                                [ text headText.postMainHeader ]
-                            ]
-                        , Html.p
-                            [ class "mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" ]
-                            [ text headText.mainSubHeader ]
-                        , div
-                            [ class "mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start" ]
-                            [ div
-                                [ class "rounded-md shadow" ]
-                                [ Route.link
-                                    Route.Contacto
-                                    [ class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-900 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
-                                    [ text "¡Contáctanos!" ]
-                                ]
-                            , div
-                                [ class "mt-3 sm:mt-0 sm:ml-3" ]
-                                [ Html.a
-                                    [ Attr.href "#features"
-                                    , class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
-                                    ]
-                                    [ text "más info." ]
-                                ]
-                            ]
-                        ]
-                    ]
+                , viewHeroMain
                 ]
             ]
-        , div
-            [ class "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
-            [ Html.img
-                [ class "h-56 w-full object-cover object-top sm:h-72 md:h-96 lg:w-full lg:h-full lg:object-right"
-                , Attr.src (Cloudinary.url "f_auto,q_auto:best" "dreamstime_s_30697263_clymr0.jpg")
-                , Attr.alt "Expertos trajamos por ti"
-                ]
-                []
-            ]
+        , viewHeroAfter
         ]
 
 
