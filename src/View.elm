@@ -8,18 +8,17 @@ import Route exposing (Route)
 type alias View msg =
     { title : String
     , body : List (Html msg)
-    , withMenu : MenuInfo
+    , withMenu : MenuInfo msg
     }
 
-type MenuInfo
+type MenuInfo msg
    = NoMenu
-   | SiMenu (List Liga) (MenuComplemento Never)
+   | SiMenu (List Liga) (MenuComplemento msg)
 
 
 type alias MenuComplemento msg =
     { mainHero : Html msg
     , afterHero : Html msg
-
     }
 
 
@@ -37,7 +36,15 @@ map : (msg1 -> msg2) -> View msg1 -> View msg2
 map fn doc =
     { title = doc.title
     , body = List.map (Html.map fn) doc.body
-    , withMenu = doc.withMenu
+    , withMenu = case doc.withMenu of
+          NoMenu -> NoMenu
+          SiMenu ligas complementosAlMenu ->
+              SiMenu
+                 ligas
+                 { mainHero = Html.map fn complementosAlMenu.mainHero
+                 , afterHero = Html.map fn complementosAlMenu.afterHero
+                 }
+
     }
 
 

@@ -127,39 +127,21 @@ view sharedData page model toMsg pageView =
         div
             []
             (viewErroresAlNotificar model.errorAlNotificar
-                ++ (case pageView.withMenu of
-                        View.NoMenu ->
-                            pageView.body
-
-                        View.SiMenu ligas complementos ->
-                          viewHero
-                             False
-                             (complementos |> Html.map toMsg)
-                   )
+                ++ [ viewMenu
+                        False
+                        pageView.withMenu
+                        toMsg
+                   ]
+                ++ pageView.body
             )
     , title = pageView.title
     }
 
 
-viewHero menuOpen complementos =
+viewMenu : Bool -> View.MenuInfo msg -> (Msg -> msg) -> Html msg
+viewMenu menuOpen wMenu toMsg =
     let
-        direccionEspecial : { texto : String, dir : View.LigaTipo }
-        direccionEspecial =
-            { texto = "Comunícate"
-            , dir = View.Interna Route.Contacto
-            }
-
-        direcciones : List { texto : String, dir : View.LigaTipo }
-        direcciones =
-            [ { texto = "Más Información"
-              , dir =
-                    "#features"
-                        |> Path.fromString
-                        |> View.Externa
-              }
-            ]
-
-        clasesMenuItems : ( Bool, Bool ) -> Html.Attribute Msg
+        clasesMenuItems : ( Bool, Bool ) -> Html.Attribute msg
         clasesMenuItems ( esMovil, especial ) =
             case ( esMovil, especial ) of
                 ( True, True ) ->
@@ -174,21 +156,21 @@ viewHero menuOpen complementos =
                 ( False, False ) ->
                     class "font-medium text-gray-500 hover:text-gray-900"
 
-        menuItem : ( Bool, Bool ) -> { texto : String, dir : View.LigaTipo } -> Html Msg
-        menuItem tipClases dirToLink =
-            case dirToLink.dir of
-                View.Externa camino ->
+        menuItem : Bool -> View.Liga -> Html msg
+        menuItem esMovil laLiga =
+            case laLiga.dir of
+                View.Otra camino ->
                     Html.a
                         [ Attr.href <| Path.toRelative camino
-                        , clasesMenuItems tipClases
+                        , clasesMenuItems ( esMovil, laLiga.especial )
                         ]
-                        [ text dirToLink.texto ]
+                        [ text laLiga.queDice ]
 
                 View.Interna rutaLiga ->
                     Route.link
                         rutaLiga
-                        [ clasesMenuItems tipClases ]
-                        [ text dirToLink.texto ]
+                        [ clasesMenuItems ( esMovil, laLiga.especial ) ]
+                        [ text laLiga.queDice ]
 
         showMovilMenu : Bool -> Animation
         showMovilMenu show =
@@ -208,7 +190,7 @@ viewHero menuOpen complementos =
                     [ P.opacity 1, P.scale 1 ]
                     [ P.opacity 0, P.scale 0.92 ]
 
-        movilMenu =
+        movilMenu ligas =
             div
                 [ class "rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden" ]
                 [ div
@@ -223,108 +205,99 @@ viewHero menuOpen complementos =
                         ]
                     , div
                         [ class "-mr-2" ]
-                        [ Html.button
-                            [ Attr.type_ "button"
-                            , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                            , Event.onClick ToggleMenu
-                            ]
-                            [ Html.span
-                                [ class "sr-only" ]
-                                [ text "Close main menu" ]
-                            , HeroIcons.outlineX
-                            ]
+                        [ Html.map toMsg <|
+                            Html.button
+                                [ Attr.type_ "button"
+                                , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                                , Event.onClick ToggleMenu
+                                ]
+                                [ Html.span
+                                    [ class "sr-only" ]
+                                    [ text "Close main menu" ]
+                                , HeroIcons.outlineX
+                                ]
                         ]
                     ]
                 , div
                     [ class "px-2 pt-2 pb-3 space-y-1" ]
-                    (List.append
-                        (List.map
-                            (menuItem
-                                ( True, False )
-                            )
-                            direcciones
-                        )
-                        (List.singleton <|
-                            menuItem
-                                ( True, True )
-                                direccionEspecial
-                        )
+                    (List.map
+                        (menuItem True)
+                        ligas
                     )
                 ]
     in
-    div
-        [ class "relative bg-white overflow-hidden" ]
-        [ div
-            [ class "max-w-7xl mx-auto" ]
-            [ div
-                [ class "relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32" ]
-                ([ HeroIcons.menuSan1
-                 , div []
+    case wMenu of
+        View.NoMenu ->
+            div [] []
+
+        View.SiMenu ligas complementos ->
+            div
+                [ class "relative bg-white overflow-hidden" ]
+                [ div
+                    [ class "max-w-7xl mx-auto" ]
                     [ div
-                        [ class "relative pt-6 px-4 sm:px-6 lg:px-8" ]
-                        [ Html.nav
-                            [ class "relative flex items-center justify-between sm:h-10 lg:justify-start"
-                            , Attr.attribute "aria-label" "Global"
-                            ]
+                        [ class "relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32" ]
+                        [ HeroIcons.menuSan1
+                        , div []
                             [ div
-                                [ class "flex items-center flex-grow flex-shrink-0 lg:flex-grow-0" ]
-                                [ div
-                                    [ class "flex items-center justify-between w-full md:w-auto" ]
-                                    [ Html.a
-                                        [ Attr.href "#" ]
-                                        [ Html.span
-                                            [ class "sr-only" ]
-                                            [ text "Workflow" ]
-                                        , Html.img
-                                            [ class "h-8 w-auto sm:h-10"
-                                            , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
+                                [ class "relative pt-6 px-4 sm:px-6 lg:px-8" ]
+                                [ Html.nav
+                                    [ class "relative flex items-center justify-between sm:h-10 lg:justify-start"
+                                    , Attr.attribute "aria-label" "Global"
+                                    ]
+                                    [ div
+                                        [ class "flex items-center flex-grow flex-shrink-0 lg:flex-grow-0" ]
+                                        [ div
+                                            [ class "flex items-center justify-between w-full md:w-auto" ]
+                                            [ Html.a
+                                                [ Attr.href "#" ]
+                                                [ Html.span
+                                                    [ class "sr-only" ]
+                                                    [ text "Workflow" ]
+                                                , Html.img
+                                                    [ class "h-8 w-auto sm:h-10"
+                                                    , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
+                                                    ]
+                                                    []
+                                                ]
+                                            , div
+                                                [ class "-mr-2 flex items-center md:hidden" ]
+                                                [ Html.map toMsg <|
+                                                    Html.button
+                                                        [ Attr.type_ "button"
+                                                        , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                                                        , Attr.attribute "aria-expanded" "false"
+                                                        , Event.onClick ToggleMenu
+                                                        ]
+                                                        [ Html.span
+                                                            [ class "sr-only" ]
+                                                            [ text "Open main menu" ]
+                                                        , HeroIcons.outlineMenu
+                                                        ]
+                                                ]
                                             ]
-                                            []
                                         ]
                                     , div
-                                        [ class "-mr-2 flex items-center md:hidden" ]
-                                        [ Html.button
-                                            [ Attr.type_ "button"
-                                            , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                                            , Attr.attribute "aria-expanded" "false"
-                                            , Event.onClick ToggleMenu
-                                            ]
-                                            [ Html.span
-                                                [ class "sr-only" ]
-                                                [ text "Open main menu" ]
-                                            , HeroIcons.outlineMenu
-                                            ]
-                                        ]
+                                        [ class "hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
+                                        (List.map
+                                            (menuItem False)
+                                            ligas
+                                        )
                                     ]
                                 ]
-                            , div
-                                [ class "hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
-                                (List.append
-                                    (List.map
-                                        (menuItem ( False, False ))
-                                        direcciones
-                                    )
-                                    (List.singleton <|
-                                        menuItem
-                                            ( False, True )
-                                            direccionEspecial
-                                    )
-                                )
+                            , Animated.div
+                                (showMovilMenu menuOpen)
+                                [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
+                                [ movilMenu ligas ]
                             ]
+                        , complementos.mainHero
                         ]
-                    , Animated.div
-                        (showMovilMenu menuOpen)
-                        [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
-                        [ movilMenu ]
                     ]
-                 , complementos.mainHero
-                 ]
-                )
-            ]
-        , complementos.afterHero
-        ]
+                , complementos.afterHero
+                ]
 
 
+viewErroresAlNotificar : Maybe Http.Error -> List (Html msg)
 viewErroresAlNotificar cualError =
     case cualError of
         Nothing ->

@@ -474,10 +474,9 @@ head static =
 view : Maybe PageUrl -> Shared.Model -> Model -> StaticPayload Data RouteParams -> View Msg
 view maybeUrl sharedModel model static =
     { title = static.data.title
-    , withMenu = View.NoMenu
+    , withMenu = View.SiMenu ligas { mainHero = viewHeroMain static.data.mainHead, afterHero = viewHeroAfter }
     , body =
-        [ viewHero model.menuOpen static.data.mainHead
-        , viewFeatures static.data.beneficios
+        [ viewFeatures static.data.beneficios
         , viewNotificacion sharedModel.usuarioStatus model.verNotificaciones
 
         --, viewGaleria model
@@ -677,249 +676,58 @@ ligas =
     ]
 
 
-viewHero menuOpen headText =
-    let
-        direccionEspecial : { texto : String, dir : LigaTipo }
-        direccionEspecial =
-            { texto = "Comunícate"
-            , dir = Interna Route.Contacto
-            }
-
-        direcciones : List { texto : String, dir : LigaTipo }
-        direcciones =
-            [ { texto = "Más Información"
-              , dir =
-                    "#features"
-                        |> Path.fromString
-                        |> Otra
-              }
+viewHeroMain headText =
+    Html.main_
+        [ class "mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28" ]
+        [ div
+            [ class "sm:text-center lg:text-left"
             ]
-
-        clasesMenuItems : ( Bool, Bool ) -> Html.Attribute msg
-        clasesMenuItems ( esMovil, especial ) =
-            case ( esMovil, especial ) of
-                ( True, True ) ->
-                    class "block w-full px-5 py-3 text-center font-medium text-blue-900 bg-gray-50 hover:bg-gray-200"
-
-                ( True, False ) ->
-                    class "block px-5 py-3 rounded-md font-medium text-base text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-
-                ( False, True ) ->
-                    class "font-medium text-blue-900 hover:text-blue-500"
-
-                ( False, False ) ->
-                    class "font-medium text-gray-500 hover:text-gray-900"
-
-        menuItem : ( Bool, Bool ) -> { texto : String, dir : LigaTipo } -> Html msg
-        menuItem tipClases dirToLink =
-            case dirToLink.dir of
-                Otra camino ->
-                    Html.a
-                        [ Attr.href <| Path.toRelative camino
-                        , clasesMenuItems tipClases
-                        ]
-                        [ text dirToLink.texto ]
-
-                Interna rutaLiga ->
-                    Route.link
-                        rutaLiga
-                        [ clasesMenuItems tipClases ]
-                        [ text dirToLink.texto ]
-
-        menuAppear : Bool -> Animation
-        menuAppear show =
-            if show then
-                Animation.fromTo
-                    { duration = 180
-                    , options = [ Animation.easeOut ]
-                    }
-                    [ P.opacity 0, P.scale 0.92 ]
-                    [ P.opacity 1, P.scale 1 ]
-
-            else
-                Animation.fromTo
-                    { duration = 125
-                    , options = [ Animation.easeIn ]
-                    }
-                    [ P.opacity 1, P.scale 1 ]
-                    [ P.opacity 0, P.scale 0.92 ]
-
-        movilMenu =
-            div
-                [ class "rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden" ]
+            [ Html.h1
+                [ class "text-4xl font-serif font-extrabold text-gray-900 sm:text-5xl" ]
+                [ Html.span
+                    [ class "block xl:inline" ]
+                    [ text headText.preMainHeader ]
+                , Html.span
+                    [ class "block text-blue-900 xl:inline" ]
+                    [ text <| " " ++ headText.mainHeaderResaltado ++ " " ]
+                , Html.span
+                    [ class "block xl:inline" ]
+                    [ text headText.postMainHeader ]
+                ]
+            , Html.p
+                [ class "mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" ]
+                [ text headText.mainSubHeader ]
+            , div
+                [ class "mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start" ]
                 [ div
-                    [ class "px-5 pt-4 flex items-center justify-between" ]
-                    [ div []
-                        [ Html.img
-                            [ class "h-8 w-auto"
-                            , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
-                            , Attr.alt ""
-                            ]
-                            []
-                        ]
-                    , div
-                        [ class "-mr-2" ]
-                        [ Html.button
-                            [ Attr.type_ "button"
-                            , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                            , Event.onClick ToggleMenu
-                            ]
-                            [ Html.span
-                                [ class "sr-only" ]
-                                [ text "Close main menu" ]
-                            , HeroIcons.outlineX
-                            ]
-                        ]
+                    [ class "rounded-md shadow" ]
+                    [ Route.link
+                        Route.Contacto
+                        [ class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-900 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
+                        [ text "¡Contáctanos!" ]
                     ]
                 , div
-                    [ class "px-2 pt-2 pb-3 space-y-1" ]
-                    (List.append
-                        (List.map
-                            (menuItem
-                                ( True, False )
-                            )
-                            direcciones
-                        )
-                        (List.singleton <|
-                            menuItem
-                                ( True, True )
-                                direccionEspecial
-                        )
-                    )
-                ]
-
-        viewHeroMain =
-            Html.main_
-                [ class "mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28" ]
-                [ div
-                    [ class "sm:text-center lg:text-left"
-                    ]
-                    [ Html.h1
-                        [ class "text-4xl font-serif font-extrabold text-gray-900 sm:text-5xl" ]
-                        [ Html.span
-                            [ class "block xl:inline" ]
-                            [ text headText.preMainHeader ]
-                        , Html.span
-                            [ class "block text-blue-900 xl:inline" ]
-                            [ text <| " " ++ headText.mainHeaderResaltado ++ " " ]
-                        , Html.span
-                            [ class "block xl:inline" ]
-                            [ text headText.postMainHeader ]
+                    [ class "mt-3 sm:mt-0 sm:ml-3" ]
+                    [ Html.a
+                        [ Attr.href "#features"
+                        , class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
                         ]
-                    , Html.p
-                        [ class "mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" ]
-                        [ text headText.mainSubHeader ]
-                    , div
-                        [ class "mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start" ]
-                        [ div
-                            [ class "rounded-md shadow" ]
-                            [ Route.link
-                                Route.Contacto
-                                [ class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-900 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
-                                [ text "¡Contáctanos!" ]
-                            ]
-                        , div
-                            [ class "mt-3 sm:mt-0 sm:ml-3" ]
-                            [ Html.a
-                                [ Attr.href "#features"
-                                , class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
-                                ]
-                                [ text "más info." ]
-                            ]
-                        ]
+                        [ text "más info." ]
                     ]
-                ]
-
-        viewHeroAfter =
-            div
-                [ class "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
-                [ Html.img
-                    [ class "h-56 w-full object-cover object-top sm:h-72 md:h-96 lg:w-full lg:h-full lg:object-right"
-                    , Attr.src (Cloudinary.url "f_auto,q_auto:best" "dreamstime_s_30697263_clymr0.jpg")
-                    , Attr.alt "Expertos trajamos por ti"
-                    ]
-                    []
-                ]
-    in
-    div
-        [ class "relative bg-white overflow-hidden" ]
-        [ div
-            [ class "max-w-7xl mx-auto" ]
-            [ div
-                [ class "relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32" ]
-                [ svg
-                    [ SvgAttr.class "hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
-                    , SvgAttr.fill "currentColor"
-                    , SvgAttr.viewBox "0 0 100 100"
-                    , SvgAttr.preserveAspectRatio "none"
-                    , Attr.attribute "aria-hidden" "true"
-                    ]
-                    [ Svg.polygon
-                        [ SvgAttr.points "50,0 100,0 50,100 0,100" ]
-                        []
-                    ]
-                , div []
-                    [ div
-                        [ class "relative pt-6 px-4 sm:px-6 lg:px-8" ]
-                        [ Html.nav
-                            [ class "relative flex items-center justify-between sm:h-10 lg:justify-start"
-                            , Attr.attribute "aria-label" "Global"
-                            ]
-                            [ div
-                                [ class "flex items-center flex-grow flex-shrink-0 lg:flex-grow-0" ]
-                                [ div
-                                    [ class "flex items-center justify-between w-full md:w-auto" ]
-                                    [ Html.a
-                                        [ Attr.href "#" ]
-                                        [ Html.span
-                                            [ class "sr-only" ]
-                                            [ text "Workflow" ]
-                                        , Html.img
-                                            [ class "h-8 w-auto sm:h-10"
-                                            , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
-                                            ]
-                                            []
-                                        ]
-                                    , div
-                                        [ class "-mr-2 flex items-center md:hidden" ]
-                                        [ Html.button
-                                            [ Attr.type_ "button"
-                                            , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                                            , Attr.attribute "aria-expanded" "false"
-                                            , Event.onClick ToggleMenu
-                                            ]
-                                            [ Html.span
-                                                [ class "sr-only" ]
-                                                [ text "Open main menu" ]
-                                            , HeroIcons.outlineMenu
-                                            ]
-                                        ]
-                                    ]
-                                ]
-                            , div
-                                [ class "hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
-                                (List.append
-                                    (List.map
-                                        (menuItem ( False, False ))
-                                        direcciones
-                                    )
-                                    (List.singleton <|
-                                        menuItem
-                                            ( False, True )
-                                            direccionEspecial
-                                    )
-                                )
-                            ]
-                        ]
-                    , Animated.div
-                        (menuAppear menuOpen)
-                        [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
-                        [ movilMenu ]
-                    ]
-                , viewHeroMain
                 ]
             ]
-        , viewHeroAfter
+        ]
+
+
+viewHeroAfter =
+    div
+        [ class "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
+        [ Html.img
+            [ class "h-56 w-full object-cover object-top sm:h-72 md:h-96 lg:w-full lg:h-full lg:object-right"
+            , Attr.src (Cloudinary.url "f_auto,q_auto:best" "dreamstime_s_30697263_clymr0.jpg")
+            , Attr.alt "Expertos trajamos por ti"
+            ]
+            []
         ]
 
 
