@@ -133,19 +133,11 @@ view sharedData page model toMsg pageView =
     { body =
         div
             []
-            ((case model.errorAlNotificar of
-                Nothing ->
-                    []
-
-                Just error ->
-                    [ div [] [ text <| viewHttpError error ] ]
-             )
+            (viewErroresAlNotificar model.errorAlNotificar
                 ++ pageView.body
             )
     , title = pageView.title
     }
-
-
 
 
 viewHero menuOpen =
@@ -339,6 +331,15 @@ viewHero menuOpen =
                 ]
             ]
         ]
+
+
+viewErroresAlNotificar cualError =
+    case cualError of
+        Nothing ->
+            []
+
+        Just error ->
+            [ div [] [ text <| viewHttpError error ] ]
 
 
 viewHttpError : Http.Error -> String
