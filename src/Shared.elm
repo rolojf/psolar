@@ -93,7 +93,9 @@ update msg model =
             ( { model | showMobileMenu = False }, Cmd.none )
 
         ToggleMenu ->
-            ( model, Cmd.none )
+            ( { model | showMobileMenu = not model.showMobileMenu }
+            , Cmd.none
+            )
 
         SharedMsg mensajePasado ->
             case mensajePasado of
@@ -128,7 +130,7 @@ view sharedData page model toMsg pageView =
             []
             (viewErroresAlNotificar model.errorAlNotificar
                 ++ [ viewMenu
-                        False
+                        model.showMobileMenu
                         pageView.withMenu
                         toMsg
                    ]
