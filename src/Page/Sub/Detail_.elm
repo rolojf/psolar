@@ -3,6 +3,8 @@ module Page.Sub.Detail_ exposing (Data, Model, Msg, page)
 import Browser.Navigation
 import Cloudinary
 import DataSource exposing (DataSource)
+import DataSource.File as File
+import DataSource.Glob as Glob
 import Head
 import Head.Seo as Seo
 import HeroIcons
@@ -74,9 +76,27 @@ page =
 
 routes : DataSource (List RouteParams)
 routes =
-    RouteParams "hola"
-        |> List.singleton
-        |> DataSource.succeed
+    let
+        allMDFiles : DataSource (List MDFile)
+        allMDFiles =
+            Glob.succeed MDFile
+                |> Glob.match (Glob.literal "data/")
+                |> Glob.capture Glob.wildcard
+                |> Glob.match (Glob.literal ".md")
+                |> Glob.captureFilePath
+                |> Glob.toDataSource
+    in
+    allMDFiles
+        |> DataSource.map
+            (List.map
+                (\cadaMD -> RouteParams cadaMD.slug)
+            )
+
+
+type alias MDFile =
+    { slug : String
+    , filePath : String
+    }
 
 
 data : RouteParams -> DataSource Data
