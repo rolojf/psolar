@@ -11,6 +11,10 @@ import HeroIcons
 import Html as Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (class)
 import Html.Events as Event
+import Markdown.Block
+import MdConverter
+import MenuDecoder
+import OptimizedDecoder as Decode exposing (Decoder)
 import Page exposing (Page, PageWithState, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
@@ -41,18 +45,16 @@ subscriptions _ _ _ _ _ =
     Sub.none
 
 
-type Msg
-    = ToggleMenu
+type alias Msg =
+    ()
 
 
 update : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
 update url maybeKey sharedM staticP msg model =
-    case msg of
-        ToggleMenu ->
-            ( { model | menuOpen = not model.menuOpen }
-            , Cmd.none
-            , Nothing
-            )
+    ( model
+    , Cmd.none
+    , Nothing
+    )
 
 
 type alias RouteParams =
@@ -99,9 +101,44 @@ type alias MDFile =
     }
 
 
+type alias Data =
+    { delMD : ContenidoConDatos }
+
+
+type alias ContenidoConDatos =
+    { body : Result String (List Markdown.Block.Block)
+    , title : String
+    , menu : View.MenuInfo Msg
+    }
+
+
 data : RouteParams -> DataSource Data
 data routeParams =
-    DataSource.succeed ()
+    let
+        miDecoder : String -> Decoder ContenidoConDatos
+        miDecoder elCuerpo =
+            Decode.map3 ContenidoConDatos
+                (elCuerpo
+                    |> MdConverter.parsea
+                    |> Decode.succeed
+                )
+                (Decode.field "title" Decode.string)
+                (MenuDecoder.opMenuToDecode
+                    { mainHero = div [] []
+                    , afterHero = div [] []
+                    }
+                )
+
+        getDataFromMD =
+            File.bodyWithFrontmatter
+                miDecoder
+            <|
+                "data/"
+                    ++ routeParams.detail
+                    ++ ".md"
+    in
+    DataSource.map Data
+        getDataFromMD
 
 
 head : StaticPayload Data RouteParams -> List Head.Tag
@@ -122,50 +159,17 @@ head static =
         |> Seo.website
 
 
-type alias Data =
-    ()
-
-
 view : Maybe PageUrl -> Shared.Model -> Model -> StaticPayload Data RouteParams -> View Msg
 view maybeUrl sharedModel model static =
-    { title = "unoDosTres"
-    , body = [ div [] [ text "Pendiente por jalar info del markdown" ] ]
-    , withMenu = View.SiMenu ligas { mainHero = viewHeroMain, afterHero = viewHeroAfter }
+    { title = static.data.delMD.title
+    , body =
+        [ Html.div
+            [ class "prose" ]
+            (MdConverter.renderea static.data.delMD.body)
+        ]
+    , withMenu =
+        static.data.delMD.menu
     }
-
-
-ligas : List View.Liga
-ligas =
-    [ { queDice = "Comunícate"
-      , dir = View.Interna Route.Contacto
-      , especial = False
-      }
-    , { queDice = "Uno"
-      , dir =
-            "#"
-                |> Path.fromString
-                |> View.Otra
-      , especial = False
-      }
-    , { queDice = "Dos"
-      , dir =
-            "#"
-                |> Path.fromString
-                |> View.Otra
-      , especial = False
-      }
-    , { queDice = "Tres"
-      , dir =
-            "#"
-                |> Path.fromString
-                |> View.Otra
-      , especial = False
-      }
-    , { queDice = "Regres al Inicio"
-      , dir = View.Interna Route.Index
-      , especial = True
-      }
-    ]
 
 
 viewHeroMain =

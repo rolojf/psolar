@@ -8,11 +8,6 @@ menu:
     especial: false
     externa: false
   -
-    queDice: Sobre Nosotros
-    dir: about
-    especial: false
-    externa: false
-  -
     queDice: Aviso de Privacidad
     dir: "https://reftex.com/privacidad"
     especial: false

@@ -1,7 +1,7 @@
 module MenuDecoder exposing (opMenuToDecode)
 
 import Html exposing (Html, div, text)
-import Json.Decode as Decode exposing (Decoder)
+import OptimizedDecoder as Decode exposing (Decoder)
 import Path exposing (Path)
 import Route exposing (Route)
 import View exposing (View)
