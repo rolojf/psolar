@@ -240,14 +240,14 @@ viewMenu ruta menuOpen wMenu toMsg =
                     [ class "max-w-7xl mx-auto" ]
                     [ div
                         [ class <|
-                            "relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 "
+                            "relative z-10 pb-8 bg-white "
                                 ++ (if ruta == Just Route.Index then
-                                        "lg:max-w-2xl "
+                                        "sm:pb-16 md:pb-20 xl:pb-32 lg:pb-28 lg:max-w-2xl "
 
                                     else
                                         ""
                                    )
-                                ++ "lg:w-full lg:pb-28 xl:pb-32"
+                                ++ "lg:w-full"
                         ]
                         [ HeroIcons.menuSan1
                         , div []
