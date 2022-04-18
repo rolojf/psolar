@@ -130,6 +130,7 @@ view sharedData page model toMsg pageView =
             []
             (viewErroresAlNotificar model.errorAlNotificar
                 ++ [ viewMenu
+                        page.route
                         model.showMobileMenu
                         pageView.withMenu
                         toMsg
@@ -140,8 +141,8 @@ view sharedData page model toMsg pageView =
     }
 
 
-viewMenu : Bool -> View.MenuInfo msg -> (Msg -> msg) -> Html msg
-viewMenu menuOpen wMenu toMsg =
+viewMenu : Maybe Route -> Bool -> View.MenuInfo msg -> (Msg -> msg) -> Html msg
+viewMenu ruta menuOpen wMenu toMsg =
     let
         clasesMenuItems : ( Bool, Bool ) -> Html.Attribute msg
         clasesMenuItems ( esMovil, especial ) =
@@ -238,7 +239,16 @@ viewMenu menuOpen wMenu toMsg =
                 [ div
                     [ class "max-w-7xl mx-auto" ]
                     [ div
-                        [ class "relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32" ]
+                        [ class <|
+                            "relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 "
+                                ++ (if ruta == Just Route.Index then
+                                        "lg:max-w-2xl "
+
+                                    else
+                                        ""
+                                   )
+                                ++ "lg:w-full lg:pb-28 xl:pb-32"
+                        ]
                         [ HeroIcons.menuSan1
                         , div []
                             [ div

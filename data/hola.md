@@ -8,8 +8,13 @@ menu:
     especial: false
     externa: false
   -
-    queDice: Aviso de Privacidad
+    queDice: Privacidad
     dir: "https://reftex.com/privacidad"
+    especial: false
+    externa: true
+  -
+    queDice: Otra Liga
+    dir: "https://reftex.com/about"
     especial: false
     externa: true
   -
