@@ -108,7 +108,7 @@ type alias Data =
 type alias ContenidoConDatos =
     { body : Result String (List Markdown.Block.Block)
     , title : String
-    , menu : View.MenuInfo Msg
+    , menu : View.MenuInfo
     }
 
 

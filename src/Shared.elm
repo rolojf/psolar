@@ -38,6 +38,7 @@ type Msg
         }
     | SharedMsg SharedMsg
     | ToggleMenu
+    | NoOpS
 
 
 type UsuarioSt
@@ -111,6 +112,8 @@ update msg model =
                     ( { model | errorAlNotificar = Just cualError }
                     , Cmd.none
                     )
+        NoOpS ->
+                    ( model, Cmd.none )
 
 
 subscriptions : Path -> Model -> Sub Msg
@@ -141,7 +144,7 @@ view sharedData page model toMsg pageView =
     }
 
 
-viewMenu : Maybe Route -> Bool -> View.MenuInfo msg -> (Msg -> msg) -> Html msg
+viewMenu : Maybe Route -> Bool -> View.MenuInfo -> (Msg -> msg) -> Html msg
 viewMenu ruta menuOpen wMenu toMsg =
     let
         clasesMenuItems : ( Bool, Bool ) -> Html.Attribute msg
@@ -303,9 +306,13 @@ viewMenu ruta menuOpen wMenu toMsg =
                                 [ movilMenu ligas ]
                             ]
                         , complementos.mainHero
+                           |> Html.map (\_ -> NoOpS)
+                           |> Html.map toMsg
                         ]
                     ]
                 , complementos.afterHero
+                   |> Html.map (\_ -> NoOpS)
+                   |> Html.map toMsg
                 ]
 
 

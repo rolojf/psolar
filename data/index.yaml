@@ -31,6 +31,7 @@ beneficios:
     - art:
         cabeza: "Poner Más Paneles, aprovechando"
         nota: "Revisar si caben, el inversor o cableado eléctrico soporta paneles adicionales para aprovechar lo que ya se tiene."
+menuGoes: true
 menu:
   -
     queDice: Comunícate

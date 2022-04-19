@@ -85,12 +85,12 @@ ligasDecoder =
    Obviamente el mainHero y afterHero van definido según el menu en la parte principal. Para el menú básico va así.
 
 -}
+-- opMenuToDecode : { complementos | mainHero : Html msg, afterHero : Html () } -> Decoder (View.MenuInfo msg)
 
 
-opMenuToDecode : { complementos | mainHero : Html (), afterHero : Html () } -> Decoder (View.MenuInfo ())
 opMenuToDecode complementos =
     let
-        decodeMenu : Decoder (View.MenuInfo ())
+        --        decodeMenu : Decoder (View.MenuInfo msg)
         decodeMenu =
             Decode.field
                 "menu"
@@ -113,3 +113,10 @@ opMenuToDecode complementos =
                 else
                     Decode.succeed View.NoMenu
             )
+
+
+mapeaMsg : (msg1 -> msg2) -> Html msg1 -> Html msg2
+mapeaMsg fn doc =
+    doc
+        |> Html.map
+            fn

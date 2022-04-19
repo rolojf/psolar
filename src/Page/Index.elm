@@ -16,6 +16,7 @@ import Html.Attributes as Attr exposing (class)
 import Html.Events as Event
 import Html.Styled as Htmls
 import Http
+import MenuDecoder
 import OptimizedDecoder as Decode exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
@@ -378,11 +379,13 @@ update url maybeKey sharedM staticP msg model =
             )
 
 
+
 type alias Data =
     { title : String
     , tags : List String
     , mainHead : HeaderText
     , beneficios : Beneficios
+    , menu : View.MenuInfo
     }
 
 
@@ -432,12 +435,34 @@ yamlDecoder =
                 (Decode.field "mainHeaderResaltado" Decode.string)
                 (Decode.field "postMainHeader" Decode.string)
                 (Decode.field "mainSubHeader" Decode.string)
+
+
+        menuDecoderSinComplementos =
+              MenuDecoder.opMenuToDecode
+                        { mainHero = div [] []
+                        , afterHero = div [] []
+                        }
+
+        elMenuDecoder dataDecoderParcial =
+            { dataDecoderParcial
+                | menu =
+                    case dataDecoderParcial.menu of
+                        View.NoMenu -> View.NoMenu
+                        View.SiMenu ligasPasadas _ ->
+                            View.SiMenu
+                               ligasPasadas
+                               { mainHero = viewHeroMain dataDecoderParcial.mainHead
+                               , afterHero = viewHeroAfter
+                               }
+            }
     in
-    Decode.map4 Data
+    Decode.map5 Data
         (Decode.field "title" Decode.string)
         (Decode.field "tags" (Decode.list Decode.string))
         (Decode.field "mainHead" mainHeaderDecoder)
         (Decode.field "beneficios" beneDecoder)
+        (menuDecoderSinComplementos)
+        |> Decode.map elMenuDecoder
 
 
 data : DataSource Data
@@ -474,7 +499,8 @@ head static =
 view : Maybe PageUrl -> Shared.Model -> Model -> StaticPayload Data RouteParams -> View Msg
 view maybeUrl sharedModel model static =
     { title = static.data.title
-    , withMenu = View.SiMenu ligas { mainHero = viewHeroMain static.data.mainHead, afterHero = viewHeroAfter }
+    , withMenu =
+        static.data.menu
     , body =
         [ viewFeatures static.data.beneficios
         , viewNotificacion sharedModel.usuarioStatus model.verNotificaciones
@@ -619,7 +645,7 @@ retroFinal icono titulo subtitulo debeAparecer =
 
 
 
--- View Footer
+-- Footer
 
 
 indexViewFooter : Html msg
@@ -657,7 +683,7 @@ indexViewFooter =
 
 
 
--- View of Above the Fold
+-- Above the Fold
 
 
 ligas : List View.Liga
