@@ -3,61 +3,54 @@ module Footer exposing (..)
 import Css
 import Css.Global
 import HeroIcons
-import Html exposing (Html)
-import Html.Styled as Htmls exposing (div)
-import Html.Styled.Attributes as Attr
-import Html.Styled.Attributes.Aria as Aria
-import Tailwind.Breakpoints as TwBp
-import Tailwind.Utilities as Tw
+import Html as Html exposing (Html, div, text)
+import Html.Attributes as Attr exposing (class)
+import Html.Attributes.Aria as Aria
 import Route
 
 
-ligaAlPie : String -> String -> Htmls.Html msg
+ligaAlPie : String -> String -> Html msg
 ligaAlPie liga texto =
     div
-        [ Attr.css [ Tw.px_5, Tw.py_2 ] ]
-        [ Htmls.a
+        [ class "px-5 py-2 " ]
+        [ Html.a
             [ Attr.href liga
-            , Attr.css
-                [ Tw.text_base
-                , Tw.text_gray_600
-                , Css.hover [ Tw.text_black ]
-                ]
+            , class "text-base text-gray-600 hover:text-black"
             ]
-            [ Htmls.text texto ]
+            [ text texto ]
         ]
 
 
-ligaIcono : String -> String -> SocialIcons -> Htmls.Html msg
+ligaIcono : String -> String -> SocialIcons -> Html msg
 ligaIcono direccion srCual iconoSocial =
-    Htmls.a
+    Html.a
         [ Attr.href direccion
-        , Attr.css [ Tw.text_gray_400, Css.hover [ Tw.text_gray_500 ] ]
+        , class "text-gray-400 hover:text-gray-500"
         ]
-        [ Htmls.span
-            [ Attr.css [ Tw.sr_only ] ]
-            [ Htmls.text srCual ]
+        [ Html.span
+            [ class "sr-only" ]
+            [ text srCual ]
         , case iconoSocial of
             Facebook ->
-                HeroIcons.svgFacebook |> Htmls.fromUnstyled
+                HeroIcons.svgFacebook
 
             Instagram ->
-                HeroIcons.svgInstagram |> Htmls.fromUnstyled
+                HeroIcons.svgInstagram
 
             Twitter ->
-                HeroIcons.svgTwitter |> Htmls.fromUnstyled
+                HeroIcons.svgTwitter
 
             Github ->
-                HeroIcons.svgGithub |> Htmls.fromUnstyled
+                HeroIcons.svgGithub
 
             LinkedIn ->
-                HeroIcons.svgLinkedIn |> Htmls.fromUnstyled
+                HeroIcons.svgLinkedIn
 
             Email ->
-                HeroIcons.svgMailIcon |> Htmls.fromUnstyled
+                HeroIcons.svgMailIcon
 
             WhatsApp ->
-                HeroIcons.svgWhatsApp |> Htmls.fromUnstyled
+                HeroIcons.svgWhatsApp
         ]
 
 
@@ -82,60 +75,32 @@ que va en el footer y será la variable copyR.
 Así el footer queda desacoplado de sus ligas e íconos que se establecen en cada página.
 
 -}
-viewFooter : List (Htmls.Html msg) -> List (Htmls.Html msg) -> String -> Html msg
+viewFooter : List (Html msg) -> List (Html msg) -> String -> Html msg
 viewFooter ligasNav icons2show copyR =
-    Htmls.footer
+    Html.footer
         []
         [ div
-            [ Attr.css [ Tw.bg_white ] ]
+            [ class "bg-white" ]
             --, Tw.py_4 ] ]
             []
         , div
-            [ Attr.css [ Tw.bg_gray_200 ] ]
+            [ class "bg-gray-200" ]
             [ div
-                [ Attr.css
-                    [ Tw.max_w_7xl
-                    , Tw.mx_auto
-                    , Tw.py_12
-                    , Tw.px_4
-                    , Tw.overflow_hidden
-                    , TwBp.lg [ Tw.px_8 ]
-                    , TwBp.sm [ Tw.px_6 ]
-                    ]
-                ]
-                [ Htmls.nav
-                    [ Attr.css
-                        [ Tw.neg_mx_5
-                        , Tw.neg_my_2
-                        , Tw.flex
-                        , Tw.flex_wrap
-                        , Tw.justify_center
-                        ]
+                [ class "max-w-7xl mx-auto py-12 px-4 overflow-hidden lg:px-8 sm:px-6" ]
+                [ Html.nav
+                    [ class "-mx-5 -my-2 flex flex-wrap justify-center"
                     , Aria.ariaLabel "Footer"
                     ]
                     ligasNav
                 , div
-                    [ Attr.css
-                        [ Tw.mt_8
-                        , Tw.flex
-                        , Tw.justify_center
-                        , Tw.space_x_6
-                        ]
-                    ]
+                    [ class "mt-8 flex justify-center space-x-6" ]
                     icons2show
-                , Htmls.p
-                    [ Attr.css
-                        [ Tw.mt_8
-                        , Tw.text_center
-                        , Tw.text_base
-                        , Tw.text_gray_500
-                        ]
-                    ]
-                    [ Htmls.text copyR ]
+                , Html.p
+                    [ class "mt-8 text-center text-base text-gray-500" ]
+                    [ text copyR ]
                 ]
             ]
         ]
-        |> Htmls.toUnstyled
 
 
 type SocialIcons

@@ -14,7 +14,6 @@ import HeroIcons
 import Html as Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (class)
 import Html.Events as Event
-import Html.Styled as Htmls
 import Http
 import MenuDecoder
 import OptimizedDecoder as Decode exposing (Decoder)
@@ -28,8 +27,6 @@ import Shared
 import Simple.Animation as Animation exposing (Animation)
 import Simple.Animation.Animated as Animated
 import Simple.Animation.Property as P
-import Svg exposing (path, svg)
-import Svg.Attributes as SvgAttr
 import Task
 import View exposing (View)
 
@@ -651,7 +648,7 @@ retroFinal icono titulo subtitulo debeAparecer =
 indexViewFooter : Html msg
 indexViewFooter =
     let
-        viewPieNavega : List (Htmls.Html msg)
+        viewPieNavega : List (Html msg)
         viewPieNavega =
             []
 
@@ -664,7 +661,7 @@ indexViewFooter =
            , Footer.ligaAlPie "#" "Partners"
            ]
         -}
-        viewPieSocialIcons : List (Htmls.Html msg)
+        viewPieSocialIcons : List (Html msg)
         viewPieSocialIcons =
             [ Footer.ligaIcono "https://github.com/rolojf/psolar" "GitHub" Footer.Github
             , Footer.ligaIcono "https://www.linkedin.com/in/rolando-flores-gzz-80887163/" "LinkedIn" Footer.LinkedIn
