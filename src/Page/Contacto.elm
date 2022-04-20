@@ -6,7 +6,6 @@ import Analytics
 import Browser.Dom as Dom
 import Browser.Navigation
 import Cloudinary
-import Css
 import DataSource exposing (DataSource)
 import Head
 import Head.Seo as Seo

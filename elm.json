@@ -2,8 +2,7 @@
     "type": "application",
     "source-directories": [
         "src",
-        ".elm-pages",
-        "tailwind"
+        ".elm-pages"
     ],
     "elm-version": "0.19.1",
     "dependencies": {
@@ -22,8 +21,7 @@
             "elm/svg": "1.0.1",
             "elm/time": "1.0.0",
             "elm/url": "1.0.0",
-            "fapian/elm-html-aria": "1.4.0",
-            "rtfeldman/elm-css": "17.0.1"
+            "fapian/elm-html-aria": "1.4.0"
         },
         "indirect": {
             "MartinSStewart/elm-serialize": "1.2.6",
@@ -47,6 +45,7 @@
             "miniBill/elm-unicode": "1.0.2",
             "noahzgordon/elm-color-extra": "1.0.2",
             "robinheghan/murmur3": "1.0.0",
+            "rtfeldman/elm-css": "17.1.0",
             "rtfeldman/elm-hex": "1.0.0",
             "stil4m/elm-syntax": "7.2.8",
             "stil4m/structured-writer": "1.0.3",

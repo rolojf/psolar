@@ -1,12 +1,9 @@
 module Footer exposing (..)
 
-import Css
-import Css.Global
 import HeroIcons
 import Html as Html exposing (Html, div, text)
 import Html.Attributes as Attr exposing (class)
 import Html.Attributes.Aria as Aria
-import Route
 
 
 ligaAlPie : String -> String -> Html msg
