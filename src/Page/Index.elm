@@ -568,7 +568,7 @@ retroFinal : Html Msg -> String -> String -> Maybe Bool -> Html Msg
 retroFinal icono titulo subtitulo debeAparecer =
     Animated.div
         (notifAppear debeAparecer)
-        [ Attr.attribute "tw aria-live" "assertive"
+        [ Attr.attribute "aria-live" "assertive"
         , class "tw fixed inset-0 flex items-end px-4 py-6 z-20 pointer-events-none sm:p-6 lg:items-center"
         ]
         [ div [ class "tw w-full flex flex-col items-center space-y-4z sm:items-start lg:items-end" ]

@@ -10,7 +10,7 @@ import Svg.Attributes as SvgAttr
 solidX : Html msg
 solidX =
     svg
-        [ SvgAttr.class "h-5 w-5"
+        [ SvgAttr.class "tw h-5 w-5"
         , SvgAttr.viewBox "0 0 20 20"
         , SvgAttr.fill "currentColor"
         , Attr.attribute "aria-hidden" "true"
@@ -26,7 +26,7 @@ solidX =
 
 outlineMenu =
     svg
-        [ SvgAttr.class "h-6 w-6"
+        [ SvgAttr.class "tw h-6 w-6"
         , SvgAttr.fill "none"
         , SvgAttr.viewBox "0 0 24 24"
         , SvgAttr.stroke "currentColor"
@@ -44,7 +44,7 @@ outlineMenu =
 
 outlineX =
     svg
-        [ SvgAttr.class "h-6 w-6"
+        [ SvgAttr.class "tw h-6 w-6"
         , SvgAttr.fill "none"
         , SvgAttr.viewBox "0 0 24 24"
         , SvgAttr.stroke "currentColor"
@@ -62,7 +62,7 @@ outlineX =
 
 outlineCheckCircle =
     svg
-        [ SvgAttr.class "h-6 w-6 text-green-400"
+        [ SvgAttr.class "tw h-6 w-6 text-green-400"
         , SvgAttr.fill "none"
         , SvgAttr.viewBox "0 0 24 24"
         , SvgAttr.stroke "currentColor"
@@ -80,7 +80,7 @@ outlineCheckCircle =
 
 outlineCheck =
     svg
-        [ SvgAttr.class "absolute h-6 w-6 text-green-500"
+        [ SvgAttr.class "tw absolute h-6 w-6 text-green-500"
         , SvgAttr.fill "none"
         , SvgAttr.viewBox "0 0 24 24"
         , SvgAttr.stroke "currentColor"
@@ -99,7 +99,7 @@ outlineCheck =
 svgSocialIcon : String -> List String -> Html msg
 svgSocialIcon vBox paths =
     div
-        [ class "h-6 w-6" ]
+        [ class "tw h-6 w-6" ]
         [ svg
             -- [ SvgAttr.Attr.css []
             [ SvgAttr.fill "currentColor"
