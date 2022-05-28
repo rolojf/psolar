@@ -572,17 +572,7 @@ retroFinal icono titulo subtitulo debeAparecer =
         , class "tw fixed inset-0 flex items-end px-4 py-6 z-20 pointer-events-none sm:p-6 lg:items-center"
         ]
         [ div [ class "tw w-full flex flex-col items-center space-y-4z sm:items-start lg:items-end" ]
-            [ {-
-                 Notification panel, dynamically insert this into the live region when it needs to be displayed
-
-                 Entering: "transform ease-out duration-300 transition"
-                   From: "translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
-                   To: "translate-y-0 opacity-100 sm:translate-x-0"
-                 Leaving: "transition ease-in duration-100"
-                   From: "opacity-100"
-                   To: "opacity-0"
-              -}
-              div
+            [ div
                 [ class "tw max-w-sm w-full bg-gray-200 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden" ]
                 [ div
                     [ class "tw p-4" ]
