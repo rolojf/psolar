@@ -490,32 +490,32 @@ view maybeUrl sharedModel model static =
 -- Notificación
 
 
+respFromPost : Result Http.Error String -> String
+respFromPost resp =
+    case resp of
+        Ok _ ->
+            "Registrado Ok, nos comunicaremos pronto."
+
+        Err cual ->
+            case cual of
+                Http.BadUrl urlBad ->
+                    "Pero, error en programa " ++ urlBad
+
+                Http.Timeout ->
+                    "No respondió el servidor, Intente de nuevo."
+
+                Http.NetworkError ->
+                    "Falló el internet."
+
+                Http.BadStatus codigo ->
+                    "Servidor regresó error " ++ String.fromInt codigo
+
+                Http.BadBody infoEnviada ->
+                    "Problemas con la información " ++ String.left 20 infoEnviada
+
+
 viewNotificacion : Shared.UsuarioSt -> Maybe Bool -> Html Msg
 viewNotificacion usrStatus verNotif =
-    let
-        respFromPost : Result Http.Error String -> String
-        respFromPost resp =
-            case resp of
-                Ok _ ->
-                    "Registrado Ok, nos comunicaremos pronto."
-
-                Err cual ->
-                    case cual of
-                        Http.BadUrl urlBad ->
-                            "Pero, error en programa " ++ urlBad
-
-                        Http.Timeout ->
-                            "No respondió el servidor, Intente de nuevo."
-
-                        Http.NetworkError ->
-                            "Falló el internet."
-
-                        Http.BadStatus codigo ->
-                            "Servidor regresó error " ++ String.fromInt codigo
-
-                        Http.BadBody infoEnviada ->
-                            "Problemas con la información " ++ String.left 20 infoEnviada
-    in
     case usrStatus of
         Shared.Conocido respBasin ->
             retroFinal
@@ -568,10 +568,10 @@ retroFinal : Html Msg -> String -> String -> Maybe Bool -> Html Msg
 retroFinal icono titulo subtitulo debeAparecer =
     Animated.div
         (notifAppear debeAparecer)
-        [ Attr.attribute "aria-live" "assertive"
-        , class "fixed inset-0 flex items-end px-4 py-6 z-20 pointer-events-none sm:p-6 lg:items-center"
+        [ Attr.attribute "tw aria-live" "assertive"
+        , class "tw fixed inset-0 flex items-end px-4 py-6 z-20 pointer-events-none sm:p-6 lg:items-center"
         ]
-        [ div [ class "w-full flex flex-col items-center space-y-4z sm:items-start lg:items-end" ]
+        [ div [ class "tw w-full flex flex-col items-center space-y-4z sm:items-start lg:items-end" ]
             [ {-
                  Notification panel, dynamically insert this into the live region when it needs to be displayed
 
@@ -583,31 +583,31 @@ retroFinal icono titulo subtitulo debeAparecer =
                    To: "opacity-0"
               -}
               div
-                [ class "max-w-sm w-full bg-gray-200 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden" ]
+                [ class "tw max-w-sm w-full bg-gray-200 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden" ]
                 [ div
-                    [ class "p-4" ]
+                    [ class "tw p-4" ]
                     [ div
-                        [ class "flex items-start" ]
+                        [ class "tw flex items-start" ]
                         [ div
-                            [ class "flex-shrink-0" ]
+                            [ class "tw flex-shrink-0" ]
                             [ icono ]
                         , div
-                            [ class "ml-3 w-0 flex-1 pt-0.5" ]
+                            [ class "tw ml-3 w-0 flex-1 pt-0.5" ]
                             [ Html.p
-                                [ class "text-sm font-medium text-gray-900" ]
+                                [ class "tw text-sm font-medium text-gray-900" ]
                                 [ text titulo ]
                             , Html.p
-                                [ class "mt-1 text-sm text-gray-500" ]
+                                [ class "tw mt-1 text-sm text-gray-500" ]
                                 [ text subtitulo ]
                             ]
                         , div
-                            [ class "ml-4 flex-shrink-0 flex" ]
+                            [ class "tw ml-4 flex-shrink-0 flex" ]
                             [ Html.button
-                                [ class "bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                [ class "tw bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                 , Event.onClick CierraNoti
                                 ]
                                 [ Html.span
-                                    [ class "sr-only" ]
+                                    [ class "tw sr-only" ]
                                     [ text "Close" ]
                                 , HeroIcons.solidX
                                 ]
