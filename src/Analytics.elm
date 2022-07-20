@@ -6,6 +6,7 @@ module Analytics exposing
     )
 
 import Http
+import Path
 
 
 
@@ -39,11 +40,14 @@ toCmd : Event -> (Result Http.Error () -> msg) -> Cmd msg
 toCmd event msg =
     case event of
         Event cualEvento ->
+            let
+                direccion =
+                    [ "api-v2", cualEvento ++ ".json" ]
+                        |> Path.join
+                        |> Path.toAbsolute
+            in
             Http.get
-                { url =
-                    --"https://h8uqc13y50.execute-api.us-east-2.amazonaws.com/msg/"
-                    "https://psolar.mx/api-v1/msg/"
-                        ++ cualEvento
+                { url = direccion
                 , expect = Http.expectWhatever msg
                 }
 

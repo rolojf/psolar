@@ -73,27 +73,6 @@ init _ _ _ =
     )
 
 
-superUpdate : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
-superUpdate url navKey sharedModel static msg model =
-    let
-        analyticsEvent : Analytics.Event
-        analyticsEvent =
-            track msg
-
-        ( newModel, cmd, siSharedMsg ) =
-            update url navKey sharedModel static msg model
-    in
-    ( newModel
-    , Cmd.batch
-        [ cmd
-        , Analytics.toCmd
-            analyticsEvent
-            Notificado
-        ]
-    , siSharedMsg
-    )
-
-
 update : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
 update _ navKey sharedModel _ msg model =
     case msg of
@@ -131,9 +110,14 @@ update _ navKey sharedModel _ msg model =
 
         CompletadoFormulario ->
             ( { model | listo = True }
-            , Task.perform
-                (\_ -> EsperaPaEnfocar)
-                (Process.sleep 100)
+            , Cmd.batch
+                [ Task.perform
+                    (\_ -> EsperaPaEnfocar)
+                    (Process.sleep 100)
+                , Analytics.toCmd
+                    (Analytics.eventoXReportar "completo-formulario")
+                    Notificado
+                ]
             , Nothing
             )
 
@@ -237,46 +221,6 @@ update _ navKey sharedModel _ msg model =
             )
 
 
-track : Msg -> Analytics.Event
-track msg =
-    case msg of
-        Nombre _ ->
-            Analytics.none
-
-        ComoSupo _ ->
-            Analytics.none
-
-        Correo _ ->
-            Analytics.none
-
-        Apellido _ ->
-            Analytics.none
-
-        Telefono _ ->
-            Analytics.none
-
-        Comentario _ ->
-            Analytics.none
-
-        CompletadoFormulario ->
-            Analytics.eventoXReportar "completo-formulario"
-
-        EsperaPaEnfocar ->
-            Analytics.none
-
-        ReMsg _ ->
-            Analytics.none
-
-        NoOp ->
-            Analytics.none
-
-        RespondeBasin resultado ->
-            Analytics.none
-
-        Notificado _ ->
-            Analytics.none
-
-
 subscriptions : Maybe PageUrl -> routeParams -> Path.Path -> Model -> Shared.Model -> Sub Msg
 subscriptions _ _ _ _ _ =
     Sub.none
@@ -295,7 +239,7 @@ page =
         |> Page.buildWithSharedState
             { view = view
             , init = init
-            , update = superUpdate
+            , update = update
             , subscriptions = subscriptions
             }
 
