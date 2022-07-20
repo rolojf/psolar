@@ -635,39 +635,39 @@ ligas =
 
 viewHeroMain headText =
     Html.main_
-        [ class "mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28" ]
+        [ class "tw mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28" ]
         [ div
-            [ class "sm:text-center lg:text-left"
+            [ class "tw sm:text-center lg:text-left"
             ]
             [ Html.h1
-                [ class "text-4xl font-serif font-extrabold text-gray-900 sm:text-5xl" ]
+                [ class "tw text-4xl font-serif font-extrabold text-gray-900 sm:text-5xl" ]
                 [ Html.span
-                    [ class "block xl:inline" ]
+                    [ class "tw block xl:inline" ]
                     [ text headText.preMainHeader ]
                 , Html.span
-                    [ class "block text-blue-900 xl:inline" ]
+                    [ class "tw block text-blue-900 xl:inline" ]
                     [ text <| " " ++ headText.mainHeaderResaltado ++ " " ]
                 , Html.span
-                    [ class "block xl:inline" ]
+                    [ class "tw block xl:inline" ]
                     [ text headText.postMainHeader ]
                 ]
             , Html.p
-                [ class "mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" ]
+                [ class "tw mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0" ]
                 [ text headText.mainSubHeader ]
             , div
-                [ class "mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start" ]
+                [ class "tw mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start" ]
                 [ div
-                    [ class "rounded-md shadow" ]
+                    [ class "tw rounded-md shadow" ]
                     [ Route.link
                         Route.Contacto
-                        [ class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-900 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
+                        [ class "tw w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-900 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10" ]
                         [ text "¡Contáctanos!" ]
                     ]
                 , div
-                    [ class "mt-3 sm:mt-0 sm:ml-3" ]
+                    [ class "tw mt-3 sm:mt-0 sm:ml-3" ]
                     [ Html.a
                         [ Attr.href "#features"
-                        , class "w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
+                        , class "tw w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 md:py-4 md:text-lg md:px-10"
                         ]
                         [ text "más info." ]
                     ]
@@ -678,9 +678,9 @@ viewHeroMain headText =
 
 viewHeroAfter =
     div
-        [ class "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
+        [ class "tw lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
         [ Html.img
-            [ class "h-56 w-full object-cover object-top sm:h-72 md:h-96 lg:w-full lg:h-full lg:object-right"
+            [ class "tw h-56 w-full object-cover object-top sm:h-72 md:h-96 lg:w-full lg:h-full lg:object-right"
             , Attr.src (Cloudinary.url "f_auto,q_auto:best" "dreamstime_s_30697263_clymr0.jpg")
             , Attr.alt "Expertos trajamos por ti"
             ]
@@ -698,41 +698,41 @@ viewFeatures bene =
         viewArts : Arts -> Html msg
         viewArts articulo =
             div
-                [ class "relative" ]
+                [ class "tw relative" ]
                 [ Html.dt []
                     [ HeroIcons.outlineCheck
                     , Html.p
-                        [ class "ml-9 text-lg leading-6 font-medium text-gray-900"
+                        [ class "tw ml-9 text-lg leading-6 font-medium text-gray-900"
                         ]
                         [ text articulo.cabeza ]
                     ]
                 , Html.dd
-                    [ class "mt-2 ml-9 text-base text-gray-500"
+                    [ class "tw mt-2 ml-9 text-base text-gray-500"
                     ]
                     [ text articulo.nota ]
                 ]
     in
     div
-        [ class "bg-white"
+        [ class "tw bg-white"
         , Attr.id "features"
         ]
         [ div
-            [ class "max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-24 lg:px-8 lg:grid lg:grid-cols-3 lg:gap-x-8" ]
+            [ class "tw max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:py-24 lg:px-8 lg:grid lg:grid-cols-3 lg:gap-x-8" ]
             [ div []
                 [ Html.h2
-                    [ class "text-base font-semibold text-indigo-600 uppercase tracking-wide" ]
+                    [ class "tw text-base font-semibold text-indigo-600 uppercase tracking-wide" ]
                     [ text bene.preHeader ]
                 , Html.p
-                    [ class "mt-2 text-3xl font-extrabold text-gray-900 font-serif tracking-wide" ]
+                    [ class "tw mt-2 text-3xl font-extrabold text-gray-900 font-serif tracking-wide" ]
                     [ text bene.header ]
                 , Html.p
-                    [ class "mt-4 text-lg text-gray-500" ]
+                    [ class "tw mt-4 text-lg text-gray-500" ]
                     [ text bene.subHeader ]
                 ]
             , div
-                [ class "mt-12 lg:mt-0 lg:col-span-2" ]
+                [ class "tw mt-12 lg:mt-0 lg:col-span-2" ]
                 [ Html.dl
-                    [ class "space-y-10 sm:space-y-0 sm:grid sm:grid-cols-2 sm:grid-rows-3 sm:grid-flow-col sm:gap-x-6 sm:gap-y-10 lg:gap-x-8" ]
+                    [ class "tw space-y-10 sm:space-y-0 sm:grid sm:grid-cols-2 sm:grid-rows-3 sm:grid-flow-col sm:gap-x-6 sm:gap-y-10 lg:gap-x-8" ]
                     (List.map viewArts bene.motivos)
                 ]
             ]

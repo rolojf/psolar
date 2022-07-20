@@ -283,23 +283,13 @@ view maybeUrl sharedModel model static =
     { title = "Formulario de Contacto"
     , withMenu = View.NoMenu
     , body =
-        [ {- div
-             [ css
-                 [ Tw.max_w_7xl
-                 , Tw.mx_auto
-                 , TwBp.sm [ Tw.px_6 ]
-                 , TwBp.lg [ Tw.px_8 ]
-                 ]
-             ]
-             [
-          -}
-          div
-            [ class "relative bg-white" ]
+        [ div
+            [ class "tw relative bg-white" ]
             [ viewLayout
             , viewFormulario model
             , if model.listo then
                 div
-                    [ class "lg:h-72" ]
+                    [ class "tw lg:h-72" ]
                     [ if sharedModel.usuarioStatus == Shared.Desconocido then
                         Reto.view model.reModel
                             |> Html.map ReMsg
@@ -318,12 +308,13 @@ view maybeUrl sharedModel model static =
 viewLayout : Html Msg
 viewLayout =
     div
-        [ class "lg:absolute lg:inset-0" ]
+        [ class "tw lg:absolute lg:inset-0" ]
         [ div
-            [ class "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
+            [ class "tw lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
             [ Html.img
-                [ class "h-56 w-full object-cover object-top lg:absolute lg:h-screen"
-                , Attr.src <| Cloudinary.url "f_auto" "v1619940728/dreamstime_m_29668275_t0oapr.jpg"
+                [ class "tw h-56 w-full object-cover object-top lg:absolute lg:h-screen"
+                , Attr.src <|
+                    Cloudinary.url "f_auto" "v1619940728/dreamstime_m_29668275_t0oapr.jpg"
                 , Attr.alt ""
                 ]
                 []
@@ -339,11 +330,11 @@ viewFormulario model =
                 []
                 [ Html.label
                     [ Attr.for "first_name"
-                    , class "block text-sm font-medium text-gray-700"
+                    , class "tw block text-sm font-medium text-gray-700"
                     ]
                     [ text "Nombre" ]
                 , div
-                    [ class "mt-1" ]
+                    [ class "tw mt-1" ]
                     [ Html.input
                         [ Attr.type_ "text"
                         , Attr.name "first_name"
@@ -352,7 +343,7 @@ viewFormulario model =
                         , Attr.minlength 2
                         , Attr.maxlength 15
                         , Attr.autocomplete True -- "given-name"
-                        , class "block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                        , class "tw block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                         , Events.onInput Nombre
                         ]
                         []
@@ -363,17 +354,17 @@ viewFormulario model =
             div []
                 [ Html.label
                     [ Attr.for "last_name"
-                    , class "block text-sm font-medium text-gray-700"
+                    , class "tw block text-sm font-medium text-gray-700"
                     ]
                     [ text "Apellido" ]
                 , div
-                    [ class "mt-1" ]
+                    [ class "tw mt-1" ]
                     [ Html.input
                         [ Attr.type_ "text"
                         , Attr.name "last_name"
                         , Attr.id "last_name"
                         , Attr.autocomplete True -- "family-name"
-                        , class "block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                        , class "tw block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                         , Events.onInput Apellido
                         ]
                         []
@@ -382,20 +373,20 @@ viewFormulario model =
 
         viewCampoCorreo =
             div
-                [ class "sm:col-span-2" ]
+                [ class "tw sm:col-span-2" ]
                 [ Html.label
                     [ Attr.for "email"
-                    , class "block text-sm font-medium text-gray-700"
+                    , class "tw block text-sm font-medium text-gray-700"
                     ]
                     [ text "Correo Electrónico" ]
                 , div
-                    [ class "mt-1" ]
+                    [ class "tw mt-1" ]
                     [ Html.input
                         [ Attr.id "email"
                         , Attr.name "email"
                         , Attr.type_ "email"
                         , Attr.autocomplete True --"email"
-                        , class "block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                        , class "tw block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                         , Events.onInput Correo
                         ]
                         []
@@ -404,22 +395,22 @@ viewFormulario model =
 
         viewCampoTelefono =
             div
-                [ class "sm:col-span-2" ]
+                [ class "tw sm:col-span-2" ]
                 [ div
-                    [ class "flex justify-between" ]
+                    [ class "tw flex justify-between" ]
                     [ Html.label
                         [ Attr.for "phone"
-                        , class "block text-sm font-medium text-gray-700"
+                        , class "tw block text-sm font-medium text-gray-700"
                         ]
                         [ text "Teléfono" ]
                     , Html.span
                         [ Attr.id "phone_description"
-                        , class "text-sm text-gray-500"
+                        , class "tw text-sm text-gray-500"
                         ]
                         [ text "Opcional" ]
                     ]
                 , div
-                    [ class "mt-1" ]
+                    [ class "tw mt-1" ]
                     [ Html.input
                         [ Attr.type_ "text"
                         , Attr.name "phone"
@@ -429,7 +420,7 @@ viewFormulario model =
                         , Attr.value model.telefono
                         , Attr.autocomplete True -- "tel"
                         , Aria.ariaDescribedby "phone_description"
-                        , class "block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
+                        , class "tw block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                         , Events.onInput Telefono
                         ]
                         []
@@ -438,28 +429,28 @@ viewFormulario model =
 
         viewCampoComment =
             div
-                [ class "sm:col-span-2" ]
+                [ class "tw sm:col-span-2" ]
                 [ div
-                    [ class "flex justify-between" ]
+                    [ class "tw flex justify-between" ]
                     [ Html.label
                         [ Attr.for "how_can_we_help"
-                        , class "block text-sm font-medium text-gray-700"
+                        , class "tw block text-sm font-medium text-gray-700"
                         ]
                         [ text "Comentario" ]
                     , Html.span
                         [ Attr.id "how_can_we_help_description"
-                        , class "text-sm text-gray-500"
+                        , class "tw text-sm text-gray-500"
                         ]
                         [ text ">Max. 500 caracteres" ]
                     ]
                 , div
-                    [ class "mt-1" ]
+                    [ class "tw mt-1" ]
                     [ Html.textarea
                         [ Attr.id "how_can_we_help"
                         , Attr.name "how_can_we_help"
                         , Aria.ariaDescribedby "how_can_we_help_description"
                         , Attr.rows 4
-                        , class "block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border_gray_300 rounded-md"
+                        , class "tw block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border_gray_300 rounded-md"
                         , Events.onInput Comentario
                         ]
                         []
@@ -468,19 +459,19 @@ viewFormulario model =
 
         viewComoSupoDeNos =
             div
-                [ class "sm:col-span-2" ]
+                [ class "tw sm:col-span-2" ]
                 [ Html.label
                     [ Attr.for "how_did_you_hear_about_us"
-                    , class "block text-sm font-medium text-gray-700"
+                    , class "tw block text-sm font-medium text-gray-700"
                     ]
                     [ text "¿Cómo llegó con nosotros?" ]
                 , div
-                    [ class "mt-1" ]
+                    [ class "tw mt-1" ]
                     [ Html.input
                         [ Attr.type_ "text"
                         , Attr.name "how_did_you_hear_about_us"
                         , Attr.id "how_did_you_hear_about_us"
-                        , class "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w_full sm:text-sm border-gray-300 rounded-md"
+                        , class "tw shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w_full sm:text-sm border-gray-300 rounded-md"
                         , Events.onInput ComoSupo
                         ]
                         []
@@ -489,31 +480,31 @@ viewFormulario model =
 
         viewBotonSubmit =
             div
-                [ class "text-right sm:col-span-2" ]
+                [ class "tw text-right sm:col-span-2" ]
                 [ Html.button
                     [ Attr.type_ "submit"
-                    , class "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    , class "tw inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     ]
                     [ text "Enviar" ]
                 ]
     in
     div
-        [ class "relative py-8 px-4 sm:px-6 lg:px-8 lg:max-w-7xl lg:mx-auto lg:grid lg:grid-cols-2 lg:py-8" ]
+        [ class "tw relative py-8 px-4 sm:px-6 lg:px-8 lg:max-w-7xl lg:mx-auto lg:grid lg:grid-cols-2 lg:py-8" ]
         [ div
-            [ class "lg:pr-8" ]
+            [ class "tw lg:pr-8" ]
             [ div
-                [ class "max-w-md mx-auto lg:mx-0 sm:max-w-lg" ]
+                [ class "tw max-w-md mx-auto lg:mx-0 sm:max-w-lg" ]
                 [ Html.h2
-                    [ class "text-3xl font-extrabold tracking-tight sm:text-4xl font-serif" ]
+                    [ class "tw text-3xl font-extrabold tracking-tight sm:text-4xl font-serif" ]
                     [ text "¿Cómo Podemos Ayudar?" ]
                 , Html.p
-                    [ class "mt-4 text-lg text-gray-500 sm:mt-3" ]
+                    [ class "tw mt-4 text-lg text-gray-500 sm:mt-3" ]
                     [ text "Responderemos tan pronto sea posible con un correo electrónico o con un mensaje a su teléfono. Gracias." ]
                 , Html.form
                     [ Attr.action "#"
                     , Attr.method "POST"
                     , Events.onSubmit CompletadoFormulario
-                    , class "mt-9 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8"
+                    , class "tw mt-9 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8"
                     ]
                     [ viewCampoNombre
                     , viewCampoApellido

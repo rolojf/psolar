@@ -216,16 +216,16 @@ viewMenu ruta menuOpen wMenu toMsg =
         clasesMenuItems ( esMovil, especial ) =
             case ( esMovil, especial ) of
                 ( True, True ) ->
-                    class "block w-full px-5 py-3 text-center font-medium text-blue-900 bg-gray-50 hover:bg-gray-200"
+                    class "tw block w-full px-5 py-3 text-center font-medium text-blue-900 bg-gray-50 hover:bg-gray-200"
 
                 ( True, False ) ->
-                    class "block px-5 py-3 rounded-md font-medium text-base text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                    class "tw block px-5 py-3 rounded-md font-medium text-base text-gray-700 hover:text-gray-900 hover:bg-gray-50"
 
                 ( False, True ) ->
-                    class "font-medium text-blue-900 hover:text-blue-500"
+                    class "tw font-medium text-blue-900 hover:text-blue-500"
 
                 ( False, False ) ->
-                    class "font-medium text-gray-500 hover:text-gray-900"
+                    class "tw font-medium text-gray-500 hover:text-gray-900"
 
         menuItem : Bool -> View.Liga -> Html msg
         menuItem esMovil laLiga =
@@ -276,34 +276,35 @@ viewMenu ruta menuOpen wMenu toMsg =
 
         movilMenu ligas =
             div
-                [ class "rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden" ]
+                [ class "tw rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden" ]
                 [ div
-                    [ class "px-5 pt-4 flex items-center justify-between" ]
+                    [ class "tw px-5 pt-4 flex items-center justify-between" ]
                     [ div []
                         [ Html.img
                             [ class "h-8 w-auto"
-                            , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
+                            , Attr.src <|
+                                Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
                             , Attr.alt ""
                             ]
                             []
                         ]
                     , div
-                        [ class "-mr-2" ]
+                        [ class "tw -mr-2" ]
                         [ Html.map toMsg <|
                             Html.button
                                 [ Attr.type_ "button"
-                                , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                                , class "tw bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                                 , Event.onClick ToggleMenu
                                 ]
                                 [ Html.span
-                                    [ class "sr-only" ]
+                                    [ class "tw sr-only" ]
                                     [ text "Close main menu" ]
                                 , HeroIcons.outlineX
                                 ]
                         ]
                     ]
                 , div
-                    [ class "px-2 pt-2 pb-3 space-y-1" ]
+                    [ class "tw px-2 pt-2 pb-3 space-y-1" ]
                     (List.map
                         (menuItem True)
                         ligas
@@ -316,55 +317,55 @@ viewMenu ruta menuOpen wMenu toMsg =
 
         View.SiMenu ligas complementos ->
             div
-                [ class "relative bg-white overflow-hidden" ]
+                [ class "tw relative bg-white overflow-hidden" ]
                 [ div
-                    [ class "max-w-7xl mx-auto" ]
+                    [ class "tw max-w-7xl mx-auto" ]
                     [ div
                         [ class <|
-                            "relative z-10 pb-8 bg-white "
+                            "tw relative z-10 pb-8 bg-white "
                                 ++ (if ruta == Just Route.Index then
-                                        "sm:pb-16 md:pb-20 xl:pb-32 lg:pb-28 lg:max-w-2xl "
+                                        "tw sm:pb-16 md:pb-20 xl:pb-32 lg:pb-28 lg:max-w-2xl "
 
                                     else
                                         ""
                                    )
-                                ++ "lg:w-full"
+                                ++ "tw lg:w-full"
                         ]
                         [ HeroIcons.menuSan1
                         , div []
                             [ div
-                                [ class "relative pt-6 px-4 sm:px-6 lg:px-8" ]
+                                [ class "tw relative pt-6 px-4 sm:px-6 lg:px-8" ]
                                 [ Html.nav
-                                    [ class "relative flex items-center justify-between sm:h-10 lg:justify-start"
+                                    [ class "tw relative flex items-center justify-between sm:h-10 lg:justify-start"
                                     , Attr.attribute "aria-label" "Global"
                                     ]
                                     [ div
-                                        [ class "flex items-center flex-grow flex-shrink-0 lg:flex-grow-0" ]
+                                        [ class "tw flex items-center flex-grow flex-shrink-0 lg:flex-grow-0" ]
                                         [ div
-                                            [ class "flex items-center justify-between w-full md:w-auto" ]
+                                            [ class "tw flex items-center justify-between w-full md:w-auto" ]
                                             [ Html.a
                                                 [ Attr.href "#" ]
                                                 [ Html.span
-                                                    [ class "sr-only" ]
+                                                    [ class "tw sr-only" ]
                                                     [ text "Workflow" ]
                                                 , Html.img
-                                                    [ class "h-8 w-auto sm:h-10"
+                                                    [ class "tw h-8 w-auto sm:h-10"
                                                     , Attr.src <|
                                                         Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
                                                     ]
                                                     []
                                                 ]
                                             , div
-                                                [ class "-mr-2 flex items-center md:hidden" ]
+                                                [ class "tw -mr-2 flex items-center md:hidden" ]
                                                 [ Html.map toMsg <|
                                                     Html.button
                                                         [ Attr.type_ "button"
-                                                        , class "bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                                                        , class "tw bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
                                                         , Attr.attribute "aria-expanded" "false"
                                                         , Event.onClick ToggleMenu
                                                         ]
                                                         [ Html.span
-                                                            [ class "sr-only" ]
+                                                            [ class "tw sr-only" ]
                                                             [ text "Open main menu" ]
                                                         , HeroIcons.outlineMenu
                                                         ]
@@ -372,7 +373,7 @@ viewMenu ruta menuOpen wMenu toMsg =
                                             ]
                                         ]
                                     , div
-                                        [ class "hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
+                                        [ class "tw hidden md:block md:ml-10 md:pr-4 md:space-x-8" ]
                                         (List.map
                                             (menuItem False)
                                             ligas
@@ -381,7 +382,7 @@ viewMenu ruta menuOpen wMenu toMsg =
                                 ]
                             , Animated.div
                                 (showMovilMenu menuOpen)
-                                [ class "absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
+                                [ class "tw absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
                                 [ movilMenu ligas ]
                             ]
                         , complementos.mainHero
