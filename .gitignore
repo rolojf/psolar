@@ -5,3 +5,4 @@ dist/
 functions/render/elm-pages-cli.js
 /.idea/
 /public/tailwind.css
+/analytics/*.csv
