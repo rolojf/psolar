@@ -1,5 +1,6 @@
 module Shared exposing (Data, Model, Msg(..), SharedMsg(..), UsuarioSt(..), template)
 
+import Analytics
 import Browser.Navigation
 import Cloudinary
 import DataSource
@@ -16,6 +17,7 @@ import SharedTemplate exposing (SharedTemplate)
 import Simple.Animation as Animation exposing (Animation)
 import Simple.Animation.Animated as Animated
 import Simple.Animation.Property as P
+import Url
 import View exposing (View)
 
 
@@ -39,6 +41,8 @@ type Msg
     | SharedMsg SharedMsg
     | ToggleMenu
     | NoOpS
+    | AnalyticsUsoMenuLigaExterna String
+    | AvisadoAnalytics (Result Http.Error ())
 
 
 type UsuarioSt
@@ -87,11 +91,39 @@ init navigationKey flags maybePagePath =
     )
 
 
+track : Msg -> Analytics.Event
+track msg =
+    case msg of
+        OnPageChange nuevaPagina ->
+            let
+                queCambioReportar =
+                    nuevaPagina.path
+                        |> Path.toSegments
+                        |> List.reverse
+                        |> List.head
+                        |> Maybe.withDefault "index"
+                        |> String.append ("cambio-pagina" ++ "-menuliga-interna-")
+            in
+            Analytics.eventoXReportar
+                queCambioReportar
+
+        AnalyticsUsoMenuLigaExterna queLiga ->
+            Analytics.eventoXReportar
+                queLiga
+
+        _ ->
+            Analytics.none
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnPageChange _ ->
-            ( { model | showMobileMenu = False }, Cmd.none )
+            ( { model | showMobileMenu = False }
+            , Analytics.toCmd
+                (track msg)
+                AvisadoAnalytics
+            )
 
         ToggleMenu ->
             ( { model | showMobileMenu = not model.showMobileMenu }
@@ -112,8 +144,26 @@ update msg model =
                     ( { model | errorAlNotificar = Just cualError }
                     , Cmd.none
                     )
+
         NoOpS ->
-                    ( model, Cmd.none )
+            ( model, Cmd.none )
+
+        AnalyticsUsoMenuLigaExterna _ ->
+            ( model
+            , Analytics.toCmd
+                (track msg)
+                AvisadoAnalytics
+            )
+
+        AvisadoAnalytics resulto ->
+            ( case resulto of
+                Err quePaso ->
+                    { model | errorAlNotificar = Just quePaso }
+
+                Ok _ ->
+                    model
+            , Cmd.none
+            )
 
 
 subscriptions : Path -> Model -> Sub Msg
@@ -147,7 +197,22 @@ view sharedData page model toMsg pageView =
 viewMenu : Maybe Route -> Bool -> View.MenuInfo -> (Msg -> msg) -> Html msg
 viewMenu ruta menuOpen wMenu toMsg =
     let
-        clasesMenuItems : ( Bool, Bool ) -> Html.Attribute msg
+        quePagina : String
+        quePagina =
+            ruta
+                |> Maybe.map Route.routeToPath
+                |> Maybe.withDefault [ "pagina-rara" ]
+                |> List.foldr String.append ""
+
+        quePaginaCompuesta : String
+        quePaginaCompuesta =
+            if String.isEmpty quePagina then
+                "pag-index"
+
+            else
+                String.append "pag-" quePagina
+
+        clasesMenuItems : ( Bool, Bool ) -> Html.Attribute Msg
         clasesMenuItems ( esMovil, especial ) =
             case ( esMovil, especial ) of
                 ( True, True ) ->
@@ -166,17 +231,30 @@ viewMenu ruta menuOpen wMenu toMsg =
         menuItem esMovil laLiga =
             case laLiga.dir of
                 View.Otra camino ->
-                    Html.a
-                        [ Attr.href <| Path.toRelative camino
-                        , clasesMenuItems ( esMovil, laLiga.especial )
+                    div
+                        [ camino
+                            |> Path.toSegments
+                            |> List.reverse
+                            |> List.head
+                            |> Maybe.withDefault "-ligaexterna-rara-"
+                            |> String.append (quePaginaCompuesta ++ "-menuliga-externa-")
+                            |> AnalyticsUsoMenuLigaExterna
+                            |> Event.onClick
                         ]
-                        [ text laLiga.queDice ]
+                        [ Html.a
+                            [ Attr.href <| Path.toRelative camino
+                            , clasesMenuItems ( esMovil, laLiga.especial )
+                            ]
+                            [ text laLiga.queDice ]
+                        ]
+                        |> Html.map toMsg
 
                 View.Interna rutaLiga ->
                     Route.link
                         rutaLiga
                         [ clasesMenuItems ( esMovil, laLiga.especial ) ]
                         [ text laLiga.queDice ]
+                        |> Html.map toMsg
 
         showMovilMenu : Bool -> Animation
         showMovilMenu show =
@@ -271,7 +349,8 @@ viewMenu ruta menuOpen wMenu toMsg =
                                                     [ text "Workflow" ]
                                                 , Html.img
                                                     [ class "h-8 w-auto sm:h-10"
-                                                    , Attr.src <| Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
+                                                    , Attr.src <|
+                                                        Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
                                                     ]
                                                     []
                                                 ]
@@ -306,13 +385,13 @@ viewMenu ruta menuOpen wMenu toMsg =
                                 [ movilMenu ligas ]
                             ]
                         , complementos.mainHero
-                           |> Html.map (\_ -> NoOpS)
-                           |> Html.map toMsg
+                            |> Html.map (\_ -> NoOpS)
+                            |> Html.map toMsg
                         ]
                     ]
                 , complementos.afterHero
-                   |> Html.map (\_ -> NoOpS)
-                   |> Html.map toMsg
+                    |> Html.map (\_ -> NoOpS)
+                    |> Html.map toMsg
                 ]
 
 
