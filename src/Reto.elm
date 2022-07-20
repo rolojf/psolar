@@ -61,13 +61,17 @@ update msg model =
             }
 
         IntentaDeNuez ->
-                { model
-                    | queRespondio = ""
-                    , intento = if model.intentos >= 3 then EstaFrito else VaDeNuevo
-                    , vaDeNuez = False
-                    , intentos = model.intentos + 1
-                }
+            { model
+                | queRespondio = ""
+                , intento =
+                    if model.intentos >= 3 then
+                        EstaFrito
 
+                    else
+                        VaDeNuevo
+                , vaDeNuez = False
+                , intentos = model.intentos + 1
+            }
 
 
 view : Model -> Html Msg
@@ -82,39 +86,38 @@ viewChallenge model =
     div
         [ class "la-base-modal" ]
         [ div
-            [ class  <|
-                "bg-green-100 shadow rounded-lg mx-auto mt-24 w-10/12 h-64 md:max-w-md md:mx-auto md:mt-48"
+            [ class <|
+                "tw bg-green-100 shadow rounded-lg mx-auto mt-24 w-10/12 h-64 md:max-w-md md:mx-auto md:mt-48"
                     ++ (if model.intento == YaRespondio then
-                            " animate-bounce"
+                            "tw animate-bounce"
 
                         else
                             ""
                        )
             ]
             [ Html.h3
-                [ class "pt-4 ml-3 text-xl leading-6 font-medium text-gray-900 md:ml-6"  ]
+                [ class "tw pt-4 ml-3 text-xl leading-6 font-medium text-gray-900 md:ml-6" ]
                 [ text "Validación Rápida" ]
             , Html.p
-                [ class "mt-2 mx-6 text-base leading-5 text-gray-500"     ]
+                [ class "tw mt-2 mx-6 text-base leading-5 text-gray-500" ]
                 [ Html.text "Contesta lo siguiente para validar que eres humano y no un bot" ]
             , div
-                [ class "w-4/5 bg-yellow-100 mt-6 mx-auto h-32"                    ]
+                [ class "tw w-4/5 bg-yellow-100 mt-6 mx-auto h-32" ]
                 [ Html.p
-                    [ class "pt-5 pl-12 text-base font-medium text-gray-700"                    ]
+                    [ class "tw pt-5 pl-12 text-base font-medium text-gray-700" ]
                     [ Html.text "Resuleve la siguiente ecuación: " ]
                 , div
-                    [ class "ml-6 mt-4 flex flex-row items-center content-center justify-center text-base"                    ]
+                    [ class "tw ml-6 mt-4 flex flex-row items-center content-center justify-center text-base" ]
                     [ Html.p
                         []
                         [ Html.text "7 + " ]
                     , Html.label
-                        [ class "sr-only"
+                        [ class "tw sr-only"
                         , Attr.for "valor"
                         ]
                         [ Html.text "número" ]
                     , Html.input
-                        [ class "text-center mx-2 w-5 rounded-md shadow-sm sm:leading-5 sm:text-sm"
-                        -- Tw.block, Tw.w_full del .apparel-campo
+                        [ class "tw text-center mx-2 w-5 rounded-md shadow-sm sm:leading-5 sm:text-sm"
                         , Attr.id "valor-challenge"
                         , Attr.autofocus True
                         , case model.intento of
@@ -128,7 +131,7 @@ viewChallenge model =
                                 Attr.value model.queRespondio
 
                             YaOk ->
-                                class "animate-ping"
+                                class "tw animate-ping"
 
                             EstaFrito ->
                                 class "no-se-que-decirle"
@@ -141,15 +144,16 @@ viewChallenge model =
                     ]
                 , if model.intentos >= 1 then
                     Html.p
-                        [ class <| "text-right pt-4 mx-4 "
+                        [ class <|
+                            "tw text-right pt-4 mx-4 "
                                 ++ (if model.intentos == 1 then
-                                        "text-black"
+                                        "tw text-black"
 
                                     else if model.intentos == 2 then
-                                        "text-red-500"
+                                        "tw text-red-500"
 
                                     else
-                                        "text-red-500 font-bold italic"
+                                        "tw text-red-500 font-bold italic"
                                    )
                         ]
                         [ Html.text "Intenta de nuevo!" ]

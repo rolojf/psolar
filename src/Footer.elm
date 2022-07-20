@@ -9,10 +9,10 @@ import Html.Attributes.Aria as Aria
 ligaAlPie : String -> String -> Html msg
 ligaAlPie liga texto =
     div
-        [ class "px-5 py-2 " ]
+        [ class "tw px-5 py-2 " ]
         [ Html.a
             [ Attr.href liga
-            , class "text-base text-gray-600 hover:text-black"
+            , class "tw text-base text-gray-600 hover:text-black"
             ]
             [ text texto ]
         ]
@@ -22,10 +22,10 @@ ligaIcono : String -> String -> SocialIcons -> Html msg
 ligaIcono direccion srCual iconoSocial =
     Html.a
         [ Attr.href direccion
-        , class "text-gray-400 hover:text-gray-500"
+        , class "tw text-gray-400 hover:text-gray-500"
         ]
         [ Html.span
-            [ class "sr-only" ]
+            [ class "tw sr-only" ]
             [ text srCual ]
         , case iconoSocial of
             Facebook ->
@@ -77,23 +77,23 @@ viewFooter ligasNav icons2show copyR =
     Html.footer
         []
         [ div
-            [ class "bg-white" ]
+            [ class "tw bg-white" ]
             --, Tw.py_4 ] ]
             []
         , div
-            [ class "bg-gray-200" ]
+            [ class "tw bg-gray-200" ]
             [ div
-                [ class "max-w-7xl mx-auto py-12 px-4 overflow-hidden lg:px-8 sm:px-6" ]
+                [ class "tw max-w-7xl mx-auto py-12 px-4 overflow-hidden lg:px-8 sm:px-6" ]
                 [ Html.nav
-                    [ class "-mx-5 -my-2 flex flex-wrap justify-center"
+                    [ class "tw -mx-5 -my-2 flex flex-wrap justify-center"
                     , Aria.ariaLabel "Footer"
                     ]
                     ligasNav
                 , div
-                    [ class "mt-8 flex justify-center space-x-6" ]
+                    [ class "tw mt-8 flex justify-center space-x-6" ]
                     icons2show
                 , Html.p
-                    [ class "mt-8 text-center text-base text-gray-500" ]
+                    [ class "tw mt-8 text-center text-base text-gray-500" ]
                     [ text copyR ]
                 ]
             ]
