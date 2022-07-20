@@ -6,15 +6,13 @@ import Analytics
 import Browser.Dom as Dom
 import Browser.Navigation
 import Cloudinary
-import Css
 import DataSource exposing (DataSource)
 import Head
 import Head.Seo as Seo
-import Html exposing (Html)
-import Html.Styled as Htmls exposing (div, text)
-import Html.Styled.Attributes as Attr exposing (class, css)
-import Html.Styled.Attributes.Aria as Aria
-import Html.Styled.Events as Events
+import Html exposing (Html, div, text)
+import Html.Attributes as Attr exposing (class)
+import Html.Attributes.Aria as Aria
+import Html.Events as Events
 import Http
 import Json.Encode as Encode
 import Page exposing (Page, StaticPayload)
@@ -25,10 +23,6 @@ import Process
 import Reto
 import Route
 import Shared
-import Svg.Styled as Svg
-import Svg.Styled.Attributes as SvgAttr
-import Tailwind.Breakpoints as TwBp
-import Tailwind.Utilities as Tw
 import Task
 import View exposing (View)
 
@@ -343,6 +337,7 @@ view :
     -> View Msg
 view maybeUrl sharedModel model static =
     { title = "Formulario de Contacto"
+    , withMenu = View.NoMenu
     , body =
         [ {- div
              [ css
@@ -355,42 +350,35 @@ view maybeUrl sharedModel model static =
              [
           -}
           div
-            [ css [ Tw.relative, Tw.bg_white ] ]
+            [ class "relative bg-white" ]
             [ viewLayout
             , viewFormulario model
             , if model.listo then
                 div
-                    [ css [ TwBp.lg [ Tw.h_72 ] ] ]
+                    [ class "lg:h-72" ]
                     [ if sharedModel.usuarioStatus == Shared.Desconocido then
                         Reto.view model.reModel
-                            |> Htmls.map ReMsg
+                            |> Html.map ReMsg
 
                       else
-                        Htmls.text ""
+                        text ""
                     ]
 
               else
                 div [] []
             ]
         ]
-            |> List.map Htmls.toUnstyled
     }
 
 
-viewLayout : Htmls.Html Msg
+viewLayout : Html Msg
 viewLayout =
     div
-        [ css [ TwBp.lg [ Tw.absolute, Tw.inset_0 ] ] ]
+        [ class "lg:absolute lg:inset-0" ]
         [ div
-            [ css [ TwBp.lg [ Tw.absolute, Tw.inset_y_0, Tw.right_0, Tw.w_1over2 ] ] ]
-            [ Htmls.img
-                [ css
-                    [ Tw.h_56
-                    , Tw.w_full
-                    , Tw.object_cover
-                    , Tw.object_top
-                    , TwBp.lg [ Tw.absolute, Tw.h_screen ]
-                    ]
+            [ class "lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2" ]
+            [ Html.img
+                [ class "h-56 w-full object-cover object-top lg:absolute lg:h-screen"
                 , Attr.src <| Cloudinary.url "f_auto" "v1619940728/dreamstime_m_29668275_t0oapr.jpg"
                 , Attr.alt ""
                 ]
@@ -399,25 +387,20 @@ viewLayout =
         ]
 
 
-viewFormulario : Model -> Htmls.Html Msg
+viewFormulario : Model -> Html Msg
 viewFormulario model =
     let
         viewCampoNombre =
             div
                 []
-                [ Htmls.label
+                [ Html.label
                     [ Attr.for "first_name"
-                    , css
-                        [ Tw.block
-                        , Tw.text_sm
-                        , Tw.font_medium
-                        , Tw.text_gray_700
-                        ]
+                    , class "block text-sm font-medium text-gray-700"
                     ]
                     [ text "Nombre" ]
                 , div
-                    [ css [ Tw.mt_1 ] ]
-                    [ Htmls.input
+                    [ class "mt-1" ]
+                    [ Html.input
                         [ Attr.type_ "text"
                         , Attr.name "first_name"
                         , Attr.id "first_name"
@@ -425,18 +408,7 @@ viewFormulario model =
                         , Attr.minlength 2
                         , Attr.maxlength 15
                         , Attr.autocomplete True -- "given-name"
-                        , css
-                            [ Tw.block
-                            , Tw.w_full
-                            , Tw.shadow_sm
-                            , TwBp.sm [ Tw.text_sm ]
-                            , Css.focus
-                                [ Tw.ring_indigo_500
-                                , Tw.border_indigo_500
-                                ]
-                            , Tw.border_gray_300
-                            , Tw.rounded_md
-                            ]
+                        , class "block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                         , Events.onInput Nombre
                         ]
                         []
@@ -445,35 +417,19 @@ viewFormulario model =
 
         viewCampoApellido =
             div []
-                [ Htmls.label
+                [ Html.label
                     [ Attr.for "last_name"
-                    , css
-                        [ Tw.block
-                        , Tw.text_sm
-                        , Tw.font_medium
-                        , Tw.text_gray_700
-                        ]
+                    , class "block text-sm font-medium text-gray-700"
                     ]
                     [ text "Apellido" ]
                 , div
-                    [ css [ Tw.mt_1 ] ]
-                    [ Htmls.input
+                    [ class "mt-1" ]
+                    [ Html.input
                         [ Attr.type_ "text"
                         , Attr.name "last_name"
                         , Attr.id "last_name"
                         , Attr.autocomplete True -- "family-name"
-                        , css
-                            [ Tw.block
-                            , Tw.w_full
-                            , Tw.shadow_sm
-                            , TwBp.sm [ Tw.text_sm ]
-                            , Css.focus
-                                [ Tw.ring_indigo_500
-                                , Tw.border_indigo_500
-                                ]
-                            , Tw.border_gray_300
-                            , Tw.rounded_md
-                            ]
+                        , class "block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                         , Events.onInput Apellido
                         ]
                         []
@@ -482,36 +438,20 @@ viewFormulario model =
 
         viewCampoCorreo =
             div
-                [ css [ TwBp.sm [ Tw.col_span_2 ] ] ]
-                [ Htmls.label
+                [ class "sm:col-span-2" ]
+                [ Html.label
                     [ Attr.for "email"
-                    , css
-                        [ Tw.block
-                        , Tw.text_sm
-                        , Tw.font_medium
-                        , Tw.text_gray_700
-                        ]
+                    , class "block text-sm font-medium text-gray-700"
                     ]
                     [ text "Correo Electrónico" ]
                 , div
-                    [ css [ Tw.mt_1 ] ]
-                    [ Htmls.input
+                    [ class "mt-1" ]
+                    [ Html.input
                         [ Attr.id "email"
                         , Attr.name "email"
                         , Attr.type_ "email"
                         , Attr.autocomplete True --"email"
-                        , css
-                            [ Tw.block
-                            , Tw.w_full
-                            , Tw.shadow_sm
-                            , TwBp.sm [ Tw.text_sm ]
-                            , Css.focus
-                                [ Tw.ring_indigo_500
-                                , Tw.border_indigo_500
-                                ]
-                            , Tw.border_gray_300
-                            , Tw.rounded_md
-                            ]
+                        , class "block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                         , Events.onInput Correo
                         ]
                         []
@@ -520,35 +460,23 @@ viewFormulario model =
 
         viewCampoTelefono =
             div
-                [ css [ TwBp.sm [ Tw.col_span_2 ] ] ]
+                [ class "sm:col-span-2" ]
                 [ div
-                    [ css
-                        [ Tw.flex
-                        , Tw.justify_between
-                        ]
-                    ]
-                    [ Htmls.label
+                    [ class "flex justify-between" ]
+                    [ Html.label
                         [ Attr.for "phone"
-                        , css
-                            [ Tw.block
-                            , Tw.text_sm
-                            , Tw.font_medium
-                            , Tw.text_gray_700
-                            ]
+                        , class "block text-sm font-medium text-gray-700"
                         ]
                         [ text "Teléfono" ]
-                    , Htmls.span
+                    , Html.span
                         [ Attr.id "phone_description"
-                        , css
-                            [ Tw.text_sm
-                            , Tw.text_gray_500
-                            ]
+                        , class "text-sm text-gray-500"
                         ]
                         [ text "Opcional" ]
                     ]
                 , div
-                    [ css [ Tw.mt_1 ] ]
-                    [ Htmls.input
+                    [ class "mt-1" ]
+                    [ Html.input
                         [ Attr.type_ "text"
                         , Attr.name "phone"
                         , Attr.id "phone"
@@ -557,15 +485,7 @@ viewFormulario model =
                         , Attr.value model.telefono
                         , Attr.autocomplete True -- "tel"
                         , Aria.ariaDescribedby "phone_description"
-                        , css
-                            [ Tw.block
-                            , Tw.w_full
-                            , Tw.shadow_sm
-                            , TwBp.sm [ Tw.text_sm ]
-                            , Css.focus [ Tw.ring_indigo_500, Tw.border_indigo_500 ]
-                            , Tw.border_gray_300
-                            , Tw.rounded_md
-                            ]
+                        , class "block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
                         , Events.onInput Telefono
                         ]
                         []
@@ -574,36 +494,28 @@ viewFormulario model =
 
         viewCampoComment =
             div
-                [ css [ TwBp.sm [ Tw.col_span_2 ] ] ]
+                [ class "sm:col-span-2" ]
                 [ div
-                    [ css [ Tw.flex, Tw.justify_between ] ]
-                    [ Htmls.label
+                    [ class "flex justify-between" ]
+                    [ Html.label
                         [ Attr.for "how_can_we_help"
-                        , css [ Tw.block, Tw.text_sm, Tw.font_medium, Tw.text_gray_700 ]
+                        , class "block text-sm font-medium text-gray-700"
                         ]
                         [ text "Comentario" ]
-                    , Htmls.span
+                    , Html.span
                         [ Attr.id "how_can_we_help_description"
-                        , css [ Tw.text_sm, Tw.text_gray_500 ]
+                        , class "text-sm text-gray-500"
                         ]
                         [ text ">Max. 500 caracteres" ]
                     ]
                 , div
-                    [ css [ Tw.mt_1 ] ]
-                    [ Htmls.textarea
+                    [ class "mt-1" ]
+                    [ Html.textarea
                         [ Attr.id "how_can_we_help"
                         , Attr.name "how_can_we_help"
                         , Aria.ariaDescribedby "how_can_we_help_description"
                         , Attr.rows 4
-                        , css
-                            [ Tw.block
-                            , Tw.w_full
-                            , Tw.shadow_sm
-                            , TwBp.sm [ Tw.text_sm ]
-                            , Css.focus [ Tw.ring_indigo_500, Tw.border_indigo_500 ]
-                            , Tw.border_gray_300
-                            , Tw.rounded_md
-                            ]
+                        , class "block w-full shadow-sm sm:text-sm focus:ring-indigo-500 focus:border-indigo-500 border_gray_300 rounded-md"
                         , Events.onInput Comentario
                         ]
                         []
@@ -612,27 +524,19 @@ viewFormulario model =
 
         viewComoSupoDeNos =
             div
-                [ css [ TwBp.sm [ Tw.col_span_2 ] ] ]
-                [ Htmls.label
+                [ class "sm:col-span-2" ]
+                [ Html.label
                     [ Attr.for "how_did_you_hear_about_us"
-                    , css [ Tw.block, Tw.text_sm, Tw.font_medium, Tw.text_gray_700 ]
+                    , class "block text-sm font-medium text-gray-700"
                     ]
                     [ text "¿Cómo llegó con nosotros?" ]
                 , div
-                    [ css [ Tw.mt_1 ] ]
-                    [ Htmls.input
+                    [ class "mt-1" ]
+                    [ Html.input
                         [ Attr.type_ "text"
                         , Attr.name "how_did_you_hear_about_us"
                         , Attr.id "how_did_you_hear_about_us"
-                        , css
-                            [ Tw.shadow_sm
-                            , Css.focus [ Tw.ring_indigo_500, Tw.border_indigo_500 ]
-                            , Tw.block
-                            , Tw.w_full
-                            , TwBp.sm [ Tw.text_sm ]
-                            , Tw.border_gray_300
-                            , Tw.rounded_md
-                            ]
+                        , class "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w_full sm:text-sm border-gray-300 rounded-md"
                         , Events.onInput ComoSupo
                         ]
                         []
@@ -641,85 +545,31 @@ viewFormulario model =
 
         viewBotonSubmit =
             div
-                [ css [ Tw.text_right, TwBp.sm [ Tw.col_span_2 ] ] ]
-                [ Htmls.button
+                [ class "text-right sm:col-span-2" ]
+                [ Html.button
                     [ Attr.type_ "submit"
-                    , css
-                        [ Tw.inline_flex
-                        , Tw.justify_center
-                        , Tw.py_2
-                        , Tw.px_4
-                        , Tw.border
-                        , Tw.border_transparent
-                        , Tw.shadow_sm
-                        , Tw.text_sm
-                        , Tw.font_medium
-                        , Tw.rounded_md
-                        , Tw.text_white
-                        , Tw.bg_indigo_600
-                        , Css.hover [ Tw.bg_indigo_700 ]
-                        , Css.focus [ Tw.outline_none, Tw.ring_2, Tw.ring_offset_2, Tw.ring_indigo_500 ]
-                        ]
+                    , class "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     ]
                     [ text "Enviar" ]
                 ]
     in
     div
-        [ css
-            [ Tw.relative
-            , Tw.py_8
-            , Tw.px_4
-            , TwBp.sm [ Tw.px_6 ]
-            , TwBp.lg
-                [ Tw.px_8
-                , Tw.max_w_7xl
-                , Tw.mx_auto
-                , Tw.grid
-                , Tw.grid_cols_2
-                , Tw.py_8
-                ]
-            ]
-        ]
+        [ class "relative py-8 px-4 sm:px-6 lg:px-8 lg:max-w-7xl lg:mx-auto lg:grid lg:grid-cols-2 lg:py-8" ]
         [ div
-            [ css [ TwBp.lg [ Tw.pr_8 ] ] ]
+            [ class "lg:pr-8" ]
             [ div
-                [ css
-                    [ Tw.max_w_md
-                    , Tw.mx_auto
-                    , TwBp.lg [ Tw.mx_0 ]
-                    , TwBp.sm [ Tw.max_w_lg ]
-                    ]
-                ]
-                [ Htmls.h2
-                    [ css
-                        [ Tw.text_3xl
-                        , Tw.font_extrabold
-                        , Tw.tracking_tight
-                        , TwBp.sm [ Tw.text_4xl ]
-                        ]
-                    , Attr.class "font-serif"
-                    ]
+                [ class "max-w-md mx-auto lg:mx-0 sm:max-w-lg" ]
+                [ Html.h2
+                    [ class "text-3xl font-extrabold tracking-tight sm:text-4xl font-serif" ]
                     [ text "¿Cómo Podemos Ayudar?" ]
-                , Htmls.p
-                    [ css
-                        [ Tw.mt_4
-                        , Tw.text_lg
-                        , Tw.text_gray_500
-                        , TwBp.sm [ Tw.mt_3 ]
-                        ]
-                    ]
+                , Html.p
+                    [ class "mt-4 text-lg text-gray-500 sm:mt-3" ]
                     [ text "Responderemos tan pronto sea posible con un correo electrónico o con un mensaje a su teléfono. Gracias." ]
-                , Htmls.form
+                , Html.form
                     [ Attr.action "#"
                     , Attr.method "POST"
                     , Events.onSubmit CompletadoFormulario
-                    , css
-                        [ Tw.mt_9
-                        , Tw.grid
-                        , Tw.grid_cols_1
-                        , Tw.gap_y_6
-                        , TwBp.sm [ Tw.grid_cols_2, Tw.gap_x_8 ]
-                        ]
+                    , class "mt-9 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8"
                     ]
                     [ viewCampoNombre
                     , viewCampoApellido

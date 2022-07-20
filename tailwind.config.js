@@ -3,9 +3,9 @@ module.exports = {
       files: ["./src/**/*.elm"],
       extract: {
          elm: (contenido) => {
-            let matchado = contenido.match(/class\s+"(.+?)"/);
+            let matchado = contenido.match(/.*"([a-z-].+?)"/);
             let regresa = matchado ? matchado[1].split(" ") : [];
-            //if (regresa.length > 0 ) {console.log(regresa)};
+            // if (regresa.length > 0 ) {console.log(regresa)};
             return regresa;
          },
       },

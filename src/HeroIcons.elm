@@ -96,6 +96,20 @@ outlineCheck =
         ]
 
 
+menuSan1 =
+    svg
+        [ SvgAttr.class "hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
+        , SvgAttr.fill "currentColor"
+        , SvgAttr.viewBox "0 0 100 100"
+        , SvgAttr.preserveAspectRatio "none"
+        , Attr.attribute "aria-hidden" "true"
+        ]
+        [ Svg.polygon
+            [ SvgAttr.points "50,0 100,0 50,100 0,100" ]
+            []
+        ]
+
+
 svgSocialIcon : String -> List String -> Html msg
 svgSocialIcon vBox paths =
     div

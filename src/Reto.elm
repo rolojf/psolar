@@ -1,10 +1,8 @@
 module Reto exposing (..)
 
-import Html.Styled as Htmls exposing (div)
-import Html.Styled.Attributes as Attr exposing (class)
-import Html.Styled.Events as Events
-import Tailwind.Breakpoints as TwBp
-import Tailwind.Utilities as Tw
+import Html as Html exposing (Html, div, text)
+import Html.Attributes as Attr exposing (class)
+import Html.Events as Events
 
 
 type alias Model =
@@ -72,106 +70,50 @@ update msg model =
 
 
 
-view : Model -> Htmls.Html Msg
+view : Model -> Html Msg
 view model =
     div
         []
         [ viewChallenge model ]
 
 
-viewChallenge : Model -> Htmls.Html Msg
+viewChallenge : Model -> Html Msg
 viewChallenge model =
     div
         [ class "la-base-modal" ]
         [ div
-            [ Attr.css <|
-                [ Tw.bg_green_100
-                , Tw.shadow
-                , Tw.rounded_lg
-                , Tw.mx_auto
-                , Tw.mt_24
-                , Tw.w_10over12
-                , Tw.h_64
-                , TwBp.md [ Tw.max_w_md, Tw.mx_auto, Tw.mt_48 ]
-                ]
+            [ class  <|
+                "bg-green-100 shadow rounded-lg mx-auto mt-24 w-10/12 h-64 md:max-w-md md:mx-auto md:mt-48"
                     ++ (if model.intento == YaRespondio then
-                            [ Tw.animate_bounce ]
+                            " animate-bounce"
 
                         else
-                            []
+                            ""
                        )
             ]
-            [ Htmls.h3
-                [ Attr.css
-                    [ Tw.pt_4
-                    , Tw.ml_3
-                    , Tw.text_xl
-                    , Tw.leading_6
-                    , Tw.font_medium
-                    , Tw.text_gray_900
-                    , TwBp.md [ Tw.ml_6 ]
-                    ]
-                ]
-                [ Htmls.text "Validación Rápida" ]
-            , Htmls.p
-                [ Attr.css
-                    [ Tw.mt_2
-                    , Tw.mx_6
-                    , Tw.text_base
-                    , Tw.leading_5
-                    , Tw.text_gray_500
-                    ]
-                ]
-                [ Htmls.text "Contesta lo siguiente para validar que eres humano y no un bot" ]
+            [ Html.h3
+                [ class "pt-4 ml-3 text-xl leading-6 font-medium text-gray-900 md:ml-6"  ]
+                [ text "Validación Rápida" ]
+            , Html.p
+                [ class "mt-2 mx-6 text-base leading-5 text-gray-500"     ]
+                [ Html.text "Contesta lo siguiente para validar que eres humano y no un bot" ]
             , div
-                [ Attr.css
-                    [ Tw.w_4over5
-                    , Tw.bg_yellow_100
-                    , Tw.mt_6
-                    , Tw.mx_auto
-                    , Tw.h_32
-                    ]
-                ]
-                [ Htmls.p
-                    [ Attr.css
-                        [ Tw.pt_5
-                        , Tw.pl_12
-                        , Tw.text_base
-                        , Tw.font_medium
-                        , Tw.text_gray_700
-                        ]
-                    ]
-                    [ Htmls.text "Resuleve la siguiente ecuación: " ]
+                [ class "w-4/5 bg-yellow-100 mt-6 mx-auto h-32"                    ]
+                [ Html.p
+                    [ class "pt-5 pl-12 text-base font-medium text-gray-700"                    ]
+                    [ Html.text "Resuleve la siguiente ecuación: " ]
                 , div
-                    [ Attr.css
-                        [ Tw.ml_6
-                        , Tw.mt_4
-                        , Tw.flex
-                        , Tw.flex_row
-                        , Tw.items_center
-                        , Tw.content_center
-                        , Tw.justify_center
-                        , Tw.text_base
-                        ]
-                    ]
-                    [ Htmls.p
+                    [ class "ml-6 mt-4 flex flex-row items-center content-center justify-center text-base"                    ]
+                    [ Html.p
                         []
-                        [ Htmls.text "7 + " ]
-                    , Htmls.label
-                        [ Attr.css [ Tw.sr_only ]
+                        [ Html.text "7 + " ]
+                    , Html.label
+                        [ class "sr-only"
                         , Attr.for "valor"
                         ]
-                        [ Htmls.text "número" ]
-                    , Htmls.input
-                        [ Attr.css
-                            [ Tw.text_center
-                            , Tw.mx_2
-                            , Tw.w_5
-                            , Tw.rounded_md
-                            , Tw.shadow_sm
-                            , TwBp.sm [ Tw.leading_5, Tw.text_sm ]
-                            ]
-
+                        [ Html.text "número" ]
+                    , Html.input
+                        [ class "text-center mx-2 w-5 rounded-md shadow-sm sm:leading-5 sm:text-sm"
                         -- Tw.block, Tw.w_full del .apparel-campo
                         , Attr.id "valor-challenge"
                         , Attr.autofocus True
@@ -186,36 +128,34 @@ viewChallenge model =
                                 Attr.value model.queRespondio
 
                             YaOk ->
-                                Attr.css [ Tw.animate_ping ]
+                                class "animate-ping"
 
                             EstaFrito ->
                                 class "no-se-que-decirle"
                         , Events.onInput Respondio
                         ]
                         []
-                    , Htmls.p
+                    , Html.p
                         []
-                        [ Htmls.text "= 11" ]
+                        [ Html.text "= 11" ]
                     ]
                 , if model.intentos >= 1 then
-                    Htmls.p
-                        [ Attr.css
-                            ([ Tw.text_right, Tw.pt_4, Tw.mx_4 ]
+                    Html.p
+                        [ class <| "text-right pt-4 mx-4 "
                                 ++ (if model.intentos == 1 then
-                                        [ Tw.text_black ]
+                                        "text-black"
 
                                     else if model.intentos == 2 then
-                                        [ Tw.text_red_500 ]
+                                        "text-red-500"
 
                                     else
-                                        [ Tw.text_red_500, Tw.font_bold, Tw.italic ]
+                                        "text-red-500 font-bold italic"
                                    )
-                            )
                         ]
-                        [ Htmls.text "Intenta de nuevo!" ]
+                        [ Html.text "Intenta de nuevo!" ]
 
                   else
-                    Htmls.p [] []
+                    Html.p [] []
                 ]
             ]
         ]
