@@ -86,7 +86,7 @@ page =
         |> Page.buildWithSharedState
             { view = view
             , init = init
-            , update = superUpdate
+            , update = update
             , subscriptions = subscriptions
             }
 
@@ -129,64 +129,6 @@ runEffect efecto =
             Task.perform (\_ -> Para) (Task.succeed ())
 
 
-superUpdate : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
-superUpdate url navKey sharedModel static msg model =
-    let
-        analyticsEvent : Analytics.Event
-        analyticsEvent =
-            track msg
-
-        ( newModel, cmd, siSharedMsg ) =
-            update url navKey sharedModel static msg model
-    in
-    ( newModel
-    , Cmd.batch
-        [ cmd
-        , Analytics.toCmd
-            analyticsEvent
-            Notificado
-        ]
-    , siSharedMsg
-    )
-
-
-track : Msg -> Analytics.Event
-track msg =
-    case msg of
-        ToggleMenu ->
-            Analytics.none
-
-        CierraNoti ->
-            Analytics.none
-
-        CheckGalInView resultadoPues ->
-            Analytics.none
-
-        WaitToCheckAgainGalInView ->
-            Analytics.none
-
-        WaitToGalAutoRotate ->
-            Analytics.none
-
-        Avanza ->
-            Analytics.none
-
-        Retrocede ->
-            Analytics.none
-
-        Para ->
-            Analytics.none
-
-        PresionoBotonIzq ->
-            Analytics.none
-
-        PresionoBotonDer ->
-            Analytics.none
-
-        Notificado _ ->
-            Analytics.none
-
-
 update : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
 update url maybeKey sharedM staticP msg model =
     case msg of
@@ -198,7 +140,9 @@ update url maybeKey sharedM staticP msg model =
 
         CierraNoti ->
             ( { model | verNotificaciones = Just False }
-            , Cmd.none
+            , Analytics.toCmd
+                (Analytics.eventoXReportar "cierra-notificacion")
+                Notificado
             , Nothing
             )
 
@@ -376,7 +320,6 @@ update url maybeKey sharedM staticP msg model =
             )
 
 
-
 type alias Data =
     { title : String
     , tags : List String
@@ -433,24 +376,25 @@ yamlDecoder =
                 (Decode.field "postMainHeader" Decode.string)
                 (Decode.field "mainSubHeader" Decode.string)
 
-
         menuDecoderSinComplementos =
-              MenuDecoder.opMenuToDecode
-                        { mainHero = div [] []
-                        , afterHero = div [] []
-                        }
+            MenuDecoder.opMenuToDecode
+                { mainHero = div [] []
+                , afterHero = div [] []
+                }
 
         elMenuDecoder dataDecoderParcial =
             { dataDecoderParcial
                 | menu =
                     case dataDecoderParcial.menu of
-                        View.NoMenu -> View.NoMenu
+                        View.NoMenu ->
+                            View.NoMenu
+
                         View.SiMenu ligasPasadas _ ->
                             View.SiMenu
-                               ligasPasadas
-                               { mainHero = viewHeroMain dataDecoderParcial.mainHead
-                               , afterHero = viewHeroAfter
-                               }
+                                ligasPasadas
+                                { mainHero = viewHeroMain dataDecoderParcial.mainHead
+                                , afterHero = viewHeroAfter
+                                }
             }
     in
     Decode.map5 Data
@@ -458,7 +402,7 @@ yamlDecoder =
         (Decode.field "tags" (Decode.list Decode.string))
         (Decode.field "mainHead" mainHeaderDecoder)
         (Decode.field "beneficios" beneDecoder)
-        (menuDecoderSinComplementos)
+        menuDecoderSinComplementos
         |> Decode.map elMenuDecoder
 
 
