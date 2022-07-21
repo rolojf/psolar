@@ -320,8 +320,10 @@ viewMenu ruta menuOpen wMenu toMsg =
                     [ div
                         [ class <|
                             "tw relative z-10 pb-8 bg-white "
-                                ++ (if ruta == Just Route.Index then
+                                ++ (if True then
+                                        -- ruta == Just Route.Index then
                                         "tw sm:pb-16 md:pb-20 xl:pb-32 lg:pb-28 lg:max-w-2xl "
+                                        --relative z-10 pb-8 bg-white lg:max-w-2xl lg:w-full
 
                                     else
                                         ""
@@ -375,12 +377,12 @@ viewMenu ruta menuOpen wMenu toMsg =
                                             (menuItem False)
                                             ligas
                                         )
+                                    , Animated.div
+                                        (showMovilMenu menuOpen)
+                                        [ class "tw absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
+                                        [ movilMenu ligas ]
                                     ]
                                 ]
-                            , Animated.div
-                                (showMovilMenu menuOpen)
-                                [ class "tw absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
-                                [ movilMenu ligas ]
                             ]
                         , complementos.mainHero
                             |> Html.map (\_ -> NoOpS)
