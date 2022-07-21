@@ -260,7 +260,7 @@ viewMenu ruta menuOpen wMenu toMsg =
                     { duration = 180
                     , options = [ Animation.easeOut ]
                     }
-                    [ P.opacity 0, P.scale 0.92 ]
+                    [ P.opacity 0, P.scale 0.9 ]
                     [ P.opacity 1, P.scale 1 ]
 
             else
@@ -269,7 +269,7 @@ viewMenu ruta menuOpen wMenu toMsg =
                     , options = [ Animation.easeIn ]
                     }
                     [ P.opacity 1, P.scale 1 ]
-                    [ P.opacity 0, P.scale 0.92 ]
+                    [ P.opacity 0, P.scale 0.9 ]
 
         movilMenu ligas =
             div
@@ -320,18 +320,18 @@ viewMenu ruta menuOpen wMenu toMsg =
                     [ div
                         [ class <|
                             "tw relative z-10 pb-8 bg-white "
+                                --sm:pb-16 md:pb-20 xl:pb-32 lg:max-w-2xl lg:w-full lg:pb-28"
                                 ++ (if True then
                                         -- ruta == Just Route.Index then
-                                        "tw sm:pb-16 md:pb-20 xl:pb-32 lg:pb-28 lg:max-w-2xl "
+                                        "tw sm:pb-16 md:pb-20 xl:pb-32 lg:max-w-2xl lg:w-full lg:pb-28 "
                                         --relative z-10 pb-8 bg-white lg:max-w-2xl lg:w-full
 
                                     else
-                                        ""
+                                        "tw lg:w-full"
                                    )
-                                ++ "tw lg:w-full"
                         ]
-                        [ HeroIcons.menuSan1
-                        , div []
+                        [ -- HeroIcons.menuSan1
+                          div []
                             [ div
                                 [ class "tw relative pt-6 px-4 sm:px-6 lg:px-8" ]
                                 [ Html.nav
@@ -342,18 +342,13 @@ viewMenu ruta menuOpen wMenu toMsg =
                                         [ class "tw flex items-center flex-grow flex-shrink-0 lg:flex-grow-0" ]
                                         [ div
                                             [ class "tw flex items-center justify-between w-full md:w-auto" ]
-                                            [ Html.a
-                                                [ Attr.href "#" ]
-                                                [ Html.span
-                                                    [ class "tw sr-only" ]
-                                                    [ text "Workflow" ]
-                                                , Html.img
-                                                    [ class "tw h-8 w-auto sm:h-10"
-                                                    , Attr.src <|
-                                                        Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
-                                                    ]
-                                                    []
+                                            [ Html.img
+                                                [ class "tw h-8 w-auto sm:h-10"
+                                                , Attr.src <|
+                                                    Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
+                                                , Attr.alt "logo PSOLAR.MX"
                                                 ]
+                                                []
                                             , div
                                                 [ class "tw -mr-2 flex items-center md:hidden" ]
                                                 [ Html.map toMsg <|
@@ -365,7 +360,7 @@ viewMenu ruta menuOpen wMenu toMsg =
                                                         ]
                                                         [ Html.span
                                                             [ class "tw sr-only" ]
-                                                            [ text "Open main menu" ]
+                                                            [ text "Abrir menu principal" ]
                                                         , HeroIcons.outlineMenu
                                                         ]
                                                 ]
@@ -377,10 +372,14 @@ viewMenu ruta menuOpen wMenu toMsg =
                                             (menuItem False)
                                             ligas
                                         )
-                                    , Animated.div
-                                        (showMovilMenu menuOpen)
-                                        [ class "tw absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
-                                        [ movilMenu ligas ]
+                                    , if menuOpen then
+                                        Animated.div
+                                            (showMovilMenu menuOpen)
+                                            [ class "tw absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
+                                            [ movilMenu ligas ]
+
+                                      else
+                                        div [] []
                                     ]
                                 ]
                             ]
