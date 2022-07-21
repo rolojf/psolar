@@ -221,7 +221,7 @@ viewMenu ruta menuOpen wMenu toMsg =
                     class "tw block w-full px-5 py-3 text-center font-medium text-blue-900 bg-gray-50 hover:bg-gray-200"
 
                 ( True, False ) ->
-                    class "tw block px-5 py-3 rounded-md font-medium text-base text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                    class "tw block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
 
                 ( False, True ) ->
                     class "tw font-medium text-blue-900 hover:text-blue-500"
