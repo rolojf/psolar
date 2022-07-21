@@ -372,7 +372,7 @@ viewMenu ruta menuOpen wMenu toMsg =
                                     , if menuOpen then
                                         Animated.div
                                             (showMovilMenu menuOpen)
-                                            [ class "tw absolute z-10 top-0 inset-x-0 p-2 transition transform origin-top-right md:hidden" ]
+                                            [ class "tw absolute z-10 top-0 inset-x-0 transition transform origin-top-right md:hidden" ]
                                             [ movilMenu ligas ]
 
                                       else
