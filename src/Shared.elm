@@ -17,6 +17,8 @@ import SharedTemplate exposing (SharedTemplate)
 import Simple.Animation as Animation exposing (Animation)
 import Simple.Animation.Animated as Animated
 import Simple.Animation.Property as P
+import Svg
+import Svg.Attributes as SvgAttr
 import Url
 import View exposing (View)
 
@@ -307,6 +309,19 @@ viewMenu ruta menuOpen wMenu toMsg =
                         ligas
                     )
                 ]
+
+        corteDiagonal =
+            Svg.svg
+                [ SvgAttr.class "tw hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-white transform translate-x-1/2"
+                , SvgAttr.fill "currentColor"
+                , SvgAttr.viewBox "0 0 100 100"
+                , SvgAttr.preserveAspectRatio "none"
+                , Attr.attribute "aria-hidden" "true"
+                ]
+                [ Svg.polygon
+                    [ SvgAttr.points "50,0 100,0 50,100 0,100" ]
+                    []
+                ]
     in
     case wMenu of
         View.NoMenu ->
@@ -327,7 +342,7 @@ viewMenu ruta menuOpen wMenu toMsg =
                                         "tw lg:w-full"
                                    )
                         ]
-                        [ -- HeroIcons.menuSan1
+                        [ -- corteDiagonal
                           div []
                             [ div
                                 [ class "tw relative pt-6 px-4 sm:px-6 lg:px-8" ]
