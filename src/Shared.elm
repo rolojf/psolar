@@ -231,8 +231,10 @@ viewMenu ruta menuOpen wMenu toMsg =
         menuItem esMovil laLiga =
             case laLiga.dir of
                 View.Otra camino ->
-                    div
-                        [ camino
+                    Html.a
+                        [ Attr.href <| Path.toRelative camino
+                        , clasesMenuItems ( esMovil, laLiga.especial )
+                        , camino
                             |> Path.toSegments
                             |> List.reverse
                             |> List.head
@@ -241,12 +243,7 @@ viewMenu ruta menuOpen wMenu toMsg =
                             |> AnalyticsUsoMenuLigaExterna
                             |> Event.onClick
                         ]
-                        [ Html.a
-                            [ Attr.href <| Path.toRelative camino
-                            , clasesMenuItems ( esMovil, laLiga.especial )
-                            ]
-                            [ text laLiga.queDice ]
-                        ]
+                        [ text laLiga.queDice ]
                         |> Html.map toMsg
 
                 View.Interna rutaLiga ->
