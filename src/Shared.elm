@@ -320,11 +320,8 @@ viewMenu ruta menuOpen wMenu toMsg =
                     [ div
                         [ class <|
                             "tw relative z-10 pb-8 bg-white "
-                                --sm:pb-16 md:pb-20 xl:pb-32 lg:max-w-2xl lg:w-full lg:pb-28"
-                                ++ (if True then
-                                        -- ruta == Just Route.Index then
-                                        "tw sm:pb-16 md:pb-20 xl:pb-32 lg:max-w-2xl lg:w-full lg:pb-28 "
-                                        --relative z-10 pb-8 bg-white lg:max-w-2xl lg:w-full
+                                ++ (if ruta == Just Route.Index then
+                                        "tw sm:pb-16 md:pb-20 xl:pb-32 lg:max-w-2xl lg:w-full lg:pb-28"
 
                                     else
                                         "tw lg:w-full"
