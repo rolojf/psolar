@@ -257,18 +257,24 @@ head :
     StaticPayload Data RouteParams
     -> List Head.Tag
 head static =
+    let
+        imagen : Seo.Image
+        imagen =
+            { alt = "Logo PSOLAR.MX"
+            , dimensions = Just { width = 723, height = 716 }
+            , mimeType = Just "png"
+            , url =
+                Pages.Url.external <|
+                    Cloudinary.url "f_webp" "v1642824483/logoMod_mryxdq.png"
+            }
+    in
     Seo.summary
         { canonicalUrlOverride = Nothing
-        , siteName = "elm-pages"
-        , image =
-            { url = Pages.Url.external "TODO"
-            , alt = "elm-pages logo"
-            , dimensions = Nothing
-            , mimeType = Nothing
-            }
-        , description = "TODO"
+        , siteName = "PSOLAR"
+        , image = imagen
+        , description = "Hoja de Contactar a PSOLAR"
         , locale = Nothing
-        , title = "TODO title" -- metadata.title -- TODO
+        , title = "Contactando a PSOLAR"
         }
         |> Seo.website
 
