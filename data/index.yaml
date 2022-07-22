@@ -39,7 +39,7 @@ menu:
     especial: true
     externa: false
   -
-    queDice: Más Información
+    queDice: Más Info.
     dir: "#Features"
     especial: false
     externa: true

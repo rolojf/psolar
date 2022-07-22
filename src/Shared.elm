@@ -275,18 +275,16 @@ viewMenu ruta menuOpen wMenu toMsg =
 
         movilMenu ligas =
             div
-                [ class "tw rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5 overflow-hidden" ]
+                [ class "tw z-20 rounded-lg shadow-md bg-white ring-1 ring-black ring-opacity-5" ]
                 [ div
                     [ class "tw px-5 pt-4 flex items-center justify-between" ]
-                    [ div []
-                        [ Html.img
-                            [ class "h-8 w-auto"
-                            , Attr.src <|
-                                Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
-                            , Attr.alt ""
-                            ]
-                            []
+                    [ Html.img
+                        [ class "h-8 w-auto"
+                        , Attr.src <|
+                            Cloudinary.url "f_auto" "v1634944374/logo-psolar2_nrh1xt.svg"
+                        , Attr.alt "logo PSOLAR.MX"
                         ]
+                        []
                     , div
                         [ class "tw -mr-2" ]
                         [ Html.map toMsg <|
@@ -329,7 +327,7 @@ viewMenu ruta menuOpen wMenu toMsg =
 
         View.SiMenu ligas complementos ->
             div
-                [ class "tw relative bg-white overflow-hidden" ]
+                [ class "tw relative bg-white" ]
                 [ div
                     [ class "tw max-w-7xl mx-auto" ]
                     [ div
@@ -385,9 +383,10 @@ viewMenu ruta menuOpen wMenu toMsg =
                                             ligas
                                         )
                                     , if menuOpen then
-                                        Animated.div
-                                            (showMovilMenu menuOpen)
-                                            [ class "tw absolute z-10 top-0 inset-x-0 transition transform origin-top-right md:hidden" ]
+                                        -- Animated.div
+                                        --    (showMovilMenu menuOpen)
+                                        div
+                                            [ class "tw absolute z-20 top-0 inset-x-0 origin-top-right md:hidden" ]
                                             [ movilMenu ligas ]
 
                                       else

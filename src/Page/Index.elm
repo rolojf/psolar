@@ -617,22 +617,6 @@ indexViewFooter =
 -- Above the Fold
 
 
-ligas : List View.Liga
-ligas =
-    [ { queDice = "Comunícate"
-      , dir = View.Interna Route.Contacto
-      , especial = True
-      }
-    , { queDice = "Más Información"
-      , dir =
-            "#features"
-                |> Path.fromString
-                |> View.Otra
-      , especial = False
-      }
-    ]
-
-
 viewHeroMain headText =
     Html.main_
         [ class "tw mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28" ]

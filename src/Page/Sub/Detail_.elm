@@ -164,7 +164,7 @@ view maybeUrl sharedModel model static =
     { title = static.data.delMD.title
     , body =
         [ Html.div
-            [ class "tw prose prose-sm ml-3 md:prose-base md:max-w-md md:mx-auto lg:prose-lg lg:max-w-lg" ]
+            [ class "tw z-0 prose prose-sm ml-3 md:prose-base md:max-w-md md:mx-auto lg:prose-lg lg:max-w-lg" ]
             (MdConverter.renderea static.data.delMD.body)
         ]
     , withMenu =
