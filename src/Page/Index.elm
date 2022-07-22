@@ -110,25 +110,6 @@ type Msg
     | Notificado (Result Http.Error ())
 
 
-type Effect
-    = EsperaLuegoPara
-    | Nada
-    | LanzaPara
-
-
-runEffect : Effect -> Cmd Msg
-runEffect efecto =
-    case efecto of
-        EsperaLuegoPara ->
-            Task.perform (\_ -> Para) (Process.sleep 1300)
-
-        Nada ->
-            Cmd.none
-
-        LanzaPara ->
-            Task.perform (\_ -> Para) (Task.succeed ())
-
-
 update : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayload templateData routeParams -> Msg -> Model -> ( Model, Cmd Msg, Maybe Shared.Msg )
 update url maybeKey sharedM staticP msg model =
     case msg of
