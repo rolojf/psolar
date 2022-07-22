@@ -340,8 +340,8 @@ viewMenu ruta menuOpen wMenu toMsg =
                                         "tw lg:w-full"
                                    )
                         ]
-                        [ -- corteDiagonal
-                          div []
+                        [ corteDiagonal
+                        ,  div []
                             [ div
                                 [ class "tw relative pt-6 px-4 sm:px-6 lg:px-8" ]
                                 [ Html.nav
